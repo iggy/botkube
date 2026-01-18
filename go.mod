@@ -30,7 +30,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.4.10
 	github.com/hashicorp/go-version v1.6.0
-	github.com/hasura/go-graphql-client v0.8.1
+	github.com/hasura/go-graphql-client v0.15.1
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
 	github.com/infracloudio/msbotbuilder-go v0.2.6-0.20231130085215-84d2040b3577
 	github.com/knadh/koanf v1.4.5
@@ -107,6 +107,7 @@ require (
 	github.com/chai2010/gettext-go v1.0.2 // indirect
 	github.com/charmbracelet/lipgloss v0.7.1 // indirect
 	github.com/cloudflare/circl v1.3.7 // indirect
+	github.com/coder/websocket v1.8.13 // indirect
 	github.com/containerd/containerd v1.7.27 // indirect
 	github.com/containerd/errdefs v0.3.0 // indirect
 	github.com/containerd/log v0.1.0 // indirect
