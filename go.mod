@@ -26,7 +26,7 @@ require (
 	github.com/gookit/color v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/go-getter v1.7.3
-	github.com/hashicorp/go-hclog v1.5.0
+	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.4.10
 	github.com/hashicorp/go-version v1.6.0
