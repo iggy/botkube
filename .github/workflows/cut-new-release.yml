@@ -16,7 +16,7 @@ env:
 jobs:
   workflow-metadata:
     name: Extract workflow metadata
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       ref: ${{ steps.extract.outputs.ref }}
       base-version: ${{ steps.extract.outputs.base-version }}
@@ -53,7 +53,7 @@ jobs:
 
   release-branch:
     name: Prepare ${{ inputs.version }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [workflow-metadata]
     steps:
       - uses: actions/checkout@v4

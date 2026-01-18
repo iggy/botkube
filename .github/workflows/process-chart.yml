@@ -30,7 +30,7 @@ on:
 jobs:
   process-chart:
     name: Process & Push Chart Updates
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       new-version: ${{ inputs.next-version }}
     steps:
