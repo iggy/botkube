@@ -69,7 +69,7 @@ jobs:
           make save-images
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: botkube-${{github.sha}}
           path: ${{ env.IMAGE_SAVE_LOAD_DIR }}
@@ -91,7 +91,7 @@ jobs:
           persist-credentials: false
 
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: botkube-${{github.sha}}
           path: ${{ env.IMAGE_SAVE_LOAD_DIR }}
