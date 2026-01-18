@@ -25,7 +25,7 @@ env:
   K3D_VERSION: v5.4.6
   PR_NUMBER: ${{ github.event.pull_request.number }}
   IMAGE_REGISTRY: "ghcr.io"
-  IMAGE_REPOSITORY: "kubeshop/pr/botkube"
+  IMAGE_REPOSITORY: "iggy/pr/botkube"
   IMAGE_TAG: ${{ github.event.pull_request.number }}-PR
   IMAGE_SAVE_LOAD_DIR: /tmp/botkube-images
   GIT_USER: botkube-dev
@@ -283,17 +283,17 @@ jobs:
         env:
           SLACK_TESTER_APP_TOKEN: ${{ secrets.SLACK_TESTER_APP_TOKEN }}
           SLACK_CLOUD_TESTER_APP_TOKEN: ${{ secrets.SLACK_CLOUD_TESTER_APP_TOKEN }}
-          SLACK_ADDITIONAL_CONTEXT_MESSAGE: "Pull request: ${{ github.event.pull_request.number }} - https://github.com/kubeshop/botkube/pull/${{ github.event.pull_request.number }}"
+          SLACK_ADDITIONAL_CONTEXT_MESSAGE: "Pull request: ${{ github.event.pull_request.number }} - https://github.com/iggy/botkube/pull/${{ github.event.pull_request.number }}"
 
           DISCORD_TESTER_APP_TOKEN: ${{ secrets.DISCORD_TESTER_APP_TOKEN }}
           DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
-          DISCORD_ADDITIONAL_CONTEXT_MESSAGE: "Pull request: ${{ github.event.pull_request.number }} - https://github.com/kubeshop/botkube/pull/${{ github.event.pull_request.number }}"
+          DISCORD_ADDITIONAL_CONTEXT_MESSAGE: "Pull request: ${{ github.event.pull_request.number }} - https://github.com/iggy/botkube/pull/${{ github.event.pull_request.number }}"
 
           TEAMS_BOT_TESTER_APP_ID: ${{ secrets.TEAMS_BOT_TESTER_APP_ID }}
           TEAMS_BOT_TESTER_APP_PASSWORD: ${{ secrets.TEAMS_BOT_TESTER_APP_PASSWORD }}
           TEAMS_ORGANIZATION_TEAM_ID: ${{ secrets.TEAMS_ORGANIZATION_TEAM_ID }}
           TEAMS_ORGANIZATION_TENANT_ID: ${{ secrets.TEAMS_ORGANIZATION_TENANT_ID }}
-          TEAMS_ADDITIONAL_CONTEXT_MESSAGE: "Branch test - commit SHA: ${{github.sha}} - https://github.com/kubeshop/botkube/commit/${{github.sha}}"
+          TEAMS_ADDITIONAL_CONTEXT_MESSAGE: "Branch test - commit SHA: ${{github.sha}} - https://github.com/iggy/botkube/commit/${{github.sha}}"
 
           PLUGINS_BINARIES_DIRECTORY: ${{ github.workspace }}/plugin-dist
           CONFIG_PROVIDER_API_KEY: ${{ secrets.CONFIG_PROVIDER_API_KEY }}
