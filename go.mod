@@ -61,7 +61,7 @@ require (
 	go.szostok.io/version v1.2.0
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56
 	golang.org/x/oauth2 v0.28.0
-	golang.org/x/sync v0.16.0
+	golang.org/x/sync v0.19.0
 	golang.org/x/text v0.27.0
 	google.golang.org/grpc v1.68.1
 	google.golang.org/protobuf v1.36.5
