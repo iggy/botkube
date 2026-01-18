@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.23
 ARG botkube_version="dev"
 LABEL org.opencontainers.image.source="git@github.com:kubeshop/botkube.git" \
       org.opencontainers.image.title="Botkube" \
