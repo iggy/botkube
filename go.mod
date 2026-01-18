@@ -8,7 +8,7 @@ require (
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/Masterminds/semver/v3 v3.3.0
 	github.com/PagerDuty/go-pagerduty v1.8.0
-	github.com/alexflint/go-arg v1.4.3
+	github.com/alexflint/go-arg v1.6.1
 	github.com/avast/retry-go/v4 v4.3.3
 	github.com/aws/aws-sdk-go v1.44.122
 	github.com/briandowns/spinner v1.23.0
@@ -94,7 +94,7 @@ require (
 	github.com/Masterminds/squirrel v1.5.4 // indirect
 	github.com/Microsoft/hcsshim v0.11.7 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230217124315-7d5c6f04bbb8 // indirect
-	github.com/alexflint/go-scalar v1.1.0 // indirect
+	github.com/alexflint/go-scalar v1.2.0 // indirect
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
