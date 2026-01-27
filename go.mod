@@ -60,7 +60,7 @@ require (
 	github.com/xyproto/randomstring v1.0.5
 	go.szostok.io/version v1.2.0
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96
-	golang.org/x/oauth2 v0.30.0
+	golang.org/x/oauth2 v0.34.0
 	golang.org/x/sync v0.19.0
 	golang.org/x/text v0.31.0
 	google.golang.org/grpc v1.72.2
