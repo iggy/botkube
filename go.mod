@@ -23,7 +23,7 @@ require (
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572
 	github.com/google/go-github/v53 v53.2.0
 	github.com/google/uuid v1.6.0
-	github.com/gookit/color v1.5.2
+	github.com/gookit/color v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/go-getter v1.7.3
 	github.com/hashicorp/go-hclog v1.5.0
