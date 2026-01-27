@@ -46,7 +46,7 @@ require (
 	github.com/prometheus/client_golang v1.22.0
 	github.com/prometheus/common v0.62.0
 	github.com/r3labs/diff/v3 v3.0.2
-	github.com/sanity-io/litter v1.5.5
+	github.com/sanity-io/litter v1.5.8
 	github.com/segmentio/analytics-go v3.1.0+incompatible
 	github.com/sha1sum/aws_signing_client v0.0.0-20200229211254-f7815c59d5c1
 	github.com/sirupsen/logrus v1.9.4
