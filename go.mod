@@ -30,7 +30,7 @@ require (
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.7.0
-	github.com/hashicorp/go-version v1.6.0
+	github.com/hashicorp/go-version v1.8.0
 	github.com/hasura/go-graphql-client v0.15.1
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
 	github.com/infracloudio/msbotbuilder-go v0.2.6-0.20231130085215-84d2040b3577
