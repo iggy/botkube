@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: yogevbd/enforce-label-action@2.2.2
         with:
-          REQUIRED_LABELS_ANY: "bug,enhancement,breaking,documentation,other"
+          REQUIRED_LABELS_ANY: "bug,enhancement,breaking,documentation,other,dependencies"
           BANNED_LABELS: "hold,'do not merge'"
