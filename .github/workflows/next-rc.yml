@@ -20,7 +20,7 @@ jobs:
       new-rc-version: ${{ steps.next-rc.outputs.new-rc-version }}
       commit-msg: ${{ steps.next-rc.outputs.commit-msg }}
       branch: ${{ steps.next-rc.outputs.branch }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
