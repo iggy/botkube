@@ -57,7 +57,7 @@ require (
 	github.com/spiffe/spire v1.5.6
 	github.com/stretchr/testify v1.11.1
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/xyproto/randomstring v1.0.5
+	github.com/xyproto/randomstring v1.2.0
 	go.szostok.io/version v1.2.0
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96
 	golang.org/x/oauth2 v0.30.0
