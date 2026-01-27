@@ -57,7 +57,7 @@ jobs:
           cache: true
 
       - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           install-only: true
           version: latest
@@ -248,7 +248,7 @@ jobs:
           --set image.tag="${IMAGE_TAG}" \
 
       - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           install-only: true
           version: latest

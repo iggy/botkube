@@ -51,7 +51,7 @@ jobs:
           echo "previous-version=$PREV_VERSION" >> $GITHUB_OUTPUT
 
       - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           install-only: true
           version: latest
