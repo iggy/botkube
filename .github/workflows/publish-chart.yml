@@ -35,7 +35,7 @@ jobs:
           echo "chart_version=$(echo $CHART_VERSION)" >> $GITHUB_OUTPUT
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.2.1
+        uses: helm/chart-testing-action@v2.8.0
 
       - name: Run chart-testing
         working-directory: ${{ github.workspace }}/helm
