@@ -11,7 +11,7 @@ jobs:
   enforce-label:
     runs-on: ubuntu-latest
     steps:
-      - uses: yogevbd/enforce-label-action@2.1.0
+      - uses: yogevbd/enforce-label-action@2.2.2
         with:
           REQUIRED_LABELS_ANY: "bug,enhancement,breaking,documentation,other"
           BANNED_LABELS: "hold,'do not merge'"
