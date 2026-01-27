@@ -21,7 +21,7 @@ jobs:
       ref: ${{ steps.extract.outputs.ref }}
       base-version: ${{ steps.extract.outputs.base-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [workflow-metadata]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ needs.workflow-metadata.outputs.ref }}
           token: ${{ secrets.GH_TOKEN }}

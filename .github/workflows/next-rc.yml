@@ -22,7 +22,7 @@ jobs:
       branch: ${{ steps.next-rc.outputs.branch }}
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
