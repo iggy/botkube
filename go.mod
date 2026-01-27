@@ -9,7 +9,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/PagerDuty/go-pagerduty v1.8.0
 	github.com/alexflint/go-arg v1.6.1
-	github.com/avast/retry-go/v4 v4.3.3
+	github.com/avast/retry-go/v4 v4.7.0
 	github.com/aws/aws-sdk-go v1.44.122
 	github.com/briandowns/spinner v1.23.2
 	github.com/bwmarrin/discordgo v0.25.0
