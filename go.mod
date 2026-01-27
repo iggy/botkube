@@ -45,7 +45,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/prometheus/common v0.62.0
-	github.com/r3labs/diff/v3 v3.0.1
+	github.com/r3labs/diff/v3 v3.0.2
 	github.com/sanity-io/litter v1.5.5
 	github.com/segmentio/analytics-go v3.1.0+incompatible
 	github.com/sha1sum/aws_signing_client v0.0.0-20200229211254-f7815c59d5c1
@@ -233,7 +233,7 @@ require (
 	github.com/spf13/cast v1.7.0 // indirect
 	github.com/tinylib/msgp v1.1.8 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
-	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
+	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/wiggin77/merror v1.0.5 // indirect
 	github.com/wiggin77/srslog v1.0.1 // indirect
