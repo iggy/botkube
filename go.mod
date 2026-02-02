@@ -21,7 +21,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/go-task/slim-sprig v2.20.0+incompatible
-	github.com/google/go-github/v53 v53.2.0
+	github.com/google/go-github/v82 v82.0.0
 	github.com/google/go-github/v82 v82.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.0
