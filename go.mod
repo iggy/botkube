@@ -34,7 +34,7 @@ require (
 	github.com/hasura/go-graphql-client v0.15.1
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
 	github.com/infracloudio/msbotbuilder-go v0.2.6-0.20231130085215-84d2040b3577
-	github.com/knadh/koanf v1.5.0
+	github.com/knadh/koanf/v2 v2.3.2
 	github.com/mattermost/mattermost/server/public v0.1.21
 	github.com/mattn/go-isatty v0.0.20
 	github.com/mattn/go-shellwords v1.0.12
