@@ -22,7 +22,6 @@ require (
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/google/go-github/v53 v53.2.0
-	github.com/google/go-github/v82 v82.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.0
 	github.com/gorilla/mux v1.8.1
@@ -69,7 +68,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 	helm.sh/helm/v3 v3.20.0
-	helm.sh/helm/v4 v4.1.0
 	k8s.io/api v0.35.0
 	k8s.io/apimachinery v0.35.0
 	k8s.io/cli-runtime v0.35.0
