@@ -51,7 +51,7 @@ require (
 	github.com/segmentio/analytics-go v3.1.0+incompatible
 	github.com/sha1sum/aws_signing_client v0.0.0-20200229211254-f7815c59d5c1
 	github.com/sirupsen/logrus v1.9.4
-	github.com/slack-go/slack v0.17.3
+	github.com/slack-go/slack v0.18.0
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
