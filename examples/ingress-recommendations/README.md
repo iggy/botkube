@@ -75,7 +75,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
   grep -qF -- "$LINE_TO_APPEND" "${HOSTS_FILE}" || (echo "$LINE_TO_APPEND" | sudo tee -a "${HOSTS_FILE}" > /dev/null)
   ```
 
-1. Navigate to https://example.botkube.local/ in your browser. You should see 404 error page, but the connection should be secured.
+1. Navigate to <https://example.botkube.local/> in your browser. You should see 404 error page, but the connection should be secured.
 
 ### Deploy Botkube
 
@@ -119,7 +119,7 @@ In this scenario, we will expose the example application under the `https://exam
   @Botkube kubectl expose deployment meme --name=meme --target-port 9090 --port 8080 --type NodePort
   ```
 
-1. Alright, let's see if the app works now: https://example.botkube.local/meme
+1. Alright, let's see if the app works now: <https://example.botkube.local/meme>
 
   Nope, still 404 error...
 
@@ -157,7 +157,7 @@ In this scenario, we will expose the example application under the `https://exam
   @Botkube kubectl expose deployment meme --name=meme --target-port 9090 --port 80 --type NodePort
   ```
 
-1. Navigate to https://example.botkube.local/meme.
+1. Navigate to <https://example.botkube.local/meme>.
 
 It works now! 🥳
 

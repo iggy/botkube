@@ -19,7 +19,7 @@ const (
 type Config struct {
 	Endpoint   string
 	Identifier string
-	APIKey     string
+	APIKey     string //nolint:gosec // intentional config field
 }
 
 // GetConfig returns remote configuration if it is set.

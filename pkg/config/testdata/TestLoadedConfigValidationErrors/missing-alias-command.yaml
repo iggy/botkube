@@ -1,4 +1,4 @@
-communications: {"foo": {}}
+communications: { "foo": {} }
 
 aliases:
   kc:
@@ -11,14 +11,14 @@ aliases:
     command: ""
 
 executors:
-  'kubectl-read-only':
+  "kubectl-read-only":
     botkube/kubectl:
       enabled: true
-  'helm':
+  "helm":
     botkube/helm:
       config: {}
       enabled: true
-  'plugin-based':
+  "plugin-based":
     botkube/echo@v1.0.1-devel:
       enabled: false
       config:

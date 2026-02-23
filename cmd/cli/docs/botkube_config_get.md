@@ -50,5 +50,5 @@ botkube config get > config.yaml
 
 ### SEE ALSO
 
-* [botkube config](botkube_config.md)	 - This command consists of multiple subcommands for working with Botkube configuration
+* [botkube config](botkube_config.md)  - This command consists of multiple subcommands for working with Botkube configuration
 

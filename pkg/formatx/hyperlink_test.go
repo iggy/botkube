@@ -16,11 +16,11 @@ func TestRemoveHyperlinks(t *testing.T) {
 
 	tests := []test{
 		{
-			input:    "get <http://prometheuses.monitoring.coreos.com|prometheuses.monitoring.coreos.com> --cluster-name <http://xyz.alpha-sense.org|xyz.alpha-sense.org>",
+			input:    "get <http://prometheuses.monitoring.coreos.com|prometheuses.monitoring.coreos.com> --cluster-name <http://xyz.alpha-sense.org|xyz.alpha-sense.org>", // DevSkim: ignore DS137138 - test data for Slack http hyperlink parsing
 			expected: "get prometheuses.monitoring.coreos.com --cluster-name xyz.alpha-sense.org",
 		},
 		{
-			input:    "get <http://prometheuses.monitoring.coreos.com|prometheuses.monitoring.coreos.com>",
+			input:    "get <http://prometheuses.monitoring.coreos.com|prometheuses.monitoring.coreos.com>", // DevSkim: ignore DS137138 - test data for Slack http hyperlink parsing
 			expected: "get prometheuses.monitoring.coreos.com",
 		},
 		{
@@ -32,7 +32,7 @@ func TestRemoveHyperlinks(t *testing.T) {
 			expected: "get https://prometheuses.monitoring.coreos.com",
 		},
 		{
-			input:    "get pods --cluster-name <http://xyz.alpha-sense.org|xyz.alpha-sense.org>",
+			input:    "get pods --cluster-name <http://xyz.alpha-sense.org|xyz.alpha-sense.org>", // DevSkim: ignore DS137138 - test data for Slack http hyperlink parsing
 			expected: "get pods --cluster-name xyz.alpha-sense.org",
 		},
 		{

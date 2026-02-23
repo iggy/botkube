@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -18,14 +17,13 @@ import (
 
 	"github.com/avast/retry-go/v4"
 
-	"botkube.io/botube/test/helmx"
+	"github.com/iggy/botkube/test/helmx"
 
-	"botkube.io/botube/test/botkubex"
-	"botkube.io/botube/test/commplatform"
-	"botkube.io/botube/test/diff"
+	"github.com/iggy/botkube/test/botkubex"
+	"github.com/iggy/botkube/test/commplatform"
+	"github.com/iggy/botkube/test/diff"
 	"github.com/MakeNowJust/heredoc"
 	"github.com/anthhub/forwarder"
-	"github.com/hasura/go-graphql-client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/vrischmann/envconfig"
@@ -40,20 +38,19 @@ import (
 	rbacv1 "k8s.io/client-go/kubernetes/typed/rbac/v1"
 	"k8s.io/client-go/tools/clientcmd"
 
-	gqlModel "github.com/kubeshop/botkube-cloud/botkube-cloud-backend/pkg/graphql"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/httpx"
-	"github.com/kubeshop/botkube/pkg/plugin"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/httpx"
+	"github.com/iggy/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 type ConfigProvider struct {
 	Endpoint             string
 	ApiKey               string
 	SlackWorkspaceTeamID string
-	ImageRepository      string `envconfig:"default=kubeshop/pr/botkube"`
+	ImageRepository      string `envconfig:"default=iggy/pr/botkube"`
 	ImageRegistry        string `envconfig:"default=ghcr.io"`
 	ImageTag             string
 	HelmRepoDirectory    string
@@ -78,10 +75,7 @@ type Config struct {
 			DefaultDiscordChannelIDName   string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_DISCORD_CHANNELS_DEFAULT_ID"`
 			SecondaryDiscordChannelIDName string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_DISCORD_CHANNELS_SECONDARY_ID"`
 			ThirdDiscordChannelIDName     string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_DISCORD_CHANNELS_THIRD_ID"`
-			TeamsEnabledName              string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_TEAMS_ENABLED"`
-			DefaultTeamsChannelIDName     string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_TEAMS_CHANNELS_DEFAULT_ID"`
-			SecondaryTeamsChannelIDName   string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_TEAMS_CHANNELS_SECONDARY_ID"`
-			ThirdTeamsChannelIDName       string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_TEAMS_CHANNELS_THIRD_ID"`
+	
 			BotkubePluginRepoURL          string `envconfig:"default=BOTKUBE_PLUGINS_REPOSITORIES_BOTKUBE_URL"`
 			LabelActionEnabledName        string `envconfig:"default=BOTKUBE_ACTIONS_LABEL-CREATED-SVC-RESOURCE_ENABLED"`
 			StandaloneActionEnabledName   string `envconfig:"default=BOTKUBE_ACTIONS_GET-CREATED-RESOURCE_ENABLED"`
@@ -100,21 +94,13 @@ type Config struct {
 	ClusterName      string `envconfig:"default=sample"`
 	Slack            commplatform.SlackConfig
 	Discord          commplatform.DiscordConfig
-	Teams            commplatform.TeamsConfig
 	ConfigProvider   ConfigProvider
 	ShortWaitTimeout time.Duration `envconfig:"default=7s"`
 }
 
 const (
 	testConfigMapName = "cm-watcher-trigger"
-	// In cloud-based tests, after resource change in cloud, we can see extra messages as follows;
-	// 1. Brace yourselves, incoming notifications from cluster '{name}'.
-	// 2. Configuration reload requested for cluster '{name}'. Hold on a sec...
-	// 3. My watch has ended for cluster '{name}'. See you soon!
-	// 4. My watch begins for cluster '{name}'! :crossed_swords:
-	// 5. Newer version (v1.7.0) of Botkube is available :tada:. Please upgrade Botkube backend.
-	// Which means, we need to wait for 5 messages in total.
-	limitLastMessageAfterCloudReload = 5
+
 )
 
 var (
@@ -127,7 +113,6 @@ var (
 
 				exit status 1`)
 	slackInvalidCmd = strings.NewReplacer("<", "&lt;", ">", "&gt;").Replace(discordInvalidCmd)
-	teamsInvalidCmd = discordInvalidCmd
 	configMapLabels = map[string]string{
 		"test.botkube.io": "true",
 	}
@@ -171,21 +156,6 @@ func TestDiscord(t *testing.T) {
 	)
 }
 
-func TestTeams(t *testing.T) {
-	t.Log("Loading configuration...")
-	var appCfg Config
-	err := envconfig.Init(&appCfg)
-	require.NoError(t, err)
-
-	runBotTest(t,
-		appCfg,
-		commplatform.TeamsBot,
-		teamsInvalidCmd,
-		appCfg.Deployment.Envs.DefaultTeamsChannelIDName,
-		appCfg.Deployment.Envs.SecondaryTeamsChannelIDName,
-		appCfg.Deployment.Envs.ThirdTeamsChannelIDName,
-	)
-}
 
 func newBotDriver(cfg Config, driverType commplatform.DriverType) (commplatform.BotDriver, error) {
 	switch driverType {
@@ -193,8 +163,7 @@ func newBotDriver(cfg Config, driverType commplatform.DriverType) (commplatform.
 		return commplatform.NewSlackTester(cfg.Slack, ptr.FromType(cfg.ConfigProvider.ApiKey))
 	case commplatform.DiscordBot:
 		return commplatform.NewDiscordTester(cfg.Discord)
-	case commplatform.TeamsBot:
-		return commplatform.NewTeamsTester(cfg.Teams, ptr.FromType(cfg.ConfigProvider.ApiKey))
+
 	}
 	return nil, nil
 }
@@ -258,23 +227,21 @@ func runBotTest(t *testing.T,
 		t.Log("Waiting for Deployment")
 		err = waitForDeploymentReady(deployNsCli, appCfg.Deployment.Name, appCfg.Deployment.WaitTimeout)
 		require.NoError(t, err)
-	case commplatform.SlackBot, commplatform.TeamsBot:
+	case commplatform.SlackBot:
 		t.Log("Creating Botkube Cloud instance...")
 		gqlCli := NewClientForAPIKey(appCfg.ConfigProvider.Endpoint, appCfg.ConfigProvider.ApiKey)
 		appCfg.ClusterName = botDriver.FirstChannel().Name()
-		deployment := createCloudDeployment(t, gqlCli, botDriver, appCfg)
+		deployment := gqlCli.MustCreateBasicDeploymentWithCloudSlack(t, appCfg.ClusterName, appCfg.ConfigProvider.SlackWorkspaceTeamID, botDriver.FirstChannel().Name(), botDriver.SecondChannel().Name(), botDriver.ThirdChannel().Name())
 		for _, alias := range aliases {
 			gqlCli.MustCreateAlias(t, alias[0], alias[1], alias[2], deployment.ID)
 		}
-		// Setting env is needed to instrument help msg with cloud sections, and proper links
-		os.Setenv("CONFIG_PROVIDER_IDENTIFIER", deployment.ID)
 		t.Cleanup(func() {
 			err := helmx.WaitForUninstallation(context.Background(), t, &botkubeDeploymentUninstalled)
 			assert.NoError(t, err)
 
 			t.Log("Deleting Botkube Cloud instance...")
 			err = retry.Do(func() error {
-				return gqlCli.DeleteDeployment(t, graphql.ID(deployment.ID))
+				return gqlCli.DeleteDeployment(t, deployment.ID)
 			},
 				retry.Attempts(5),
 				retry.Delay(500*time.Millisecond),
@@ -396,10 +363,7 @@ func runBotTest(t *testing.T,
 			switch botDriver.Type() {
 			case commplatform.SlackBot:
 				expectedBody = ".... empty response _*&lt;cricket sounds&gt;*_ :cricket: :cricket: :cricket:"
-			case commplatform.TeamsBot:
-				// the MS Teams treats the '_*<cricket sounds>*_' as the HTML tag and renders it into '<em><em></em></em>'
-				// which is later dropped by the markdown converter
-				expectedBody = ".... empty response  :cricket: :cricket: :cricket:"
+
 			}
 
 			err = waitForLastPlaintextMessageWithHeaderEqual(appCfg, botDriver, command, expectedBody)
@@ -606,19 +570,6 @@ func runBotTest(t *testing.T,
 
 	t.Run("Executor", func(t *testing.T) {
 		hasValidHeader := func(cmd, msg string) bool {
-			if botDriver.Type() == commplatform.TeamsBot {
-				// Teams uses AdaptiveCard and the built-in table format, that's the reason why we can't
-				// compare it with the plain text message. On the other hand, comparing JSON format would require us
-				// to normalize the table cells (e.g. time)
-
-				if strings.HasPrefix(msg, "{") {
-					cmd = strconv.Quote(cmd) // it is a JSON so it will be escaped
-				}
-				// message is in JSON
-				return strings.Contains(msg, cmd) &&
-					strings.Contains(msg, " on ") &&
-					strings.Contains(msg, appCfg.ClusterName)
-			}
 			return strings.Contains(msg, heredoc.Doc(fmt.Sprintf("`%s` on `%s`", cmd, appCfg.ClusterName)))
 		}
 
@@ -677,9 +628,6 @@ func runBotTest(t *testing.T,
 		})
 
 		t.Run("Receive large output as plaintext file with executor command as message", func(t *testing.T) {
-			if botDriver.Type() == commplatform.TeamsBot {
-				t.Skip() // TODO(https://github.com/kubeshop/botkube-cloud/issues/728): enable this test case
-			}
 			command := fmt.Sprintf("kubectl get pod -o yaml -n %s", appCfg.Deployment.Namespace)
 			fileUploadAssertionFn := func(title, mimetype string) bool {
 				return title == "Response.txt" && strings.Contains(mimetype, "text/plain")
@@ -766,8 +714,6 @@ func runBotTest(t *testing.T,
 					msg = podName.ReplaceAllString(msg, `"botkube-pod" is`)
 
 					switch botDriver.Type() {
-					case commplatform.TeamsBot:
-						msg, expectedMessage = commplatform.NormalizeTeamsWhitespacesInMessages(msg, expectedMessage)
 					default:
 						msg = commplatform.TrimSlackMsgTrailingLine(msg)
 					}
@@ -831,9 +777,6 @@ func runBotTest(t *testing.T,
 
 	var firstCMUpdate commplatform.ExpAttachmentInput
 	limitMessages := func() int {
-		if botDriver.Type().IsCloud() {
-			return limitLastMessageAfterCloudReload
-		}
 		return 2
 	}
 
@@ -844,10 +787,7 @@ func runBotTest(t *testing.T,
 
 		botDriver.PostMessageToBot(t, botDriver.SecondChannel().Identifier(), command)
 
-		if botDriver.Type() == commplatform.TeamsBot {
-			// TODO(https://github.com/kubeshop/botkube-cloud/issues/841): add option to configure notifications
-			expectedBody = codeBlock(fmt.Sprintf("Notifications from cluster '%s' are enabled here.", appCfg.ClusterName))
-		}
+
 
 		expectedMessage := fmt.Sprintf("%s\n%s", cmdHeader(command), expectedBody)
 		err = botDriver.WaitForLastMessageEqual(botDriver.BotUserID(), botDriver.SecondChannel().ID(), expectedMessage)
@@ -1101,9 +1041,6 @@ func runBotTest(t *testing.T,
 		time.Sleep(appCfg.Slack.MessageWaitTimeout)
 
 		limitMessagesNo := 2
-		if botDriver.Type().IsCloud() {
-			limitMessagesNo = limitLastMessageAfterCloudReload
-		}
 		err = botDriver.OnChannel().WaitForMessagePostedWithAttachment(botDriver.BotUserID(), botDriver.SecondChannel().ID(), limitMessagesNo, secondCMUpdate)
 		require.NoError(t, err)
 	})
@@ -1190,17 +1127,6 @@ func runBotTest(t *testing.T,
 
 		t.Log("Expecting bot automation message...")
 		hasValidHeaderWithAuthor := func(msg, command, author string) bool {
-			if botDriver.Type() == commplatform.TeamsBot {
-				// Teams uses AdaptiveCard and the built-in table format, that's the reason why we can't
-				// compare it with the plain text message. On the other hand, comparing JSON format would require us
-				// to normalize the table cells (e.g. time)
-				// message is in JSON
-				return strings.Contains(msg, command) &&
-					strings.Contains(msg, " on ") &&
-					strings.Contains(msg, appCfg.ClusterName) &&
-					strings.Contains(msg, strconv.Quote(author))
-			}
-
 			return strings.Contains(msg, fmt.Sprintf("`%s` on `%s`%s", command, appCfg.ClusterName, author))
 		}
 		command := fmt.Sprintf(`kubectl get pod -n %s %s`, pod.Namespace, pod.Name)
@@ -1280,21 +1206,17 @@ func runBotTest(t *testing.T,
 
 		expectedBody := codeBlock(heredoc.Doc(`
 			EXECUTOR          ENABLED ALIASES RESTARTS STATUS  LAST_RESTART
-			botkube/echo      true    e       0/1      Running 
-			botkube/kubectl   true    k, kc   0/1      Running 
-			botkubeCloud/helm true            0/1      Running`))
+			botkube/echo      true    e       0/1      Running
+			botkube/kubectl   true    k, kc   0/1      Running`))
 
 		if botDriver.Type() == commplatform.DiscordBot {
 			// Cloud plugins are not tested on Discord
 			expectedBody = codeBlock(heredoc.Doc(`
 			EXECUTOR                   ENABLED ALIASES RESTARTS STATUS  LAST_RESTART
-			botkube/echo@v0.0.0-latest true    e       0/1      Running 
+			botkube/echo@v0.0.0-latest true    e       0/1      Running
 			botkube/kubectl            true    k, kc   0/1      Running`))
 		}
 
-		if botDriver.Type() == commplatform.TeamsBot {
-			expectedBody = trimRightWhitespace(expectedBody)
-		}
 		expectedMessage := fmt.Sprintf("%s\n%s", cmdHeader(command), expectedBody)
 		botDriver.PostMessageToBot(t, botDriver.FirstChannel().Identifier(), command)
 		err := botDriver.WaitForLastMessageContains(botDriver.BotUserID(), botDriver.FirstChannel().ID(), expectedMessage)
@@ -1305,7 +1227,7 @@ func runBotTest(t *testing.T,
 		command := "list aliases"
 		expectedBody := codeBlock(heredoc.Doc(`
 			ALIAS COMMAND                    DISPLAY NAME
-			e     echo                       
+			e     echo
 			k     kubectl                    Kubectl alias
 			kc    kubectl                    Kubectl alias
 			kgda  kubectl get deployments -A Get Deployments
@@ -1319,31 +1241,16 @@ func runBotTest(t *testing.T,
 
 		botDriver.PostMessageToBot(t, botDriver.FirstChannel().Identifier(), command)
 
-		switch botDriver.Type() {
-		case commplatform.SlackBot, commplatform.DiscordBot:
-			err = botDriver.WaitForLastMessageEqual(botDriver.BotUserID(), botDriver.FirstChannel().ID(), expectedMessage)
-			assert.NoError(t, err)
-
-		case commplatform.TeamsBot:
-			// in this case of a plain text message, Teams renderer uses Adaptive Cards format
-			// TODO(https://github.com/kubeshop/botkube-cloud/issues/752#issuecomment-1908669638): fix formatting for aliases table
-			err = botDriver.WaitForMessagePosted(botDriver.BotUserID(), botDriver.FirstChannel().ID(), 1, func(msg string) (bool, int, string) {
-				return hasAllColumns(msg, "ALIAS", "COMMAND", "DISPLAY NAME"), 0, ""
-			})
-			require.NoError(t, err)
-		}
+		err = botDriver.WaitForLastMessageEqual(botDriver.BotUserID(), botDriver.FirstChannel().ID(), expectedMessage)
+		assert.NoError(t, err)
 	})
 
 	t.Run("List sources", func(t *testing.T) {
 		command := "list sources"
 		expectedBody := codeBlock(heredoc.Doc(`
 			SOURCE             ENABLED RESTARTS STATUS  LAST_RESTART
-			botkube/cm-watcher true    0/1      Running 
+			botkube/cm-watcher true    0/1      Running
 			botkube/kubernetes true    0/1      Running`))
-		if botDriver.Type() == commplatform.TeamsBot {
-			expectedBody = trimRightWhitespace(expectedBody)
-		}
-
 		expectedMessage := fmt.Sprintf("%s\n%s", cmdHeader(command), expectedBody)
 		botDriver.PostMessageToBot(t, botDriver.FirstChannel().Identifier(), command)
 		err := botDriver.WaitForLastMessageContains(botDriver.BotUserID(), botDriver.FirstChannel().ID(), expectedMessage)
@@ -1511,9 +1418,6 @@ func runBotTest(t *testing.T,
 
 			t.Log("Expecting bot event message...")
 			limitMessages := 1
-			if botDriver.Type() == commplatform.TeamsBot {
-				limitMessages = 2 // we sent in Teams the filter input as the separate message, but the main body will be in the N-1
-			}
 			err = botDriver.WaitForMessagePosted(botDriver.BotUserID(), botDriver.ThirdChannel().ID(), limitMessages, assertionFn)
 			assert.NoError(t, err)
 			t.Cleanup(func() { cleanupCreatedIng(t, ingressCli, ingress.Name) })
@@ -1711,12 +1615,6 @@ func waitForRestart(t *testing.T, tester commplatform.BotDriver, userID, channel
 	tester.SetTimeout(120 * time.Second)
 	expMsg := fmt.Sprintf("My watch begins for cluster '%s'! :crossed_swords:", clusterName)
 	assertFn := tester.AssertEquals(expMsg)
-	if tester.Type() == commplatform.TeamsBot { // Teams sends JSON (Adaptive Card), so we cannot do equal assertion
-		expMsg = fmt.Sprintf("My watch begins for cluster '%s'!", clusterName)
-		assertFn = func(msg string) (bool, int, string) {
-			return strings.Contains(msg, expMsg), 0, ""
-		}
-	}
 
 	// 2, since from time to time latest message becomes upgrade message right after begin message
 	err := tester.OnChannel().WaitForMessagePosted(userID, channel, 2, assertFn)
@@ -1766,38 +1664,12 @@ func waitForLastCodeBlockMessageWithHeaderEqual(cfg Config, driver commplatform.
 		return fmt.Sprintf("`%s` on `%s`", command, cfg.ClusterName)
 	}
 
-	switch driver.Type() {
-	case commplatform.TeamsBot:
-		// Teams renderer uses Adaptive Cards format to render header in a more readable way
-		msg := interactive.CoreMessage{
-			Description: cmdHeader(cmd),
-			Message:     api.Message{},
-		}
-		msg.Message.BaseBody.CodeBlock = expectedBody
-
-		return driver.WaitForLastInteractiveMessagePostedEqual(driver.BotUserID(), driver.FirstChannel().ID(), msg)
-	default:
-		expectedBody = codeBlock(expectedBody)
-		expectedMessage := fmt.Sprintf("%s\n%s", cmdHeader(cmd), expectedBody)
-		return driver.WaitForLastMessageEqual(driver.BotUserID(), driver.FirstChannel().ID(), expectedMessage)
-	}
+	expectedBody = codeBlock(expectedBody)
+	expectedMessage := fmt.Sprintf("%s\n%s", cmdHeader(cmd), expectedBody)
+	return driver.WaitForLastMessageEqual(driver.BotUserID(), driver.FirstChannel().ID(), expectedMessage)
 }
 
-func createCloudDeployment(t *testing.T, gqlCli *Client, driver commplatform.BotDriver, appCfg Config) *gqlModel.Deployment {
-	switch driver.Type() {
-	case commplatform.TeamsBot:
-		return gqlCli.MustCreateBasicDeploymentWithCloudTeams(t, appCfg.ClusterName, appCfg.Teams.OrganizationTeamID, driver.FirstChannel().ID(), driver.SecondChannel().ID(), driver.ThirdChannel().ID())
-	case commplatform.SlackBot:
-		return gqlCli.MustCreateBasicDeploymentWithCloudSlack(t, appCfg.ClusterName, appCfg.ConfigProvider.SlackWorkspaceTeamID, driver.FirstChannel().Name(), driver.SecondChannel().Name(), driver.ThirdChannel().Name())
-	}
-	return nil
-}
 
 func getHelpExecutors(botDriverType commplatform.DriverType) []string {
-	executors := []string{"botkube/kubectl"}
-	if botDriverType != commplatform.DiscordBot {
-		executors = append(executors, "botkubeCloud/helm")
-	}
-
-	return executors
+	return []string{"botkube/kubectl"}
 }

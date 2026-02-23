@@ -1,0 +1,13 @@
+exclude-paths:
+  - "examples/"
+  - "docs/"
+  - "megalinter-reports/"
+  - "helm/"
+exclude-queries:
+  # Use sha instead of tags - maybe someday
+  - 555ab8f9-2001-455e-a077-f2d0f41e2fb9
+  # Dockerfile healthcheck - this only runs in k8s, so the healthcheck should be specified in the
+  # deployment yaml
+  - b03a748a-542d-44f4-bb86-9199ab4fd2d5
+  # these are bogus, they are clearly placeholders
+  - a88baa34-e2ad-44ea-ad6f-8cac87bc7c71

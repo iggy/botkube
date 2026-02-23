@@ -30,21 +30,21 @@ jobs:
         id: extract
         shell: bash
         run: |
-          REF=$(echo "${{ env.main-branch }}")
+          REF="${{ env.main-branch }}"
           # Valid version format
           if [[ "${{ inputs.version }}" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
             # Find release branch from provided version. This resolves '0.14' from 'v0.14.0|1|2...'
             BASE_VERSION=$(echo "${{ inputs.version }}" | cut -c2- |  awk 'BEGIN{FS=OFS="."}NF--')
-            echo "Finding branch: release-${BASE_VERSION}..." 
-            branch_exists=$(git ls-remote --heads origin release-${BASE_VERSION}) 
+            echo "Finding branch: release-${BASE_VERSION}..."
+            branch_exists=$(git ls-remote --heads origin "release-${BASE_VERSION}")
             if [[ -z ${branch_exists} ]]; then
-              echo "release-${BASE_VERSION} is not found." 
-            else 
+              echo "release-${BASE_VERSION} is not found."
+            else
               echo "release-${BASE_VERSION} is found, now REF=release-${BASE_VERSION}"
-              REF=$(echo "release-${BASE_VERSION}") 
-            fi 
-            echo "ref=$REF" >> $GITHUB_OUTPUT
-            echo "base-version=$BASE_VERSION" >> $GITHUB_OUTPUT
+              REF="release-${BASE_VERSION}"
+            fi
+            echo "ref=$REF" >> "$GITHUB_OUTPUT"
+            echo "base-version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
           else
             # Fail entire job if it is not a valid format
             echo "${{ inputs.version }} is not a valid version format. Use something like 'v0.14.0'"
@@ -74,22 +74,22 @@ jobs:
             PREV_VERSION=$(git for-each-ref --sort=-creatordate --format '%(refname)' refs/tags | grep -E "\.0$" | awk -F'refs/tags/' '{ print $2 }'| head -1)
             echo "The latest tag on ${{ env.main-branch }} is ${PREV_VERSION}"
           else
-            PATCH_VERSION=$(echo ${{ inputs.version }} | awk -F'.' '{ print $3 }')
-            PREV_VERSION=$(echo "v${{ needs.workflow-metadata.outputs.base-version }}.$((PATCH_VERSION - 1))")
+            PATCH_VERSION=$(echo "${{ inputs.version }}" | awk -F'.' '{ print $3 }')
+            PREV_VERSION="v${{ needs.workflow-metadata.outputs.base-version }}.$((PATCH_VERSION - 1))"
           fi
           git fetch origin "refs/notes/*:refs/notes/*"
           NOTE_COMMIT=$(git notes --ref release-${{ needs.workflow-metadata.outputs.base-version }} list | awk '{print $2}')
           if [[ ! -z "$NOTE_COMMIT" ]]; then
             echo "Pruning previous notes in release-${{ needs.workflow-metadata.outputs.base-version }}"
-            git notes --ref release-${{ needs.workflow-metadata.outputs.base-version }} remove ${NOTE_COMMIT} || true     
+            git notes --ref release-${{ needs.workflow-metadata.outputs.base-version }} remove "${NOTE_COMMIT}" || true
           fi
           echo "Adding new note: previous-version: ${PREV_VERSION},current-version: ${{ inputs.version }}"
           git notes --ref release-${{ needs.workflow-metadata.outputs.base-version }} add -m "previous-version: ${PREV_VERSION},current-version: ${{ inputs.version }}"
           git push origin 'refs/notes/*'
-          
+
           # Since we don't push by branch creation for patch releases
           if [[ ${{ needs.workflow-metadata.outputs.ref }} != ${{ env.main-branch }} ]]; then
-            git commit --allow-empty -m "Trigger next rc build for ${{ inputs.version }}" 
+            git commit --allow-empty -m "Trigger next rc build for ${{ inputs.version }}"
             git push origin release-${{ needs.workflow-metadata.outputs.base-version }} --force
           fi
       - name: Create a release branch

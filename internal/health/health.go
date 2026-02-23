@@ -69,7 +69,7 @@ func (h *Checker) ServeHTTP(resp http.ResponseWriter, _ *http.Request) {
 	}
 
 	resp.WriteHeader(statusCode)
-	_, _ = fmt.Fprint(resp, string(respJSon))
+	_, _ = fmt.Fprint(resp, string(respJSon)) //nolint:gosec // writing JSON response, not user-controlled HTML
 }
 
 // NewServer creates http server for health checker.

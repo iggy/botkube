@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-option go_package = "pkg/api/cloudslack";
-
 package cloudslack;
 
+option go_package = "pkg/api/cloudslack";
+
 message ConnectRequest {
-  string instanceId = 1;
-  string botId = 2;
+  string instance_id = 1;
+  string bot_id = 2;
 }
 
 message ConnectResponse {

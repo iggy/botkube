@@ -1,21 +1,21 @@
 communications: # req 1 elm.
-  'default-workspace':
+  "default-workspace":
     slack:
       enabled: false
       channels:
-        'alias':
-          name: 'SLACK_CHANNEL'
+        "alias":
+          name: "SLACK_CHANNEL"
           bindings:
             executors:
               - kubectl-read-only
             sources:
               - k8s-events
-      token: 'SLACK_API_TOKEN'
+      token: "SLACK_API_TOKEN"
       notification:
         type: short
 
 sources:
-  'k8s-events':
+  "k8s-events":
     displayName: "Plugins & Builtins"
 
     botkube/kubernetes:
@@ -24,7 +24,7 @@ sources:
         - delete
         - error
       namespaces:
-        include: [ ".*" ]
+        include: [".*"]
       resources:
         - type: v1/pods
 
@@ -33,28 +33,48 @@ sources:
       config:
         field: value
 
-
 executors:
-  'kubectl-read-only':
+  "kubectl-read-only":
     # Kubectl executor configs
     kubectl:
       namespaces:
-        include: [ ".*" ]
-        exclude: [ "foo", "bar", "test-*-ns" ]
+        include: [".*"]
+        exclude: ["foo", "bar", "test-*-ns"]
 
       # Set true to enable kubectl commands execution
       enabled: false
       # List of allowed commands
       commands:
         # method which are allowed
-        verbs: [ "api-resources", "api-versions", "cluster-info", "describe", "diff", "explain", "get", "logs", "top", "auth" ]
+        verbs:
+          [
+            "api-resources",
+            "api-versions",
+            "cluster-info",
+            "describe",
+            "diff",
+            "explain",
+            "get",
+            "logs",
+            "top",
+            "auth",
+          ]
         # resource configuration which is allowed
-        resources: [ "deployments", "pods" , "namespaces", "daemonsets", "statefulsets", "storageclasses", "nodes" ]
+        resources:
+          [
+            "deployments",
+            "pods",
+            "namespaces",
+            "daemonsets",
+            "statefulsets",
+            "storageclasses",
+            "nodes",
+          ]
       # set Namespace to execute botkube kubectl commands by default
       defaultNamespace: default
       # Set true to enable commands execution from configured channel only
       restrictAccess: false
-  'plugin-based':
+  "plugin-based":
     botkube/echo: # <repo>/<plugin> is syntax for plugin based executors
       enabled: true
       config:

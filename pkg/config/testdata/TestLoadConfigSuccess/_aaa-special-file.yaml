@@ -1,7 +1,7 @@
 communications: # req 1 elm.
-  'default-workspace':
+  "default-workspace":
     slack:
       channels:
-        'alias':
+        "alias":
           notification:
             disabled: true

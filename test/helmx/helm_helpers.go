@@ -124,7 +124,6 @@ const (
 // We have a glitch on backend side and the logic below is a workaround for that.
 // Tl;dr uninstalling Helm chart reports "DISCONNECTED" status, and deployment deletion reports "DELETED" status.
 // If we do these two things too quickly, we'll run into resource version mismatch in repository logic.
-// Read more here: https://github.com/kubeshop/botkube-cloud/pull/486#issuecomment-1604333794
 func WaitForUninstallation(ctx context.Context, t *testing.T, alreadyUninstalled *atomic.Bool) error {
 	t.Helper()
 	t.Log("Waiting for Helm chart uninstallation, in order to proceed with deleting Botkube Cloud instance...")

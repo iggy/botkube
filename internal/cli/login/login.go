@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	loginURLFmt           = "%s/cli/login?redirect_url=http://%s/login_redirect"
+	loginURLFmt           = "%s/cli/login?redirect_url=http://%s/login_redirect" // DevSkim: ignore DS137138 - local redirect server uses http
 	redirectURLSuccessFmt = "%s/cli/login?success=true"
 )
 

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - "main"
 
 env:
   git-user: github-actions[bot]
@@ -26,13 +26,13 @@ jobs:
         id: process-chart
         run: |
           CHART_VERSION="0.0.0-$(git rev-parse --short HEAD)"
-          HELM_FOLDER=$(echo "${{ github.workspace }}/helm")
-          CHART_CURRENT_VERSION=$(sed -nE 's/^version\s*:\s*([^\s\/]*).*/\1/p' ${HELM_FOLDER}/botkube/Chart.yaml)
+          HELM_FOLDER="${{ github.workspace }}/helm"
+          CHART_CURRENT_VERSION=$(sed -nE 's/^version\s*:\s*([^\s\/]*).*/\1/p' "${HELM_FOLDER}/botkube/Chart.yaml")
           CHART_DEV_VERSION="v9.99.9-dev"
-          find ${HELM_FOLDER} -name "*.yaml" -exec sed -i "s/${CHART_CURRENT_VERSION}/${CHART_VERSION}/g" {} +
-          find ${HELM_FOLDER} -name "*.yaml" -exec sed -i "s/${CHART_DEV_VERSION}/${CHART_VERSION}/g" {} +
-          
-          echo "chart_version=$(echo $CHART_VERSION)" >> $GITHUB_OUTPUT
+          find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s/${CHART_CURRENT_VERSION}/${CHART_VERSION}/g" {} +
+          find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s/${CHART_DEV_VERSION}/${CHART_VERSION}/g" {} +
+
+          echo "chart_version=$CHART_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.8.0
@@ -48,16 +48,16 @@ jobs:
           helm repo index --url "${{ env.CHART_REPOSITORY }}" --merge ${{ github.workspace }}/main-chart/index.yaml ${{ github.workspace }}/main-chart/
 
       - name: GCP auth
-        uses: 'google-github-actions/auth@v3'
+        uses: "google-github-actions/auth@v3"
         with:
           credentials_json: ${{ secrets.PLUGINS_BUCKET_CREDENTIALS }}
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v3'
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v3"
 
       - name: Upload chart to GCS
         uses: google-github-actions/upload-cloud-storage@v3
         with:
           path: ${{ github.workspace }}/main-chart
-          destination: 'botkube-latest-main-charts/'
+          destination: "botkube-latest-main-charts/"
           parent: false

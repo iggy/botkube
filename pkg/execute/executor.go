@@ -181,13 +181,12 @@ func (e *DefaultExecutor) Execute(ctx context.Context) interactive.CoreMessage {
 		helpMsg := e.cmdsMapping.HelpMessageForVerb(cmdVerb)
 		responseMsg := fmt.Sprintf(invalidCmdWithUsage, cmdRes, helpMsg)
 		return respond(responseMsg, cmdCtx)
-	} else {
-		cmdToReport := string(cmdVerb)
-		if cmdRes != "" {
-			cmdToReport = fmt.Sprintf("%s %s", cmdVerb, cmdRes)
-		}
-		e.reportCommand(ctx, "", cmdToReport, false, cmdCtx)
 	}
+	cmdToReport := string(cmdVerb)
+	if cmdRes != "" {
+		cmdToReport = fmt.Sprintf("%s %s", cmdVerb, cmdRes)
+	}
+	e.reportCommand(ctx, "", cmdToReport, false, cmdCtx)
 
 	msg, err := fn(ctx, cmdCtx)
 	switch {

@@ -19,7 +19,7 @@ spec:
             - containerPort: 9090
           env:
             - name: QUOTE_URL
-              value: "http://quote/"
+              value: "http://quote/" # DevSkim: ignore DS137138 - in-cluster K8s service name uses http
 ---
 kind: Service
 apiVersion: v1
@@ -41,17 +41,17 @@ kind: Ingress
 metadata:
   name: meme
   labels:
-    app: meme  
+    app: meme
 spec:
   ingressClassName: nginx
   rules:
-  - host: "example.botkube.local"
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: meme
-            port:
-              number: 80
+    - host: "example.botkube.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: meme
+                port:
+                  number: 80

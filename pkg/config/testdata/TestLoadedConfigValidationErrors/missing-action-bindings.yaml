@@ -1,7 +1,7 @@
 communications:
-  'foo': {}
+  "foo": {}
 actions:
-  'show-created-resource':
+  "show-created-resource":
     enabled: true
     displayName: "Display created resource"
     command: "kubectl describe {{.Event.ResourceType}} -n {{.Event.Namespace}} {{.Event.Name}}"

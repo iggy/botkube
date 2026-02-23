@@ -18,21 +18,21 @@ communications:
               - bkc-ver-1
 
 executors:
-  'bkc-latest':
+  "bkc-latest":
     botkube/kubectl:
       enabled: true
-      config: { }
-  'bkc-ver-1':
+      config: {}
+  "bkc-ver-1":
     botkube/kubectl@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
 
 sources:
-  'us-east-2':
+  "us-east-2":
     botkube/prometheus:
       enabled: true
-      config: { }
-  'eu-central-1':
+      config: {}
+  "eu-central-1":
     botkube/prometheus@v1.2.0:
       enabled: true
-      config: { }
+      config: {}

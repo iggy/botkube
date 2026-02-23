@@ -47,6 +47,6 @@ We need to add below values for Mattermost in Helm Chart or config.yaml.
 - In `controller.go`, for event notifications and sending start/stop messages, add notifier for Mattermost.
 
 ### References
-- https://github.com/mattermost/mattermost-bot-sample-golang
-- https://github.com/mattermost/mattermost-server/blob/master/model/client4.go
-- https://docs.mattermost.com/install/install-ubuntu-1804.html
+- <https://github.com/mattermost/mattermost-bot-sample-golang>
+- <https://github.com/mattermost/mattermost-server/blob/master/model/client4.go>
+- <https://docs.mattermost.com/install/install-ubuntu-1804.html>

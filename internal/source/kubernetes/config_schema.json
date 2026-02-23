@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "title": "Kubernetes",
   "description": "Consume Kubernetes events and get notifications with additional warnings and recommendations.",
   "type": "object",
@@ -311,9 +311,7 @@
     "event": {
       "$ref": "#/definitions/Event",
       "default": {
-        "types": [
-          "error"
-        ]
+        "types": ["error"]
       },
       "description": "Describes event constraints for Kubernetes resources. These constraints are applied for every resource specified in the \"Resources\" list, unless they are overridden by the resource's own \"Events\" configuration."
     },
@@ -343,9 +341,7 @@
           "type": "v1/nodes",
           "event": {
             "message": {
-              "exclude": [
-                ".*nf_conntrack_buckets.*"
-              ]
+              "exclude": [".*nf_conntrack_buckets.*"]
             }
           }
         },
@@ -389,9 +385,7 @@
       "items": {
         "title": "Resource",
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "type": "string",
@@ -774,9 +768,7 @@
         "include": {
           "title": "Include",
           "type": "array",
-          "default": [
-            ".*"
-          ],
+          "default": [".*"],
           "items": {
             "type": "string",
             "title": "Namespace"
@@ -795,17 +787,13 @@
           "description": "List of ignored Kubernetes Namespace. It can also contain a regex expressions: \"test-.*\" - to specify all Namespaces."
         }
       },
-      "required": [
-        "include"
-      ]
+      "required": ["include"]
     },
     "Event": {
       "title": "Event",
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "types"
-      ],
+      "required": ["types"],
       "properties": {
         "types": {
           "title": "Types",

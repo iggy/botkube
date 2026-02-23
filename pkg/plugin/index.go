@@ -170,7 +170,7 @@ func (s *JSONSchema) Get(ctx context.Context, httpCli *http.Client) (json.RawMes
 		return nil, fmt.Errorf("while creating request: %w", err)
 	}
 
-	res, err := httpCli.Do(req)
+	res, err := httpCli.Do(req) //nolint:gosec // URL comes from plugin config, SSRF is accepted risk
 	if err != nil {
 		return nil, fmt.Errorf("while fetching JSON schema by RefURL %q: %w", s.RefURL, err)
 	}

@@ -33,6 +33,7 @@ func newGraphQLHeartbeatReporter(logger logrus.FieldLogger, client GraphQLClient
 	}
 }
 
+// ReportHeartbeat sends a heartbeat report for the deployment.
 func (r *GraphQLHeartbeatReporter) ReportHeartbeat(ctx context.Context, heartbeat ReportHeartbeat) error {
 	logger := r.log.WithFields(logrus.Fields{
 		"deploymentID": r.gql.DeploymentID(),

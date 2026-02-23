@@ -1,31 +1,31 @@
 ## Scenario: configure plugins with wrong syntax
 
 executors:
-  'wrong-name':
+  "wrong-name":
     testing/@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
     /kubectl@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
     /@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
     some-3rd-plugin:
       enabled: true
-      config: { }
+      config: {}
 
 sources:
-  'wrong-name':
+  "wrong-name":
     botkube/@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
     /prometheus@v1.2.0:
       enabled: true
-      config: { }
+      config: {}
     /@v1.2.0:
       enabled: true
-      config: { }
+      config: {}
 
 communications: # we require at least 1 elm.
-  'default-workspace': { }
+  "default-workspace": {}

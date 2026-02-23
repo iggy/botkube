@@ -718,7 +718,7 @@ It gives us more descriptive and intuitive API, however, after evaluation we fou
       enabled: true
       token: 'SLACK_API_TOKEN'
   ```
-  if installed with `helm install --set communications[0].slack.token="foo"`, the rest of the `slack` properties will be removed instead of merged. See related issue: https://github.com/helm/helm/issues/5711.
+  if installed with `helm install --set communications[0].slack.token="foo"`, the rest of the `slack` properties will be removed instead of merged. See related issue: <https://github.com/helm/helm/issues/5711>.
 - it requires additionally validation logic, e.g. check that a given channel is not specified multiple times, otherwise we would need to add specific merging strategy. For example, replace the previous occurrence or merge related properties with append/override option.
 
 </details>

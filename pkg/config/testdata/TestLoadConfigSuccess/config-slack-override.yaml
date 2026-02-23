@@ -1,4 +1,4 @@
 communications:
-  'default-workspace':
+  "default-workspace":
     slack:
       enabled: true

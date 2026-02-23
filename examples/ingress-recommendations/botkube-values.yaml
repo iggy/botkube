@@ -1,20 +1,20 @@
 communications:
-  'default-group':
+  "default-group":
     slack:
       enabled: true
       channels:
-        'default':
+        "default":
           bindings:
             executors:
-              - 'kubectl-example'
-              - 'kubectl-read-only'
+              - "kubectl-example"
+              - "kubectl-read-only"
             sources:
-              - 'k8s-events'
+              - "k8s-events"
       notification:
         type: short
 
 sources:
-  'k8s-events':
+  "k8s-events":
     kubernetes:
       recommendations:
         pod:
@@ -55,14 +55,14 @@ configWatcher:
   enabled: false
 
 executors:
-  'kubectl-example':
+  "kubectl-example":
     kubectl:
       namespaces:
         include: [".*"]
       enabled: true
       commands:
-        verbs: [ "expose", "delete", "create", "get", "describe" ]
-        resources: [ "deployments", "pods", "services", "ingresses" ]
+        verbs: ["expose", "delete", "create", "get", "describe"]
+        resources: ["deployments", "pods", "services", "ingresses"]
       defaultNamespace: default
       restrictAccess: false
 

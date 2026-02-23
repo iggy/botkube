@@ -389,9 +389,9 @@ Cons:
 
 This is a variation of the previous approach. We could distinguish two types of commands:
 - commands that don't restart Botkube, e.g. `notifier start/stop`
-    - they save the state in runtime config and another ConfigMap, which is not monitored by Config Watcher, but still loaded during Botkube startup.
+  - they save the state in runtime config and another ConfigMap, which is not monitored by Config Watcher, but still loaded during Botkube startup.
 - commands that restart Botkube instantly, such as commands for notification presets
-    - they post "Reloading configuration..." message and restart the app.
+  - they post "Reloading configuration..." message and restart the app.
 
 Initially, the "goodbye" and "welcome" messages could be kept as they are. Later we can combine it with option 2.
 
@@ -413,9 +413,9 @@ Doing a diff and restarting just some updated components (e.g. just Slack Bot or
 
 After team discussion (@ezodude, @huseyinbabal, @mszostok) we agree as follows:
 - We'll choose the option no 3.
-    - In the first implementation every Botkube restart related to configuration change will post "goodbye" and "hello" messages. This will be implemented as a part of [#704](https://github.com/kubeshop/botkube/issues/704).
-    - If we have time as a part of this task, we will also implement the scope of 2:
-        - Modify ConfigWatcher - save config
-        - Read config in controller and post custom message (`Botkube configuration for cluster "dev" has been reloaded 👍`)
-        - Clear welcome message after posting it
+  - In the first implementation every Botkube restart related to configuration change will post "goodbye" and "hello" messages. This will be implemented as a part of [#704](https://github.com/kubeshop/botkube/issues/704).
+  - If we have time as a part of this task, we will also implement the scope of 2:
+    - Modify ConfigWatcher - save config
+    - Read config in controller and post custom message (`Botkube configuration for cluster "dev" has been reloaded 👍`)
+    - Clear welcome message after posting it
 - We may still implement the `@Botkube reload` command from the [1. Dedicated command for manual restart](#1-dedicated-command-for-manual-restart) section later, to support operation use cases (e.g. update configuration during maintenance window). This will be defined as a follow-up task to see how big the community demand is.

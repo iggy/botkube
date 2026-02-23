@@ -1,0 +1,18 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Allowlist test data files with fake/example credentials"
+paths = [
+    '''test/helmx/redact_test\.go''',
+    '''internal/config/remote/testdata/gql_get_deployment_success\.json''',
+    '''deploy-all-in-one-tls\.yaml''',
+]
+
+[[allowlists]]
+description = "Allowlist known false positive commits by fingerprint"
+commits = [
+    "957c55c94f0695c64d661d1770f822a9c832aec7",
+    "fc71f9a7f780230f1301b26e4b4b9ad69925591a",
+    "24eb71e755031382d609a8af6230518dcda504b0",
+]

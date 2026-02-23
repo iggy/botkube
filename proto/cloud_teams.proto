@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "pkg/api/cloudteams";
-
 package cloudteams;
+
+option go_package = "pkg/api/cloudteams";
 
 message AgentActivity {
   // message sent by agent, either as a response to a command or an event from enabled sources
@@ -10,20 +10,20 @@ message AgentActivity {
 }
 
 enum MessageType {
-  MESSAGE_EXECUTOR = 0;
-  MESSAGE_SOURCE = 1;
+  MESSAGE_TYPE_MESSAGE_EXECUTOR_UNSPECIFIED = 0;
+  MESSAGE_TYPE_MESSAGE_SOURCE = 1;
 }
 
 message Message {
-  string teamId = 1;
-  string conversationId = 3;
-  MessageType messageType = 4;
+  string team_id = 1;
+  string conversation_id = 3;
+  MessageType message_type = 4;
   bytes data = 5;
 }
 
 message CloudActivity {
   bytes event = 1;
-  string conversationDisplayName = 2;
+  string conversation_display_name = 2;
 }
 
 service CloudTeams {

@@ -1,0 +1,33 @@
+---
+extends: default
+
+rules:
+  # Don't require documents to start with ---
+  document-start: disable
+
+  # GitHub Actions workflows use 'on' as a truthy value (it's a valid YAML key)
+  # and many other YAML files don't follow strict truthy requirements
+  truthy: disable
+
+  # Allow longer lines (common in workflow files)
+  line-length:
+    max: 200
+    level: warning
+
+  # Allow empty lines in templates and config files
+  empty-lines:
+    max: 2
+    max-end: 1
+
+  # Comments indentation is flexible in config files
+  comments-indentation: disable
+
+  # Braces spacing - relax for Helm-style template expressions
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+ignore: |
+  helm/botkube/templates/
+  .goreleaser.plugin.tpl.yaml
+  docs/investigation/configuration/assets/communicationsecret.yaml

@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 env:
   git-user: github-actions[bot]
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: 'go.mod'
+          go-version-file: "go.mod"
           cache: true
 
       - name: Set up QEMU
@@ -39,7 +39,7 @@ jobs:
 
       - name: Prepare GoReleaser Env
         run: |
-          echo "IMAGE_REPOSITORY=$GITHUB_REPOSITORY_OWNER/botkube" >> $GITHUB_ENV
+          echo "IMAGE_REPOSITORY=${GITHUB_REPOSITORY_OWNER}/botkube" >> "$GITHUB_ENV"
 
       - name: Extract Previous Version
         id: prev-version
@@ -47,8 +47,8 @@ jobs:
           BASE_TAG=$(echo "${{ github.ref_name }}" | awk -F- '{print $1}')
           git fetch origin "refs/notes/*:refs/notes/*"
           BASE_VERSION=$(echo "${BASE_TAG}" | cut -c2- |  awk 'BEGIN{FS=OFS="."}NF--')
-          PREV_VERSION=$(echo $(git log --pretty=format:"%N" --show-notes="release-${BASE_VERSION}") | awk -F',' '{ print $1 }' | awk NF | awk '{ print $2 }')
-          echo "previous-version=$PREV_VERSION" >> $GITHUB_OUTPUT
+          PREV_VERSION=$(git log --pretty=format:"%N" --show-notes="release-${BASE_VERSION}"| awk -F',' '{ print $1 }' | awk NF | awk '{ print $2 }')
+          echo "previous-version=$PREV_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install GoReleaser
         uses: goreleaser/goreleaser-action@v7
@@ -69,7 +69,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api repos/$GITHUB_REPOSITORY/releases/generate-notes \
+          gh api "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
             -f tag_name="${GITHUB_REF#refs/tags/}" \
             -f previous_tag_name="${{ steps.prev-version.outputs.previous-version }}" \
             -q .body > CHANGELOG.md

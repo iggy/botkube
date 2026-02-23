@@ -1,0 +1,17 @@
+lint:
+  rules:
+    no_default:
+      enabled: true
+    add:
+      - FIELD_NAMES_LOWER_SNAKE_CASE
+      - MESSAGE_NAMES_UPPER_CAMEL_CASE
+      - ENUM_NAMES_UPPER_CAMEL_CASE
+      - SERVICE_NAMES_UPPER_CAMEL_CASE
+      - RPC_NAMES_UPPER_CAMEL_CASE
+      - PACKAGE_NAME_LOWER_CASE
+      - IMPORTS_SORTED
+      - PROTO3_FIELDS_AVOID_REQUIRED
+      - PROTO3_GROUPS_AVOID
+  rules_option:
+    max_line_length:
+      max_chars: 200

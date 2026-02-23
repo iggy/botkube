@@ -22,12 +22,12 @@
   • `{{BotName}} edit SourceBindings`
 
 **Automatically execute commands upon receiving events**
-Automation help: https://docs.botkube.io/usage/automated-actions
+Automation help: <https://docs.botkube.io/usage/automated-actions>
 
 **Manage executors and aliases**
   • `{{BotName}} list executors`
   • `{{BotName}} list aliases`
-Executors and aliases help: https://docs.botkube.io/usage/executor
+Executors and aliases help: <https://docs.botkube.io/usage/executor>
 
 **Run kubectl commands**
   • `{{BotName}} kubectl`
@@ -36,7 +36,7 @@ Executors and aliases help: https://docs.botkube.io/usage/executor
 **Run Helm commands**
   • `{{BotName}} helm help`
 
-Give feedback: https://feedback.botkube.io
-Read our docs: https://docs.botkube.io
-Join our Slack: https://join.botkube.io
-Follow us on Twitter: https://twitter.com/botkube_io
+Give feedback: <https://feedback.botkube.io>
+Read our docs: <https://docs.botkube.io>
+Join our Slack: <https://join.botkube.io>
+Follow us on Twitter: <https://twitter.com/botkube_io>

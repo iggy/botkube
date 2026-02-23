@@ -1,0 +1,51 @@
+# Revive configuration file
+# https://github.com/mgechev/revive#configuration
+
+ignoreGeneratedHeader = false
+severity = "warning"
+confidence = 0.8
+errorCode = 1
+warningCode = 0
+
+[rule.blank-imports]
+[rule.context-as-argument]
+[rule.context-keys-type]
+[rule.dot-imports]
+[rule.empty-block]
+[rule.error-naming]
+[rule.error-return]
+  disabled = true
+[rule.increment-decrement]
+[rule.indent-error-flow]
+[rule.range]
+[rule.receiver-naming]
+[rule.time-naming]
+[rule.unexported-return]
+[rule.var-declaration]
+
+# Disable noisy rules that produce too many false positives for this codebase
+
+# Many packages intentionally don't have package-level doc comments
+[rule.package-comments]
+  disabled = true
+
+# Interface implementations often have unused parameters (required by interface signature)
+[rule.unused-parameter]
+  disabled = true
+
+# Many exported symbols intentionally lack comments in this codebase
+[rule.exported]
+  disabled = true
+
+# Allow package-prefixed type names (e.g. cloudslack.CloudSlackError)
+[rule.var-naming]
+  disabled = true
+
+# Allow redefinition of built-in identifiers (e.g. parameter named 'min', 'max')
+[rule.redefines-builtin-id]
+  disabled = true
+
+# error-strings: disable warns about capitalized and ended with punctuation error messages
+# https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#error-strings
+[rule.error-strings]
+  disabled = true

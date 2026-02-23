@@ -50,5 +50,5 @@ botkube uninstall --release-name botkube-dev
 
 ### SEE ALSO
 
-* [botkube](botkube.md)	 - Botkube CLI
+* [botkube](botkube.md)  - Botkube CLI
 

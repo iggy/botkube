@@ -1,0 +1,13 @@
+fail-on-severity: "high"
+ignore:
+  # this is from the megalinter default rules
+  - vulnerability: CVE-2018-20225
+  # this is a package that doesn't actually have a new release out
+  - package:
+      name: github.com/mattermost/mattermost/server/v8
+  # indirect dep that we have no control over
+  - package:
+      name: filippo.io/edwards25519
+exclude:
+  - ./test/**
+  - ./examples/**

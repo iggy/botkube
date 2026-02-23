@@ -14,8 +14,8 @@ General overview of the proposal and section with ToC
 
 <!-- toc -->
 
-  * [Goal](#goal)
-  * [Non-goal](#non-goal)
+* [Goal](#goal)
+* [Non-goal](#non-goal)
 - [Proposal](#proposal)
   * [User Story Name](#user-story-name)
     + [Suggested solution](#suggested-solution)

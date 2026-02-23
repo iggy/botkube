@@ -10,19 +10,19 @@ import (
 	"testing"
 	"time"
 
-	"botkube.io/botube/test/diff"
 	"github.com/araddon/dateparse"
 	"github.com/google/uuid"
+	"github.com/iggy/botkube/test/diff"
 	"github.com/slack-go/slack"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"k8s.io/apimachinery/pkg/util/wait"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/formatx"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 var _ BotDriver = (*SlackTester)(nil)
