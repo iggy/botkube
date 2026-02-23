@@ -6,12 +6,10 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/DanielTitkov/go-adaptive-cards v0.2.2
 	github.com/MakeNowJust/heredoc v1.0.0
-	github.com/MakeNowJust/heredoc/v2 v2.0.1
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/PagerDuty/go-pagerduty v1.8.0
 	github.com/alexflint/go-arg v1.6.1
 	github.com/avast/retry-go/v4 v4.7.0
-	github.com/avast/retry-go/v5 v5.0.0
 	github.com/aws/aws-sdk-go v1.55.8
 	github.com/briandowns/spinner v1.23.2
 	github.com/bwmarrin/discordgo v0.29.0
@@ -24,12 +22,10 @@ require (
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/google/go-github/v53 v53.2.0
-	github.com/google/go-github/v82 v82.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/go-getter v1.8.4
-	github.com/hashicorp/go-getter/v2 v2.2.3
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.7.0
@@ -72,9 +68,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 	helm.sh/helm/v3 v3.20.0
-	helm.sh/helm/v4 v4.1.1
-	k8s.io/api v0.35.0
-	k8s.io/apimachinery v0.35.0
+	k8s.io/api v0.35.1
+	k8s.io/apimachinery v0.35.1
 	k8s.io/cli-runtime v0.35.0
 	k8s.io/client-go v0.35.0
 	k8s.io/klog/v2 v2.130.1
@@ -289,7 +284,6 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/term v0.39.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
-	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.258.0 // indirect
 	google.golang.org/genproto v0.0.0-20251202230838-ff82c1b0f217 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251202230838-ff82c1b0f217 // indirect
