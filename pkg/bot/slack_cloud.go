@@ -90,9 +90,6 @@ func NewCloudSlack(log logrus.FieldLogger,
 	}
 
 	channels := cloudSlackChannelsConfigFrom(log, cfg.Channels)
-	if err != nil {
-		return nil, fmt.Errorf("while producing channels configuration map by ID: %w", err)
-	}
 
 	return &CloudSlack{
 		log:               log,
@@ -553,7 +550,7 @@ func (b *CloudSlack) send(ctx context.Context, event slackMessage, resp interact
 	}
 
 	// Upload message as a file if too long
-	var file *slack.File
+	var file *slack.FileSummary
 	var err error
 	if len(markdown) >= slackMaxMessageSize {
 		file, err = b.uploadFileToSlack(ctx, event, resp)
@@ -611,17 +608,16 @@ func (b *CloudSlack) send(ctx context.Context, event slackMessage, resp interact
 	return nil
 }
 
-func (b *CloudSlack) uploadFileToSlack(ctx context.Context, event slackMessage, resp interactive.CoreMessage) (*slack.File, error) {
-	params := slack.FileUploadParameters{
+func (b *CloudSlack) uploadFileToSlack(ctx context.Context, event slackMessage, resp interactive.CoreMessage) (*slack.FileSummary, error) {
+	params := slack.UploadFileParameters{
 		Filename:        "Response.txt",
 		Title:           "Response.txt",
 		InitialComment:  resp.Description,
 		Content:         interactive.MessageToPlaintext(resp, interactive.NewlineFormatter),
-		Channels:        []string{event.Channel},
+		Channel:         event.Channel,
 		ThreadTimestamp: b.resolveMessageTimestamp(resp, event),
 	}
 
-	//nolint:staticcheck
 	file, err := b.client.UploadFileContext(ctx, params)
 	if err != nil {
 		return nil, fmt.Errorf("while uploading file: %w", err)
@@ -648,12 +644,16 @@ func (b *CloudSlack) BotName() string {
 	return fmt.Sprintf("<@%s>", b.botID)
 }
 
-func (b *CloudSlack) getThreadOptionIfNeeded(resp interactive.CoreMessage, event slackMessage, file *slack.File) slack.MsgOption {
+func (b *CloudSlack) getThreadOptionIfNeeded(resp interactive.CoreMessage, event slackMessage, file *slack.FileSummary) slack.MsgOption {
 	if file != nil {
-		// If the message was already as a file attachment, reply it a given thread
-		for _, share := range file.Shares.Public {
-			if len(share) >= 1 && share[0].Ts != "" {
-				return slack.MsgOptionTS(share[0].Ts)
+		// If the message was already sent as a file attachment, reply in the given thread
+		ctx := context.Background()
+		info, _, _, err := b.client.GetFileInfoContext(ctx, file.ID, 100, 1)
+		if err == nil {
+			for _, share := range info.Shares.Public {
+				if len(share) >= 1 && share[0].Ts != "" {
+					return slack.MsgOptionTS(share[0].Ts)
+				}
 			}
 		}
 	}

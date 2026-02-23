@@ -129,9 +129,9 @@ func (e *PluginExecutor) Execute(ctx context.Context, bindings []string, slackSt
 	if err != nil {
 		s, ok := status.FromError(err)
 		if !ok {
-			return interactive.CoreMessage{}, NewExecutionCommandError(err.Error())
+			return interactive.CoreMessage{}, NewExecutionCommandError("%s", err.Error())
 		}
-		return interactive.CoreMessage{}, NewExecutionCommandError(s.Message())
+		return interactive.CoreMessage{}, NewExecutionCommandError("%s", s.Message())
 	}
 
 	if resp.Message.Type == api.SkipMessage && allMessagesMarkedAsSkip(resp.Messages) {

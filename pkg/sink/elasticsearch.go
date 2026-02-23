@@ -1,31 +1,79 @@
 package sink
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
 	"crypto/tls"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
-	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
-	"github.com/aws/aws-sdk-go/aws/session"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
-	"github.com/aws/aws-sdk-go/service/sts"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/olivere/elastic/v7"
-	"github.com/sha1sum/aws_signing_client"
 	"github.com/sirupsen/logrus"
 
 	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/config"
+	botkubeconfig "github.com/kubeshop/botkube/pkg/config"
 	"github.com/kubeshop/botkube/pkg/multierror"
 	"github.com/kubeshop/botkube/pkg/sliceutil"
 )
+
+// awsSigningTransport is an http.RoundTripper that signs every request with
+// AWS Signature Version 4 before forwarding it to the underlying transport.
+type awsSigningTransport struct {
+	signer      *v4.Signer
+	credentials aws.CredentialsProvider
+	region      string
+	service     string
+	next        http.RoundTripper
+}
+
+func (t *awsSigningTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Clone the request so we don't mutate the caller's copy.
+	cloned := req.Clone(req.Context())
+
+	// Read and restore the body so the signer can hash it.
+	var bodyBytes []byte
+	if req.Body != nil && req.Body != http.NoBody {
+		var err error
+		bodyBytes, err = io.ReadAll(req.Body)
+		if err != nil {
+			return nil, fmt.Errorf("while reading request body for AWS signing: %w", err)
+		}
+		cloned.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+	}
+
+	// Compute SHA-256 hash of the payload.
+	hash := sha256.Sum256(bodyBytes)
+	payloadHash := hex.EncodeToString(hash[:])
+
+	// Retrieve current credentials.
+	creds, err := t.credentials.Retrieve(req.Context())
+	if err != nil {
+		return nil, fmt.Errorf("while retrieving AWS credentials for signing: %w", err)
+	}
+
+	if err := t.signer.SignHTTP(cloned.Context(), creds, cloned, payloadHash, t.service, t.region, time.Now()); err != nil {
+		return nil, fmt.Errorf("while signing AWS request: %w", err)
+	}
+
+	transport := t.next
+	if transport == nil {
+		transport = http.DefaultTransport
+	}
+	return transport.RoundTrip(cloned)
+}
 
 var _ Sink = &Elasticsearch{}
 
@@ -48,7 +96,7 @@ type Elasticsearch struct {
 	log            logrus.FieldLogger
 	reporter       AnalyticsReporter
 	client         *elastic.Client
-	indices        map[string]config.ELSIndex
+	indices        map[string]botkubeconfig.ELSIndex
 	clusterVersion string
 	status         health.PlatformStatusMsg
 	failureReason  health.FailureReasonMsg
@@ -56,7 +104,7 @@ type Elasticsearch struct {
 }
 
 // NewElasticsearch creates a new Elasticsearch instance.
-func NewElasticsearch(log logrus.FieldLogger, commGroupIdx int, c config.Elasticsearch, reporter AnalyticsReporter) (*Elasticsearch, error) {
+func NewElasticsearch(log logrus.FieldLogger, commGroupIdx int, c botkubeconfig.Elasticsearch, reporter AnalyticsReporter) (*Elasticsearch, error) {
 	var elsClient *elastic.Client
 	var err error
 
@@ -71,28 +119,40 @@ func NewElasticsearch(log logrus.FieldLogger, commGroupIdx int, c config.Elastic
 	}
 
 	if c.AWSSigning.Enabled {
-		// Get credentials from environment variables and create the AWS Signature Version 4 signer
-		sess := session.Must(session.NewSession())
+		// Load the default AWS config (reads env vars, shared config, instance metadata, etc.)
+		awsCfg, err := config.LoadDefaultConfig(context.Background(),
+			config.WithRegion(c.AWSSigning.AWSRegion),
+		)
+		if err != nil {
+			return nil, fmt.Errorf("while loading AWS config: %w", err)
+		}
 
-		// Use OIDC token to generate credentials if using IAM to Service Account
+		// Use OIDC token to generate credentials if using IAM Role for Service Account (IRSA).
 		awsRoleARN := os.Getenv(awsRoleARNEnvName)
 		awsWebIdentityTokenFile := os.Getenv(awsWebIDTokenFileEnvName)
-		var creds *credentials.Credentials
+		var credsProvider aws.CredentialsProvider
 		if awsRoleARN != "" && awsWebIdentityTokenFile != "" {
-			svc := sts.New(sess)
-			p := stscreds.NewWebIdentityRoleProviderWithOptions(svc, awsRoleARN, "", stscreds.FetchTokenPath(awsWebIdentityTokenFile))
-			creds = credentials.NewCredentials(p)
+			stsClient := sts.NewFromConfig(awsCfg)
+			p := stscreds.NewWebIdentityRoleProvider(stsClient, awsRoleARN, stscreds.IdentityTokenFile(awsWebIdentityTokenFile))
+			credsProvider = aws.NewCredentialsCache(p)
 		} else if c.AWSSigning.RoleArn != "" {
-			creds = stscreds.NewCredentials(sess, c.AWSSigning.RoleArn)
+			stsClient := sts.NewFromConfig(awsCfg)
+			p := stscreds.NewAssumeRoleProvider(stsClient, c.AWSSigning.RoleArn)
+			credsProvider = aws.NewCredentialsCache(p)
 		} else {
-			creds = ec2rolecreds.NewCredentials(sess)
+			// Fall back to the credential chain resolved by LoadDefaultConfig
+			// (env vars → shared credentials → EC2 instance metadata, etc.).
+			credsProvider = awsCfg.Credentials
 		}
 
-		signer := v4.NewSigner(creds)
-		awsClient, err := aws_signing_client.New(signer, nil, awsService, c.AWSSigning.AWSRegion)
-		if err != nil {
-			return nil, fmt.Errorf("while creating new AWS Signing client: %w", err)
+		transport := &awsSigningTransport{
+			signer:      v4.NewSigner(),
+			credentials: credsProvider,
+			region:      c.AWSSigning.AWSRegion,
+			service:     awsService,
 		}
+		awsClient := &http.Client{Transport: transport}
+
 		elsOpts = append(elsOpts,
 			elastic.SetURL(c.Server),
 			elastic.SetScheme("https"),
@@ -160,7 +220,7 @@ type index struct {
 	Replicas int `json:"number_of_replicas"`
 }
 
-func (e *Elasticsearch) flushIndex(ctx context.Context, indexCfg config.ELSIndex, event interface{}) error {
+func (e *Elasticsearch) flushIndex(ctx context.Context, indexCfg botkubeconfig.ELSIndex, event interface{}) error {
 	// Construct the ELS Index Name with timestamp suffix
 	indexName := indexCfg.Name + "-" + time.Now().Format(indexSuffixFormat)
 	// Create index if not exists
@@ -231,13 +291,13 @@ func (e *Elasticsearch) SendEvent(ctx context.Context, rawData any, sources []st
 }
 
 // IntegrationName describes the notifier integration name.
-func (e *Elasticsearch) IntegrationName() config.CommPlatformIntegration {
-	return config.ElasticsearchCommPlatformIntegration
+func (e *Elasticsearch) IntegrationName() botkubeconfig.CommPlatformIntegration {
+	return botkubeconfig.ElasticsearchCommPlatformIntegration
 }
 
 // Type describes the notifier type.
-func (e *Elasticsearch) Type() config.IntegrationType {
-	return config.SinkIntegrationType
+func (e *Elasticsearch) Type() botkubeconfig.IntegrationType {
+	return botkubeconfig.SinkIntegrationType
 }
 
 func (e *Elasticsearch) setFailureReason(reason health.FailureReasonMsg, errorMsg string) {
