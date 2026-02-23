@@ -373,7 +373,7 @@ func (b *Mattermost) formatMessage(ctx context.Context, msg interactive.CoreMess
 // Check if Mattermost server is reachable
 func (b *Mattermost) checkServerConnection(ctx context.Context) error {
 	// Check api connection
-	if _, _, err := b.apiClient.GetOldClientConfig(ctx, ""); err != nil {
+	if _, _, err := b.apiClient.GetClientConfig(ctx, ""); err != nil {
 		return err
 	}
 

@@ -91,9 +91,6 @@ func NewSocketSlack(log logrus.FieldLogger, commGroupMetadata CommGroupMetadata,
 	}
 
 	channels := slackChannelsConfigFrom(log, cfg.Channels)
-	if err != nil {
-		return nil, fmt.Errorf("while producing channels configuration map by ID: %w", err)
-	}
 
 	return &SocketSlack{
 		log:               log,
@@ -804,7 +801,7 @@ func (b *SocketSlack) GetStatus() health.PlatformStatus {
 
 func (b *SocketSlack) uploadFileToSlack(ctx context.Context, channel string, resp interactive.CoreMessage, ts string) (*slack.FileSummary, error) {
 	content := interactive.MessageToPlaintext(resp, interactive.NewlineFormatter)
-	params := slack.UploadFileV2Parameters{
+	params := slack.UploadFileParameters{
 		Filename:        "Response.txt",
 		Title:           "Response.txt",
 		InitialComment:  resp.Description,
@@ -814,7 +811,7 @@ func (b *SocketSlack) uploadFileToSlack(ctx context.Context, channel string, res
 		ThreadTimestamp: ts,
 	}
 
-	file, err := b.client.UploadFileV2Context(ctx, params)
+	file, err := b.client.UploadFileContext(ctx, params)
 	if err != nil {
 		return nil, fmt.Errorf("while uploading file: %w", err)
 	}

@@ -54,8 +54,5 @@ func (e *ConfigExecutor) Show(_ context.Context, cmdCtx CommandContext) (interac
 		return interactive.CoreMessage{}, fmt.Errorf("while rendering Botkube configuration: %w", err)
 	}
 
-	if err != nil {
-		return interactive.CoreMessage{}, fmt.Errorf("while rendering Botkube configuration: %w", err)
-	}
 	return respond(string(bytes), cmdCtx), nil
 }

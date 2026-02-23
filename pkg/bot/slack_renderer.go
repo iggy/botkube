@@ -70,15 +70,15 @@ func (b *SlackRenderer) RenderAsSlackBlocks(msg interactive.CoreMessage) []slack
 	}
 
 	if msg.Description != "" {
-		blocks = append(blocks, b.mdTextSection(msg.Description))
+		blocks = append(blocks, b.mdTextSection("%s", msg.Description))
 	}
 
 	if msg.BaseBody.Plaintext != "" {
-		blocks = append(blocks, b.mdTextSection(msg.BaseBody.Plaintext))
+		blocks = append(blocks, b.mdTextSection("%s", msg.BaseBody.Plaintext))
 	}
 
 	if msg.BaseBody.CodeBlock != "" {
-		blocks = append(blocks, b.mdTextSection(formatx.AdaptiveCodeBlock(msg.BaseBody.CodeBlock)))
+		blocks = append(blocks, b.mdTextSection("%s", formatx.AdaptiveCodeBlock(msg.BaseBody.CodeBlock)))
 	}
 
 	for idx, s := range msg.Sections {
@@ -168,7 +168,7 @@ func (b *SlackRenderer) renderSection(in api.Section) []slack.Block {
 	}
 
 	if in.Description != "" {
-		out = append(out, b.mdTextSection(in.Description))
+		out = append(out, b.mdTextSection("%s", in.Description))
 	}
 
 	if len(in.TextFields) > 0 {
@@ -176,11 +176,11 @@ func (b *SlackRenderer) renderSection(in api.Section) []slack.Block {
 	}
 
 	if in.Body.Plaintext != "" {
-		out = append(out, b.mdTextSection(in.Body.Plaintext))
+		out = append(out, b.mdTextSection("%s", in.Body.Plaintext))
 	}
 
 	if in.Body.CodeBlock != "" {
-		out = append(out, b.mdTextSection(formatx.AdaptiveCodeBlock(in.Body.CodeBlock)))
+		out = append(out, b.mdTextSection("%s", formatx.AdaptiveCodeBlock(in.Body.CodeBlock)))
 	}
 
 	for _, item := range in.PlaintextInputs {
@@ -431,7 +431,7 @@ func (b *SlackRenderer) renderBulletLists(in api.BulletLists) slack.Block {
 		strBuilder.WriteString("\n")
 	}
 
-	return b.mdTextSection(strBuilder.String())
+	return b.mdTextSection("%s", strBuilder.String())
 }
 
 func convertToSlackStyle(in api.ButtonStyle) slack.Style {

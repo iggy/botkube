@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/knadh/koanf"
+	"github.com/go-viper/mapstructure/v2"
 	koanfyaml "github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/rawbytes"
-	"github.com/mitchellh/mapstructure"
+	"github.com/knadh/koanf/v2"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
