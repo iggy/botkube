@@ -26,7 +26,6 @@ require (
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/google/go-github/v53 v53.2.0
-	github.com/google/go-github/v84 v84.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.0
 	github.com/gorilla/mux v1.8.1
@@ -71,7 +70,7 @@ require (
 	golang.org/x/oauth2 v0.35.0
 	golang.org/x/sync v0.19.0
 	golang.org/x/text v0.34.0
-	google.golang.org/grpc v1.79.1
+	google.golang.org/grpc v1.79.3
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
