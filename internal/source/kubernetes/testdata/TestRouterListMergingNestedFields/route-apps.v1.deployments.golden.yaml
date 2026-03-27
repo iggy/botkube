@@ -10,18 +10,18 @@
       namespaces:
         include: []
         exclude:
-            - other
+          - other
       updatesetting: null
       event:
         reason:
-            include:
-                - reason-include-1-level
-            exclude:
-                - reason-exclude-1-level
+          include:
+            - reason-include-1-level
+          exclude:
+            - reason-exclude-1-level
         message:
-            include:
-                - message-include-1-level
-            exclude:
-                - message-exclude-1-level
+          include:
+            - message-include-1-level
+          exclude:
+            - message-exclude-1-level
         types:
-            - delete
+          - delete

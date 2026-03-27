@@ -21,7 +21,7 @@ botkube telemetry enable [flags]
 
 # Enable Botkube telemetry
 botkube telemetry enable
-		
+
 
 
 ```
@@ -40,5 +40,5 @@ botkube telemetry enable
 
 ### SEE ALSO
 
-* [botkube telemetry](botkube_telemetry.md)	 - Configure collection of anonymous analytics
+* [botkube telemetry](botkube_telemetry.md)  - Configure collection of anonymous analytics
 

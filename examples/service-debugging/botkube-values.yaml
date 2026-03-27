@@ -1,5 +1,5 @@
 sources:
-  'k8s-events':
+  "k8s-events":
     kubernetes:
       recommendations:
         pod:
@@ -28,7 +28,7 @@ sources:
             - error
 
 executors:
-  'kubectl-read-only':
+  "kubectl-read-only":
     kubectl:
       namespaces:
         include:
@@ -36,10 +36,10 @@ executors:
       enabled: true
       commands:
         verbs: ["describe", "get", "logs"]
-        resources: ["pods","services"]
+        resources: ["pods", "services"]
       defaultNamespace: default
       restrictAccess: false
-  'kubectl-admin':
+  "kubectl-admin":
     kubectl:
       namespaces:
         include:
@@ -52,25 +52,25 @@ executors:
       restrictAccess: false
 
 communications:
-  'default-group':
+  "default-group":
     slack:
       enabled: true
       channels:
-        'team':
-          name: 'gophers'
+        "team":
+          name: "gophers"
           bindings:
             executors:
               - kubectl-read-only
             sources:
               - k8s-events
-        'admin':
-          name: 'admin'
+        "admin":
+          name: "admin"
           bindings:
             executors:
               - kubectl-read-only
               - kubectl-admin
 
-      token: 'SLACK_API_TOKEN'
+      token: "SLACK_API_TOKEN"
       notification:
         type: short
 
@@ -102,4 +102,3 @@ rbac:
 
 serviceAccount:
   create: true
-

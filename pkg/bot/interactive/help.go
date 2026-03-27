@@ -44,7 +44,6 @@ func (h *HelpMessage) Build(init bool) CoreMessage {
 
 	type getter func() []api.Section
 	sections := []getter{
-		h.botkubeCloud,
 		h.aiPlugin,
 		h.basicCommands,
 		h.notificationSections,
@@ -181,24 +180,6 @@ func (h *HelpMessage) pluginHelpSections() []api.Section {
 		out = append(out, helpSection)
 	}
 	return out
-}
-
-func (h *HelpMessage) botkubeCloud() []api.Section {
-	if !remote.IsEnabled() {
-		return nil
-	}
-	return []api.Section{
-		{
-			Base: api.Base{
-				Header: "☁️ Botkube Cloud",
-			},
-			Buttons: []api.Button{
-				h.btnBuilder.ForCommandWithDescCmd("List connected instances", "cloud list instances"),
-				h.btnBuilder.ForCommandWithDescCmd("Set channel default cluster", "cloud set default-instance"),
-				h.btnBuilder.ForURL("Open Botkube Cloud", "https://app.botkube.io", api.ButtonStylePrimary),
-			},
-		},
-	}
 }
 
 func (h *HelpMessage) aiPlugin() []api.Section {

@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/static:latest
+FROM gcr.io/distroless/static:nonroot
 
 ARG botkube_config_exporter_version="dev"
 
@@ -10,5 +10,7 @@ LABEL org.opencontainers.image.source="git@github.com:kubeshop/botkube.git" \
       org.opencontainers.image.licenses="MIT"
 
 COPY botkube-config-exporter /usr/local/bin/botkube-config-exporter
+
+USER nonroot
 
 CMD ["botkube-config-exporter"]

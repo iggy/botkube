@@ -790,6 +790,7 @@ func (b *SocketSlack) setFailureReason(reason health.FailureReasonMsg, errorMsg 
 	b.errorMsg = errorMsg
 }
 
+// GetStatus returns the current health status of the SocketSlack bot.
 func (b *SocketSlack) GetStatus() health.PlatformStatus {
 	return health.PlatformStatus{
 		Status:   b.status,

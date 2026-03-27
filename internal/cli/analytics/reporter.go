@@ -16,7 +16,7 @@ const (
 
 var (
 	// APIKey contains the API key for external analytics service. It is set during application build.
-	APIKey string = ""
+	APIKey string
 )
 
 // Reporter defines behavior for reporting analytics.

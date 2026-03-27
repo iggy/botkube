@@ -18,7 +18,7 @@ func TestIndexBuilder_ValidateJSONSchemas(t *testing.T) {
 				JSONSchema: JSONSchema{
 					Value: heredoc.Doc(`
 					{
-						"$schema": "http://json-schema.org/draft-07/schema#",
+						"$schema": "https://json-schema.org/draft-07/schema#",
 						"title": "botkube/helm",
 						"description": "Helm",
 						"type": "object",
@@ -47,7 +47,7 @@ func TestIndexBuilder_ValidateJSONSchemas(t *testing.T) {
 				Name: "value-invalid1",
 				JSONSchema: JSONSchema{
 					Value: heredoc.Doc(`{
-						"$schema": "http://json-schema.org/draft-07/schema#",
+						"$schema": "https://json-schema.org/draft-07/schema#",
 						"type": "object",
 						"properties": {
 							"helmDriver": {
@@ -76,7 +76,7 @@ func TestIndexBuilder_ValidateJSONSchemas(t *testing.T) {
 				Name: "validation-error",
 				JSONSchema: JSONSchema{
 					Value: heredoc.Doc(`{
-						"$schema": "http://json-schema.org/draft-07/schema#",
+						"$schema": "https://json-schema.org/draft-07/schema#",
 						"type": "object",
 						"properties": {
 							"helmDriver": {

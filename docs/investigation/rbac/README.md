@@ -114,29 +114,29 @@ You can change permissions for Roles and ClusterRoles in runtime and they will b
 
 We have a full control over how a given plugin is run. That means we can use e.g. `chroot` to isolate the plugin process from the rest of the system, in order to avoid reading sensitive data such as Slack credentials.
 
-I tested it successfully with a simple separate Go app on my machine. However, when I modified the code in Botkube codebase, the plugin's gRPC server exits with an error. 
+I tested it successfully with a simple separate Go app on my machine. However, when I modified the code in Botkube codebase, the plugin's gRPC server exits with an error.
 
 ```go
- 	for key, path := range bins {
- 		pluginLogger, stdoutLogger, stderrLogger := NewPluginLoggers(logger, key, pluginType)
+  for key, path := range bins {
+   pluginLogger, stdoutLogger, stderrLogger := NewPluginLoggers(logger, key, pluginType)
  
- 		dir, file := filepath.Split(path)
- 		//nolint:gosec // warns us about 'Subprocess launching with variable', but we are the one that created that variable.
- 		cmd := exec.Command("./" + file)
- 		cmd.Dir = "/"
- 		cmd.SysProcAttr = &syscall.SysProcAttr{
- 			Chroot:     dir,
- 		}
+   dir, file := filepath.Split(path)
+   //nolint:gosec // warns us about 'Subprocess launching with variable', but we are the one that created that variable.
+   cmd := exec.Command("./" + file)
+   cmd.Dir = "/"
+   cmd.SysProcAttr = &syscall.SysProcAttr{
+    Chroot:     dir,
+   }
  
- 		cli := plugin.NewClient(&plugin.ClientConfig{
- 			Plugins: pluginMap,
- 			Cmd:              newPluginOSRunCommand(path),
- 			Plugins:          pluginMap,
- 			Cmd:              cmd,
- 			AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
- 			HandshakeConfig: plugin.HandshakeConfig{
+   cli := plugin.NewClient(&plugin.ClientConfig{
+    Plugins: pluginMap,
+    Cmd:              newPluginOSRunCommand(path),
+    Plugins:          pluginMap,
+    Cmd:              cmd,
+    AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
+    HandshakeConfig: plugin.HandshakeConfig{
       // ...
-		})
+  })
     
     // ...
   }

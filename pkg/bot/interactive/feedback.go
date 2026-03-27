@@ -1,3 +1,4 @@
+// Package interactive provides utilities for building interactive bot messages.
 package interactive
 
 import "github.com/kubeshop/botkube/pkg/api"

@@ -1,19 +1,20 @@
+// Package mathx provides helper math utility functions.
 package mathx
 
-// IncreaseWithMax increase in by 1 but only up to max value.
-func IncreaseWithMax(in, max int) int {
+// IncreaseWithMax increases in by 1 but only up to maxVal value.
+func IncreaseWithMax(in, maxVal int) int {
 	in++
-	if in > max {
-		return max
+	if in > maxVal {
+		return maxVal
 	}
 	return in
 }
 
-// DecreaseWithMin decreases in by 1 but only to min value.
-func DecreaseWithMin(in, min int) int {
+// DecreaseWithMin decreases in by 1 but only to minVal value.
+func DecreaseWithMin(in, minVal int) int {
 	in--
-	if in < min {
-		return min
+	if in < minVal {
+		return minVal
 	}
 	return in
 }

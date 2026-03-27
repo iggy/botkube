@@ -118,7 +118,7 @@ For faster development, you can also build and run Botkube outside K8s cluster.
    EOF
    ```
 
-   To learn more about configuration, visit https://docs.botkube.io/configuration/.
+   To learn more about configuration, visit <https://docs.botkube.io/configuration/>.
 
 3. Export paths to configuration files. The priority will be given to the last (right-most) file specified.
 
@@ -159,7 +159,7 @@ For faster development, you can also build and run Botkube outside K8s cluster.
 
 **Steps**
 
-1. Start fake plugins server to serve binaries from [`dist`](dist) folder:
+1. Start fake plugins server to serve binaries from `dist` folder:
 
    ```bash
    go run hack/target/serve-plugins/main.go

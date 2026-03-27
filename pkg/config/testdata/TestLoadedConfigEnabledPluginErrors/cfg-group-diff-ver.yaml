@@ -1,22 +1,22 @@
 ## Scenario: configure plugins from different repositories under the same configuration group
 
 executors:
-  'wrong-vers':
+  "wrong-vers":
     botkube/kubectl:
       enabled: true
-      config: { }
+      config: {}
     botkube/kubectl@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
 
 sources:
-  'wrong-vers':
+  "wrong-vers":
     botkube/prometheus@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
     botkube/prometheus@v1.2.0:
       enabled: true
-      config: { }
+      config: {}
 
 communications: # we require at least 1 elm.
-  'default-workspace': { }
+  "default-workspace": {}

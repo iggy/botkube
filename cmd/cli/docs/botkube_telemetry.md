@@ -20,7 +20,7 @@ Configure collection of anonymous analytics
 
 ### SEE ALSO
 
-* [botkube](botkube.md)	 - Botkube CLI
-* [botkube telemetry disable](botkube_telemetry_disable.md)	 - Disable Botkube telemetry
-* [botkube telemetry enable](botkube_telemetry_enable.md)	 - Enable Botkube telemetry
+* [botkube](botkube.md)  - Botkube CLI
+* [botkube telemetry disable](botkube_telemetry_disable.md)  - Disable Botkube telemetry
+* [botkube telemetry enable](botkube_telemetry_enable.md)  - Enable Botkube telemetry
 

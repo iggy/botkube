@@ -1,3 +1,4 @@
+// Package plugin provides utilities for loading and managing plugin configurations.
 package plugin
 
 import (

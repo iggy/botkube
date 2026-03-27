@@ -390,13 +390,13 @@ This section described necessary changes if the implementation idea will be acce
 ### Follow-up changes
 
 1. Create Namespace-scoped controllers for:
-  1. Communicators
+1. Communicators
     - CommunicatorTemplate
     - Communicator
-  2. Executors
+2. Executors
     - ExecutorTemplate
     - Executor
-  3. Notifiers
+3. Notifiers
     - NotifierTemplate
     - Notifier
 

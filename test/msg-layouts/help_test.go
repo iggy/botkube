@@ -6,21 +6,16 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/kubeshop/botkube-cloud/botkube-cloud-backend/pkg/teamsx"
-	"github.com/kubeshop/botkube/pkg/bot"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/bot"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
 	"github.com/slack-go/slack"
 	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/golden"
 )
 
-// TestNewHelpMessage generates help message directly in Teams and Slack format.
-// It's defined here as it requires the Cloud Teams renderer.
+// TestNewHelpMessage generates help message directly in Discord and Mattermost format.
 // The output is stored in 'testdata/TestNewHelpMessage/' folder. You can just copy-paste it into dedicated editors to see the message layout:
-//   - Slack: https://app.slack.com/block-kit-builder/
-//   - Teams: https://adaptivecards.io/designer/
 //   - Discord: it's only markdown, just post as a normal message in discord channel
 //   - Mattermost: it's only markdown, just post as a normal message in mattermost channel
 //
@@ -28,24 +23,8 @@ import (
 //
 //	go test -v -run TestNewHelpMessage -update
 func TestNewHelpMessage(t *testing.T) {
-	// Cloud options
-	platform := config.CloudSlackCommPlatformIntegration
-	os.Setenv("CONFIG_PROVIDER_IDENTIFIER", "42")
-	msg := interactive.NewHelpMessage(platform, "Stage US", []string{"botkubeCloud/ai", "botkubeCloud/helm", "botkube/kubectl"}).Build(false)
-	msg.ReplaceBotNamePlaceholder("@Botkube")
-
-	// Slack
-	blocks := bot.NewSlackRenderer().RenderAsSlackBlocks(msg)
-	assertJSONGoldenFiles(t, SlackBuiltKit{Blocks: blocks}, "cloud-slack-help.golden.json")
-
-	// Teams
-	_, card, err := teamsx.NewMessageRendererAdapter(loggerx.NewNoop(), "botkube", "botkube").RenderCoreMessageCardAndOptions(msg, "Botkube")
-	require.NoError(t, err)
-	assertJSONGoldenFiles(t, card, "cloud-teams-help.golden.json")
-
-	// Non cloud options
 	os.Setenv("CONFIG_PROVIDER_IDENTIFIER", "")
-	msg = interactive.NewHelpMessage(config.DiscordCommPlatformIntegration, "Stage US", []string{"botkube/kubectl"}).Build(false)
+	msg := interactive.NewHelpMessage(config.DiscordCommPlatformIntegration, "Stage US", []string{"botkube/kubectl"}).Build(false)
 	msg.ReplaceBotNamePlaceholder("@Botkube")
 
 	// discord - we have only markdown formatter
@@ -55,6 +34,21 @@ func TestNewHelpMessage(t *testing.T) {
 	// mattermost - we have only markdown formatter
 	md = bot.NewMattermostRenderer().MessageToMarkdown(msg)
 	golden.Assert(t, md, filepath.Join(t.Name(), "mattermost-help.golden.md"))
+}
+
+// TestNewHelpMessageSlack generates a Slack help message and saves it as a golden file.
+// You can paste the output into https://app.slack.com/block-kit-builder/ to see the layout.
+//
+// To update the golden files:
+//
+//	go test -v -run TestNewHelpMessageSlack -update
+func TestNewHelpMessageSlack(t *testing.T) {
+	os.Setenv("CONFIG_PROVIDER_IDENTIFIER", "")
+	msg := interactive.NewHelpMessage(config.SlackCommPlatformIntegration, "Stage US", []string{"botkube/kubectl"}).Build(false)
+	msg.ReplaceBotNamePlaceholder("@Botkube")
+
+	blocks := bot.NewSlackRenderer().RenderAsSlackBlocks(msg)
+	assertJSONGoldenFiles(t, SlackBuiltKit{Blocks: blocks}, "slack-help.golden.json")
 }
 
 type SlackBuiltKit struct {

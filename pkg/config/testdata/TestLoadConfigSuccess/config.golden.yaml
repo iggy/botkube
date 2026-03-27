@@ -1,162 +1,162 @@
 actions:
-    show-created-resource:
-        enabled: true
-        displayName: Display created resource
-        command: kubectl describe {{.Event.ResourceType}} -n {{.Event.Namespace}} {{.Event.Name}}
-        bindings:
-            sources:
-                - k8s-events
-            executors:
-                - k8s-tools
+  show-created-resource:
+    enabled: true
+    displayName: Display created resource
+    command: kubectl describe {{.Event.ResourceType}} -n {{.Event.Namespace}} {{.Event.Name}}
+    bindings:
+      sources:
+        - k8s-events
+      executors:
+        - k8s-tools
 sources:
-    k8s-events:
-        displayName: Plugins & Builtins
-        botkube/keptn:
-            enabled: true
-            config:
-                field: value
-            context: {}
-        botkube/kubernetes:
-            enabled: false
-            config: null
-            context: {}
+  k8s-events:
+    displayName: Plugins & Builtins
+    botkube/keptn:
+      enabled: true
+      config:
+        field: value
+      context: {}
+    botkube/kubernetes:
+      enabled: false
+      config: null
+      context: {}
 executors:
-    echo:
-        displayName: Echo
-        botkube/echo:
-            enabled: true
-            config:
-                changeResponseToUpperCase: true
-            context: {}
-    k8s-tools:
-        displayName: K8S Tools
-        botkube/helm:
-            enabled: true
-            config: null
-            context: {}
-        botkube/kubectl:
-            enabled: true
-            config: null
-            context: {}
+  echo:
+    displayName: Echo
+    botkube/echo:
+      enabled: true
+      config:
+        changeResponseToUpperCase: true
+      context: {}
+  k8s-tools:
+    displayName: K8S Tools
+    botkube/helm:
+      enabled: true
+      config: null
+      context: {}
+    botkube/kubectl:
+      enabled: true
+      config: null
+      context: {}
 aliases: {}
 communications:
-    default-workspace:
-        socketSlack:
-            enabled: true
-            channels:
-                alias:
-                    name: SLACK_CHANNEL
-                    notification:
-                        disabled: false
-                    bindings:
-                        sources:
-                            - k8s-events
-                        executors:
-                            - k8s-tools
-                    messageTriggers: []
-            botToken: xoxb-token-from-env
-            appToken: xapp-token-from-env
-        mattermost:
-            enabled: false
-            botName: ""
-            url: MATTERMOST_SERVER_URL
-            token: MATTERMOST_TOKEN
-            team: MATTERMOST_TEAM
-            channels:
-                alias:
-                    name: MATTERMOST_CHANNEL
-                    notification:
-                        disabled: true
-                    bindings:
-                        sources:
-                            - k8s-events
-                        executors:
-                            - k8s-tools
-                    messageTriggers: []
-        discord:
-            enabled: false
-            token: DISCORD_TOKEN
-            botID: DISCORD_BOT_ID
-            channels:
-                alias:
-                    id: DISCORD_CHANNEL_ID
-                    notification:
-                        disabled: false
-                    bindings:
-                        sources:
-                            - k8s-events
-                        executors:
-                            - k8s-tools
-        webhook:
-            enabled: false
-            url: WEBHOOK_URL
-            bindings:
-                sources:
-                    - k8s-events
-        elasticsearch:
-            enabled: false
-            username: ELASTICSEARCH_USERNAME
-            password: ELASTICSEARCH_PASSWORD
-            server: ELASTICSEARCH_ADDRESS
-            skipTLSVerify: false
-            awsSigning:
-                enabled: false
-                awsRegion: us-east-1
-                roleArn: ""
-            indices:
-                alias:
-                    name: botkube
-                    type: botkube-event
-                    shards: 1
-                    replicas: 0
-                    bindings:
-                        sources:
-                            - k8s-events
-            logLevel: ""
-analytics:
-    disable: true
-settings:
-    clusterName: cluster-name-from-env
-    upgradeNotifier: true
-    systemConfigMap:
-        name: botkube-system
-        namespace: botkube
-    persistentConfig:
-        startup:
-            fileName: __startup_state.yaml
-            configMap:
-                name: startup-config
-        runtime:
-            fileName: _runtime_state.yaml
-            configMap:
-                name: runtime-config
-    metricsPort: "1313"
-    healthPort: "1314"
-    log:
-        level: error
-        disableColors: false
-        formatter: ""
-    informersResyncPeriod: 30m0s
-    kubeconfig: kubeconfig-from-env
-    saCredentialsPathPrefix: ""
-configWatcher:
-    enabled: false
-    remote:
-        pollInterval: 15s
-    inCluster:
-        informerResyncPeriod: 0s
-    deployment: {}
-plugins:
-    cacheDir: /tmp
-    repositories:
-        botkube:
-            url: http://localhost:3000/botkube.yaml
-            headers: {}
-    incomingWebhook:
+  default-workspace:
+    socketSlack:
+      enabled: true
+      channels:
+        alias:
+          name: SLACK_CHANNEL
+          notification:
+            disabled: false
+          bindings:
+            sources:
+              - k8s-events
+            executors:
+              - k8s-tools
+          messageTriggers: []
+      botToken: xoxb-token-from-env
+      appToken: xapp-token-from-env
+    mattermost:
+      enabled: false
+      botName: ""
+      url: MATTERMOST_SERVER_URL
+      token: MATTERMOST_TOKEN
+      team: MATTERMOST_TEAM
+      channels:
+        alias:
+          name: MATTERMOST_CHANNEL
+          notification:
+            disabled: true
+          bindings:
+            sources:
+              - k8s-events
+            executors:
+              - k8s-tools
+          messageTriggers: []
+    discord:
+      enabled: false
+      token: DISCORD_TOKEN
+      botID: DISCORD_BOT_ID
+      channels:
+        alias:
+          id: DISCORD_CHANNEL_ID
+          notification:
+            disabled: false
+          bindings:
+            sources:
+              - k8s-events
+            executors:
+              - k8s-tools
+    webhook:
+      enabled: false
+      url: WEBHOOK_URL
+      bindings:
+        sources:
+          - k8s-events
+    elasticsearch:
+      enabled: false
+      username: ELASTICSEARCH_USERNAME
+      password: ELASTICSEARCH_PASSWORD
+      server: ELASTICSEARCH_ADDRESS
+      skipTLSVerify: false
+      awsSigning:
         enabled: false
-        port: 0
-        inClusterBaseURL: ""
-    restartPolicy:
-        type: ""
-        threshold: 0
-    healthCheckInterval: 0s
+        awsRegion: us-east-1
+        roleArn: ""
+      indices:
+        alias:
+          name: botkube
+          type: botkube-event
+          shards: 1
+          replicas: 0
+          bindings:
+            sources:
+              - k8s-events
+      logLevel: ""
+analytics:
+  disable: true
+settings:
+  clusterName: cluster-name-from-env
+  upgradeNotifier: true
+  systemConfigMap:
+    name: botkube-system
+    namespace: botkube
+  persistentConfig:
+    startup:
+      fileName: __startup_state.yaml
+      configMap:
+        name: startup-config
+    runtime:
+      fileName: _runtime_state.yaml
+      configMap:
+        name: runtime-config
+  metricsPort: "1313"
+  healthPort: "1314"
+  log:
+    level: error
+    disableColors: false
+    formatter: ""
+  informersResyncPeriod: 30m0s
+  kubeconfig: kubeconfig-from-env
+  saCredentialsPathPrefix: ""
+configWatcher:
+  enabled: false
+  remote:
+    pollInterval: 15s
+  inCluster:
+    informerResyncPeriod: 0s
+  deployment: {}
+plugins:
+  cacheDir: /tmp
+  repositories:
+    botkube:
+      url: http://localhost:3000/botkube.yaml
+      headers: {}
+  incomingWebhook:
+    enabled: false
+    port: 0
+    inClusterBaseURL: ""
+  restartPolicy:
+    type: ""
+    threshold: 0
+  healthCheckInterval: 0s

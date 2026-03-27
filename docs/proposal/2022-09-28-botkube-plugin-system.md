@@ -22,7 +22,7 @@ General overview of the proposal and section with ToC
   * [Source Plugin Structure](#source-plugin-structure)
   * [Executor Plugin Structure](#executor-plugin-structure)
   * [Cloud Events](#cloud-events)
-    + [Botkube Cloudevents Data Structure](#Botkube-cloudevents-data-structure)
+    + [Botkube Cloudevents Data Structure](#botkube-cloudevents-data-structure)
 - [PoC](#poc)
   * [Motivation](#motivation)
   * [Folder Structure](#folder-structure)
@@ -157,7 +157,7 @@ I haven't included the final structure for that, I believe it can be generated f
 ## PoC
 ### Motivation
 The main motivation of the PoC is to come up with a simple playground project that explains how it looks like to have a plugin system for Botkube.
-There are 2 projects to better show the entire flow: `Botkube-plugins` (https://github.com/huseyinbabal/Botkube-plugins) and `Botkube-plugins-playground` (https://github.com/huseyinbabal/Botkube-plugins-playground). `Botkube-plugins` repository simply contains
+There are 2 projects to better show the entire flow: `Botkube-plugins` (<https://github.com/huseyinbabal/Botkube-plugins>) and `Botkube-plugins-playground` (<https://github.com/huseyinbabal/Botkube-plugins-playground>). `Botkube-plugins` repository simply contains
 community-driven plugins and also some `api` related packages to help consumers (e.g. Botkube) to initialize plugin base to use as a pluggable component.
 `Botkube-plugins-playground` is a sample project that shows how we can use `Botkube-plugins` repository as plugin marketplace. Now let's take a look `Botkube-plugins` project
 to understand how it is structured.

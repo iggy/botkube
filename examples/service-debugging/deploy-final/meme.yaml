@@ -20,7 +20,7 @@ spec:
             - containerPort: 9090
           env:
             - name: QUOTE_URL
-              value: "http://quote/"
+              value: "http://quote/" # DevSkim: ignore DS137138 - in-cluster K8s service name uses http
 ---
 kind: Service
 apiVersion: v1

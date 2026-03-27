@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
 )
 
 const (
@@ -71,12 +71,11 @@ type DriverType string
 const (
 	SlackBot   DriverType = "cloudSlack"
 	DiscordBot DriverType = "discord"
-	TeamsBot   DriverType = "cloudTeams"
 )
 
 func (d DriverType) IsCloud() bool {
 	switch d {
-	case SlackBot, TeamsBot:
+	case SlackBot:
 		return true
 	default:
 		return false

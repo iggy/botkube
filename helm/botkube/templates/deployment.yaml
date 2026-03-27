@@ -134,7 +134,7 @@ spec:
             - name: BOTKUBE_PLUGINS_INCOMING__WEBHOOK_PORT
               value: {{ .Values.plugins.incomingWebhook.port | quote }}
             - name: BOTKUBE_PLUGINS_INCOMING__WEBHOOK_IN__CLUSTER__BASE__U__R__L
-              value: "http://{{ include "botkube.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.plugins.incomingWebhook.port }}"
+              value: "http://{{ include "botkube.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.plugins.incomingWebhook.port }}" # DevSkim: ignore DS137138 - in-cluster K8s service URL uses http
           {{- with .Values.extraEnv }}
             {{ toYaml . | nindent 12 }}
           {{- end }}

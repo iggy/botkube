@@ -537,7 +537,7 @@ type GRPCServerTLSConfig struct {
 type Elasticsearch struct {
 	Enabled       bool                `yaml:"enabled"`
 	Username      string              `yaml:"username"`
-	Password      string              `yaml:"password"`
+	Password      string              `yaml:"password"` //nolint:gosec // intentional config field
 	Server        string              `yaml:"server"`
 	SkipTLSVerify bool                `yaml:"skipTLSVerify"`
 	AWSSigning    AWSSigning          `yaml:"awsSigning"`

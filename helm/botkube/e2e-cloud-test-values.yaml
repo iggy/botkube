@@ -4,13 +4,12 @@ analytics:
 rbac:
   create: true
   rules:
-    - apiGroups: [ "*" ]
-      resources: [ "*" ]
-      verbs: [ "get", "watch", "list" ] # defaults
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["get", "watch", "list"] # defaults
   staticGroupName: "botkube-plugins-default"
 
 extraObjects:
-
   # Group 'kubectl-first-channel': permissions for kubectl for first channel
   ## namespace scoped permissions
   - apiVersion: rbac.authorization.k8s.io/v1
@@ -20,12 +19,12 @@ extraObjects:
       labels:
         app.kubernetes.io/instance: botkube-e2e-test
     rules:
-      - apiGroups: [ "apps" ]
-        resources: [ "deployments" ]
-        verbs: [ "get","watch","list" ]
-      - apiGroups: [ "" ]
-        resources: [ "configmaps", "pods" ]
-        verbs: [ "get", "watch", "list" ]
+      - apiGroups: ["apps"]
+        resources: ["deployments"]
+        verbs: ["get", "watch", "list"]
+      - apiGroups: [""]
+        resources: ["configmaps", "pods"]
+        verbs: ["get", "watch", "list"]
   - apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
     metadata:
@@ -55,9 +54,9 @@ extraObjects:
       labels:
         app.kubernetes.io/instance: botkube-e2e-test
     rules:
-      - apiGroups: [ "apps" ]
-        resources: [ "deployments" ]
-        verbs: [ "get", "list" ]
+      - apiGroups: ["apps"]
+        resources: ["deployments"]
+        verbs: ["get", "list"]
   - apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata: *kubectl-deploy-all-meta
@@ -76,9 +75,9 @@ extraObjects:
       labels:
         app.kubernetes.io/instance: botkube-e2e-test
     rules:
-      - apiGroups: [ "" ]
-        resources: [ "pods/exec" ]
-        verbs: [ "create" ]
+      - apiGroups: [""]
+        resources: ["pods/exec"]
+        verbs: ["create"]
   - apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
     metadata:
@@ -109,9 +108,9 @@ extraObjects:
       labels:
         app.kubernetes.io/instance: botkube-e2e-test
     rules:
-      - apiGroups: [ "" ]
-        resources: [ "services" ]
-        verbs: [ "get", "patch" ]
+      - apiGroups: [""]
+        resources: ["services"]
+        verbs: ["get", "patch"]
   - apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata: *kc-label-svc-all-meta
@@ -132,9 +131,9 @@ extraObjects:
       labels:
         app.kubernetes.io/instance: botkube-e2e-test
     rules:
-      - apiGroups: [ "" ]
-        resources: [ "configmaps" ]
-        verbs: [ "watch", "list" ]
+      - apiGroups: [""]
+        resources: ["configmaps"]
+        verbs: ["watch", "list"]
   - apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata: *k8s-cm-watch-meta

@@ -37,6 +37,12 @@ containerSecurityContext:
   privileged: false
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop:
+      - ALL
 
 # -- Role Based Access for Botkube Pod and plugins.
 # [Ref doc](https://kubernetes.io/docs/reference/access-authn-authz/rbac/ ).
@@ -54,7 +60,7 @@ rbac:
   staticGroupName: ""
   # -- Use this to create RBAC resources for specified group subjects.
   groups:
-    'botkube-plugins-default':
+    "botkube-plugins-default":
       create: true
       rules:
         - apiGroups: ["*"]
@@ -79,7 +85,7 @@ kubeconfig:
 #
 ## Format: actions.{alias}
 actions:
-  'describe-created-resource':
+  "describe-created-resource":
     # -- If true, enables the action.
     enabled: false
     # -- Action display name posted in the channels bound to the same source bindings.
@@ -98,7 +104,7 @@ actions:
       # -- Executors configuration used to execute a configured command.
       executors:
         - k8s-default-tools
-  'show-logs-on-error':
+  "show-logs-on-error":
     # -- If true, enables the action.
     enabled: false
 
@@ -125,13 +131,12 @@ actions:
 #
 ## Format: sources.{alias}
 sources:
-  'k8s-recommendation-events':
+  "k8s-recommendation-events":
     displayName: "Kubernetes Recommendations"
     # -- Describes Kubernetes source configuration.
     # @default -- See the `values.yaml` file for full object.
     botkube/kubernetes:
-      context: &default-plugin-context
-        # -- RBAC configuration for this plugin.
+      context: &default-plugin-context # -- RBAC configuration for this plugin.
         rbac:
           group:
             # -- Static impersonation for a given username and groups.
@@ -142,12 +147,12 @@ sources:
               # -- Name of group.rbac.authorization.k8s.io the plugin will be bound to.
               values: ["botkube-plugins-default"]
           # user:
-            # type: Static
-            # -- Prefix that will be applied to .static.value[*].
-            # prefix: ""
-            # static:
-              # -- Name of user.rbac.authorization.k8s.io the plugin will be bound to.
-              # value: ""
+          # type: Static
+          # -- Prefix that will be applied to .static.value[*].
+          # prefix: ""
+          # static:
+          # -- Name of user.rbac.authorization.k8s.io the plugin will be bound to.
+          # value: ""
       enabled: true
       config:
         namespaces:
@@ -168,7 +173,7 @@ sources:
             # -- If true, notifies about Ingress resources with invalid TLS secret reference.
             tlsSecretValid: true
 
-  'k8s-all-events':
+  "k8s-all-events":
     displayName: "Kubernetes Info"
     # -- Describes Kubernetes source configuration.
     # @default -- See the `values.yaml` file for full object.
@@ -237,31 +242,31 @@ sources:
         # @default -- See the `values.yaml` file for full object.
         resources:
           - type: v1/pods
-  #          namespaces:             # Overrides 'source'.kubernetes.namespaces
-  #            include:
-  #              - ".*"
-  #            exclude: []
-  #          annotations: {}         # Overrides 'source'.kubernetes.annotations
-  #          labels: {}              # Overrides 'source'.kubernetes.labels
-  #          # Optional resource name constraints.
-  #          name:
-  #            # Include contains a list of allowed values. It can also contain regex expressions.
-  #            include: []
-  #            # Exclude contains a list of values to be ignored even if allowed by Include. It can also contain regex expressions.
-  #            # Exclude list is checked before the Include list.
-  #            exclude: []
-  #          event:
-  #            # Overrides 'source'.kubernetes.event.reason
-  #            reason:
-  #              include: []
-  #              exclude: []
-  #            # Overrides 'source'.kubernetes.event.message
-  #            message:
-  #              include: []
-  #              exclude: []
-  #            # Overrides 'source'.kubernetes.event.types
-  #            types:
-  #              - create
+          #          namespaces:             # Overrides 'source'.kubernetes.namespaces
+          #            include:
+          #              - ".*"
+          #            exclude: []
+          #          annotations: {}         # Overrides 'source'.kubernetes.annotations
+          #          labels: {}              # Overrides 'source'.kubernetes.labels
+          #          # Optional resource name constraints.
+          #          name:
+          #            # Include contains a list of allowed values. It can also contain regex expressions.
+          #            include: []
+          #            # Exclude contains a list of values to be ignored even if allowed by Include. It can also contain regex expressions.
+          #            # Exclude list is checked before the Include list.
+          #            exclude: []
+          #          event:
+          #            # Overrides 'source'.kubernetes.event.reason
+          #            reason:
+          #              include: []
+          #              exclude: []
+          #            # Overrides 'source'.kubernetes.event.message
+          #            message:
+          #              include: []
+          #              exclude: []
+          #            # Overrides 'source'.kubernetes.event.types
+          #            types:
+          #              - create
 
           - type: v1/services
           - type: networking.k8s.io/v1/ingresses
@@ -326,25 +331,25 @@ sources:
               fields:
                 - spec.template.spec.containers[*].image
                 - status.readyReplicas
-         ## Custom resource example
-         # - type: velero.io/v1/backups
-         #   namespaces:
-         #     include:
-         #       - ".*"
-         #     exclude:
-         #       -
-         #   event:
-         #     types:
-         #       - create
-         #       - update
-         #       - delete
-         #       - error
-         #   updateSetting:
-         #     includeDiff: true
-         #     fields:
-         #       - status.phase
+          ## Custom resource example
+          # - type: velero.io/v1/backups
+          #   namespaces:
+          #     include:
+          #       - ".*"
+          #     exclude:
+          #       -
+          #   event:
+          #     types:
+          #       - create
+          #       - update
+          #       - delete
+          #       - error
+          #   updateSetting:
+          #     includeDiff: true
+          #     fields:
+          #       - status.phase
 
-  'k8s-err-events':
+  "k8s-err-events":
     displayName: "Kubernetes Errors"
 
     # -- Describes Kubernetes source configuration.
@@ -388,7 +393,7 @@ sources:
           - type: apps/v1/statefulsets
           - type: apps/v1/daemonsets
           - type: batch/v1/jobs
-  'k8s-err-with-logs-events':
+  "k8s-err-with-logs-events":
     displayName: "Kubernetes Errors for resources with logs"
 
     # -- Describes Kubernetes source configuration.
@@ -419,7 +424,7 @@ sources:
           - type: batch/v1/jobs
           # `apps/v1/replicasets` excluded on purpose - to not show logs twice for a given higher-level resource (e.g. Deployment)
 
-  'k8s-create-events':
+  "k8s-create-events":
     displayName: "Kubernetes Resource Created Events"
 
     # -- Describes Kubernetes source configuration.
@@ -527,7 +532,7 @@ existingCommunicationsSecretName: ""
 #
 ## Format: communications.{alias}
 communications:
-  'default-group':
+  "default-group":
     ## Settings for Slack with Socket Mode.
     socketSlack:
       # -- If true, enables bot for Slack.
@@ -536,9 +541,9 @@ communications:
       #
       ## Format: channels.{alias}
       channels:
-        'default':
+        "default":
           # -- Slack channel name without '#' prefix where you have added Botkube and want to receive notifications in.
-          name: 'SLACK_CHANNEL'
+          name: "SLACK_CHANNEL"
           bindings:
             # -- Executors configuration for a given channel.
             executors:
@@ -549,30 +554,30 @@ communications:
               - k8s-recommendation-events
       # -- Bot token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
-      botToken: ''
+      botToken: ""
       # -- App-level token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
-      appToken: ''
+      appToken: ""
     ## Settings for Mattermost.
     mattermost:
       # -- If true, enables Mattermost bot.
       enabled: false
       # -- User in Mattermost which belongs the specified Personal Access token.
-      botName: 'Botkube'
+      botName: "Botkube"
       # -- The URL (including http/https schema) where Mattermost is running. e.g https://example.com:9243
-      url: 'MATTERMOST_SERVER_URL'
+      url: "MATTERMOST_SERVER_URL"
       # -- Personal Access token generated by Botkube user.
-      token: 'MATTERMOST_TOKEN'
+      token: "MATTERMOST_TOKEN"
       # -- The Mattermost Team name where Botkube is added.
-      team: 'MATTERMOST_TEAM'
+      team: "MATTERMOST_TEAM"
       # -- Map of configured channels. The property name under `channels` object is an alias for a given configuration.
       #
       ## Format: channels.{alias}
       channels:
-        'default':
+        "default":
           # -- The Mattermost channel name for receiving Botkube alerts.
           # The Botkube user needs to be added to it.
-          name: 'MATTERMOST_CHANNEL'
+          name: "MATTERMOST_CHANNEL"
           notification:
             # -- If true, the notifications are not sent to the channel. They can be enabled with `@Botkube` command anytime.
             disabled: false
@@ -590,17 +595,17 @@ communications:
       # -- If true, enables Discord bot.
       enabled: false
       # -- Botkube Bot Token.
-      token: 'DISCORD_TOKEN'
+      token: "DISCORD_TOKEN"
       # -- Botkube Application Client ID.
-      botID: 'DISCORD_BOT_ID'
+      botID: "DISCORD_BOT_ID"
       # -- Map of configured channels. The property name under `channels` object is an alias for a given configuration.
       #
       ## Format: channels.{alias}
       channels:
-        'default':
+        "default":
           # -- Discord channel ID for receiving Botkube alerts.
           # The Botkube user needs to be added to it.
-          id: 'DISCORD_CHANNEL_ID'
+          id: "DISCORD_CHANNEL_ID"
           notification:
             # -- If true, the notifications are not sent to the channel. They can be enabled with `@Botkube` command anytime.
             disabled: false
@@ -626,11 +631,11 @@ communications:
         # -- AWS IAM Role arn to assume for credentials, use this only if you don't want to use the EC2 instance role or not running on AWS instance.
         roleArn: ""
       # -- The server URL, e.g https://example.com:9243
-      server: 'ELASTICSEARCH_ADDRESS'
+      server: "ELASTICSEARCH_ADDRESS"
       # -- Basic Auth username.
-      username: 'ELASTICSEARCH_USERNAME'
+      username: "ELASTICSEARCH_USERNAME"
       # -- Basic Auth password.
-      password: 'ELASTICSEARCH_PASSWORD'
+      password: "ELASTICSEARCH_PASSWORD"
       # -- If true, skips the verification of TLS certificate of the Elastic nodes.
       # It's useful for clusters with self-signed certificates.
       skipTLSVerify: false
@@ -646,7 +651,7 @@ communications:
       #
       ## Format: indices.{alias}
       indices:
-        'default':
+        "default":
           # -- Configures Elasticsearch index settings.
           name: botkube
           type: botkube-event
@@ -663,7 +668,7 @@ communications:
       # -- If true, enables Webhook.
       enabled: false
       # -- The Webhook URL, e.g.: https://example.com:80
-      url: 'WEBHOOK_URL'
+      url: "WEBHOOK_URL"
       bindings:
         # -- Notification sources configuration for the webhook.
         sources:
@@ -807,7 +812,6 @@ extraEnv:
 #        key: value_key
 #  - name: {key}
 #    value: value
-
 
 # -- Extra volumes to pass to the Botkube container. Mount it later with extraVolumeMounts.
 # [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/volume/#Volume).

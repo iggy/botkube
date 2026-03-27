@@ -372,7 +372,7 @@ func (m *Manager) fetchIndex(ctx context.Context, path string, repo config.Plugi
 		"url":     repo.URL,
 	}).Debug("Fetching index via GET request...")
 
-	res, err := m.httpClient.Do(req)
+	res, err := m.httpClient.Do(req) //nolint:gosec // URL comes from plugin repo config, SSRF is accepted risk
 	if err != nil {
 		return fmt.Errorf("while executing request: %w", err)
 	}

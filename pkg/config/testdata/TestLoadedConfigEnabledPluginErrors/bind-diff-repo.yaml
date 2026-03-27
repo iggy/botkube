@@ -18,21 +18,21 @@ communications:
               - mkc
 
 executors:
-  'bkc':
+  "bkc":
     botkube/kubectl:
       enabled: true
-      config: { }
-  'mkc':
+      config: {}
+  "mkc":
     mszostok/kubectl@v1.0.0:
       enabled: true
-      config: { }
+      config: {}
 
 sources:
-  'us-east-2':
+  "us-east-2":
     botkube/prometheus@v1.0.0:
       enabled: true
-      config: { }
-  'eu-central-1':
+      config: {}
+  "eu-central-1":
     mszostok/prometheus@v1.2.0:
       enabled: true
-      config: { }
+      config: {}

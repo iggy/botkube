@@ -111,7 +111,7 @@ func TestNewPluginOSRunCommand_HappyPath(t *testing.T) {
 func TestManager_RenderPluginIndexHeaders(t *testing.T) {
 	// given
 	remoteCfg := remote.Config{
-		Endpoint:   "http://endpoint",
+		Endpoint:   "http://endpoint", // DevSkim: ignore DS137138
 		Identifier: "identifier",
 		APIKey:     "api-key",
 	}

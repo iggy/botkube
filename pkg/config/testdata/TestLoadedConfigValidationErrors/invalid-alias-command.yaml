@@ -1,4 +1,4 @@
-communications: {"foo": {}}
+communications: { "foo": {} }
 
 aliases:
   kc:
@@ -24,14 +24,14 @@ aliases:
     displayName: "Botkube show config"
 
 executors:
-  'kubectl-read-only':
+  "kubectl-read-only":
     kubectl:
       enabled: false
   helm:
     botkube/helm:
       config: {}
       enabled: true
-  'plugin-based':
+  "plugin-based":
     botkube/echo@v1.0.1-devel:
       enabled: false
       config:

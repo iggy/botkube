@@ -1,3 +1,4 @@
+// Package main provides a tool to generate the Botkube plugin index.
 package main
 
 import (
@@ -45,6 +46,6 @@ func main() {
 	loggerx.ExitOnError(err, "while marshaling index into YAML format")
 
 	logger.WithField("output", *output).Info("Saving index file...")
-	err = os.WriteFile(*output, raw, filePerm)
+	err = os.WriteFile(*output, raw, filePerm) //nolint:gosec // path comes from CLI flag, intentional
 	loggerx.ExitOnError(err, "while saving index file")
 }

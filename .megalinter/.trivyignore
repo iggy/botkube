@@ -1,0 +1,79 @@
+# tries to read these as regular yaml files and they are all some sort of template
+.goreleaser.plugin.tpl.yaml
+docs/investigation/configuration/assets/communicationsecret.yaml
+# helm/**
+megalinter-reports/**
+examples/**
+test/**
+
+# KSV-0041: ClusterRole botkube-clusterrole requires access to secrets in order to watch/list
+# Kubernetes resources for alerting. This is intentional and documented behavior.
+KSV-0041
+
+# KSV-0046: ClusterRole botkube-plugins-default requires broad resource access to support
+# the configurable plugin executor permissions. Users configure this via rbac.groups in values.yaml.
+KSV-0046
+
+# KSV-0048/KSV-0049/KSV-0113: The botkube-system Role requires access to pods, deployments,
+# configmaps, and secrets to manage plugin lifecycle, runtime configuration, and read credentials.
+# This is required functionality.
+KSV-0048
+KSV-0049
+KSV-0113
+
+# KSV-0011/KSV-0015/KSV-0016/KSV-0018: Resource limits/requests are intentionally not set in
+# chart defaults since they vary significantly by deployment environment and workload.
+# Users should set appropriate values via the resources: section in values.yaml.
+KSV-0011
+KSV-0015
+KSV-0016
+KSV-0018
+
+# KSV-0020/KSV-0021: runAsUser/runAsGroup is set to 101 (botkube user) in values.yaml.
+# The > 10000 threshold is an arbitrary hardening guideline, not a requirement.
+KSV-0020
+KSV-0021
+
+# KSV-0110: Deployment namespace is set at Helm install time via --namespace flag.
+# The default namespace in values.yaml is "default" as a placeholder; actual deployments
+# use a dedicated namespace.
+KSV-0110
+
+# KSV-0125: The botkube image uses the project's own registry (ghcr.io/kubeshop).
+# This is not an "untrusted" registry; Trivy's registry trust list doesn't include it.
+KSV-0125
+
+# DS-0026: HEALTHCHECK is intentionally omitted from these Dockerfiles.
+# build/Dockerfile runs a long-lived agent that is monitored via Kubernetes liveness probes.
+# build/Dockerfile.config_exporter runs a short-lived batch job and HEALTHCHECK is not applicable.
+DS-0026
+
+# github.com/mattermost/mattermost/server/v8 is used as a client library, not as a server.
+# These CVEs are server-side vulnerabilities that require running a Mattermost server and
+# are not exploitable via client library usage. Additionally, the pseudo-version
+# v8.0.0-20260224033600-4b8ff4e6a3fd is a 2026-02-24 snapshot that postdates these fixes;
+# Trivy incorrectly flags it because pseudo-versions compare as v8.0.0.
+CVE-2023-6458
+CVE-2024-1887
+CVE-2023-40703
+CVE-2023-43754
+CVE-2023-45223
+CVE-2023-47168
+CVE-2023-47858
+CVE-2023-47865
+CVE-2023-48268
+CVE-2023-48369
+CVE-2023-48732
+CVE-2023-6202
+CVE-2023-6459
+CVE-2024-1402
+CVE-2024-1888
+CVE-2024-1942
+CVE-2024-1953
+CVE-2023-35075
+CVE-2023-50333
+CVE-2023-7113
+CVE-2024-1949
+CVE-2024-21848
+CVE-2024-23488
+CVE-2024-24776

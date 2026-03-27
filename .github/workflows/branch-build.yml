@@ -5,7 +5,7 @@ on:
     branches:
       - main
   repository_dispatch:
-    types: [ trigger-e2e-tests ]
+    types: [trigger-e2e-tests]
 
 env:
   HELM_VERSION: v3.9.0
@@ -30,10 +30,10 @@ jobs:
         id: extract-version
         run: |
           IMAGE_VERSION=$(git rev-parse --short HEAD)
-          echo "versions={\"image-version\":[\"v9.99.9-dev\",\"0.0.0-${IMAGE_VERSION}\"]}" >> $GITHUB_OUTPUT
+          echo "versions={\"image-version\":[\"v9.99.9-dev\",\"0.0.0-${IMAGE_VERSION}\"]}" >> "$GITHUB_OUTPUT"
   build:
     if: github.event_name != 'repository_dispatch' # skip if triggered by repository_dispatch
-    needs: [ extract-metadata ]
+    needs: [extract-metadata]
     strategy:
       matrix: ${{ fromJson(needs.extract-metadata.outputs.versions) }}
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: 'go.mod'
+          go-version-file: "go.mod"
           cache: true
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -75,7 +75,7 @@ jobs:
     if: github.event_name != 'repository_dispatch' # skip if triggered by repository_dispatch
     name: Integration tests
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [build]
     permissions:
       contents: read
       packages: read
@@ -96,14 +96,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup Go modules
-        uses: ./.github/actions/setup-go-mod-private
+      - name: Setup Go
+        uses: actions/setup-go@v6
         with:
-          access_token: ${{ secrets.E2E_TEST_GH_DEV_ACCOUNT_PAT }}
-          username: ${{ env.GIT_USER }}
+          go-version-file: "./test/go.mod"
+          cache: true
+
+      - name: Download Go modules
+        shell: bash
+        run: go mod download
+        working-directory: ./test
 
       - name: Pub/Sub auth
-        uses: 'google-github-actions/auth@v3'
+        uses: "google-github-actions/auth@v3"
         if: matrix.integration == 'teams'
         with:
           credentials_json: ${{ secrets.E2E_TEST_GCP_PUB_SUB_CREDENTIALS }}
@@ -165,7 +170,7 @@ jobs:
 
       - name: Add Botkube CLI to env
         run: |
-          echo CONFIG_PROVIDER_BOTKUBE_CLI_BINARY_PATH="$PWD/dist/botkube-cli_linux_amd64_v1/botkube" >> $GITHUB_ENV
+          echo "CONFIG_PROVIDER_BOTKUBE_CLI_BINARY_PATH=$PWD/dist/botkube-cli_linux_amd64_v1/botkube" >> "$GITHUB_ENV"
 
       - name: Run ${{ matrix.integration }} tests
         env:
@@ -205,10 +210,10 @@ jobs:
         if: ${{ failure() }}
         env:
           SLACK_USERNAME: Botkube Cloud CI
-          SLACK_COLOR: 'red'
-          SLACK_TITLE: 'Message'
-          SLACK_CHANNEL: 'botkube-cloud-ci-alerts'
-          SLACK_MESSAGE: 'Integration ${{ matrix.integration }} test failed :scream:'
-          SLACK_ICON_EMOJI: ':this-is-fine-fire:'
+          SLACK_COLOR: "red"
+          SLACK_TITLE: "Message"
+          SLACK_CHANNEL: "botkube-ci-alerts"
+          SLACK_MESSAGE: "Integration ${{ matrix.integration }} test failed :scream:"
+          SLACK_ICON_EMOJI: ":this-is-fine-fire:"
           SLACK_WEBHOOK: ${{ secrets.SLACK_CI_ALERTS_WEBHOOK }}
           SLACK_FOOTER: "Fingers crossed it's just an outdated/flaky test..."

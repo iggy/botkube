@@ -1,18 +1,18 @@
 communications:
-  'default-group':
+  "default-group":
     socketSlack:
       enabled: false
-      botToken: 'xoxb-223'
+      botToken: "xoxb-223"
       appToken: "xapp-223"
       channels:
-        'botkube':
-          name: 'botkube'
+        "botkube":
+          name: "botkube"
           bindings:
             sources:
               - cm-1
               - cm-2
 sources:
-  'cm-1':
+  "cm-1":
     displayName: "Events based on plugin"
     botkube/cm-watcher:
       enabled: true
@@ -24,13 +24,13 @@ sources:
             Type: Static
             Prefix: ""
             Static:
-              Values: [ "developers" ]
+              Values: ["developers"]
           User:
             Type: this-value-is-different # <---
             Prefix: ""
             Static:
               Value: "default"
-  'cm-2':
+  "cm-2":
     displayName: "Events based on plugin"
     botkube/cm-watcher:
       enabled: true
@@ -42,7 +42,7 @@ sources:
             Type: Static
             Prefix: ""
             Static:
-              Values: [ "developers" ]
+              Values: ["developers"]
           User:
             Type: Static1
             Prefix: ""

@@ -18,7 +18,7 @@ type (
 	// StaticPluginServerConfig holds configuration for fake plugin server.
 	StaticPluginServerConfig struct {
 		BinariesDirectory string
-		Host              string `envconfig:"default=http://host.k3d.internal"`
+		Host              string `envconfig:"default=http://host.k3d.internal"` // DevSkim: ignore DS137138 - k3d local dev host uses http
 		Port              int    `envconfig:"default=3000"`
 	}
 )
@@ -35,18 +35,18 @@ func NewStaticPluginServer(cfg StaticPluginServerConfig) (string, func() error) 
 		isArchive := os.Getenv("OUTPUT_MODE") == "archive"
 		idx, err := builder.Build(cfg.BinariesDirectory, basePath+"/static", ".*", true, isArchive)
 		if err != nil {
-			log.Printf("Cannot build index file: %s", err.Error())
+			log.Printf("Cannot build index file: %s", err.Error()) //nolint:gosec // logging internal error, not user input
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		out, err := yaml.Marshal(idx)
 		if err != nil {
-			log.Printf("Cannot marshall index file: %s", err.Error())
+			log.Printf("Cannot marshall index file: %s", err.Error()) //nolint:gosec // logging internal error, not user input
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
 		_, err = w.Write(out)
 		if err != nil {
-			log.Printf("Cannot send marshalled index file: %s", err.Error())
+			log.Printf("Cannot send marshalled index file: %s", err.Error()) //nolint:gosec // logging internal error, not user input
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})

@@ -1,3 +1,4 @@
+// Package telemetry provides CLI commands for managing Botkube telemetry settings.
 package telemetry
 
 import (

@@ -1,10 +1,10 @@
 communications: # req 1 elm.
-  'default-workspace':
+  "default-workspace":
     slack:
       enabled: true
       channels:
-        'alias':
-          name: 'SLACK_CHANNEL'
+        "alias":
+          name: "SLACK_CHANNEL"
           bindings:
             executors:
               - kubectl-read-only
@@ -13,8 +13,8 @@ communications: # req 1 elm.
     socketSlack:
       enabled: true
       channels:
-        'alias':
-          name: 'SLACK_CHANNEL'
+        "alias":
+          name: "SLACK_CHANNEL"
           bindings:
             executors:
               - kubectl-read-only

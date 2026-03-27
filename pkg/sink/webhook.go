@@ -88,7 +88,7 @@ func (w *Webhook) PostWebhook(ctx context.Context, jsonPayload *WebhookPayload) 
 	req.Header.Add("Content-Type", "application/json")
 
 	client := &http.Client{Timeout: defaultHTTPCliTimeout}
-	resp, err := client.Do(req)
+	resp, err := client.Do(req) //nolint:gosec // URL comes from sink config, SSRF is accepted risk
 	if err != nil {
 		return err
 	}

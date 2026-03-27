@@ -71,31 +71,29 @@ builds:
       - 7
 
 archives:
-      
   - builds: [echo]
     id: echo
     files:
       - none*
     name_template: "{{ .Binary }}"
-      
+
   - builds: [kubectl]
     id: kubectl
     files:
       - none*
     name_template: "{{ .Binary }}"
-      
+
   - builds: [cm-watcher]
     id: cm-watcher
     files:
       - none*
     name_template: "{{ .Binary }}"
-      
+
   - builds: [kubernetes]
     id: kubernetes
     files:
       - none*
     name_template: "{{ .Binary }}"
-  
 
 snapshot:
-  name_template: 'v{{ .Version }}'
+  name_template: "v{{ .Version }}"

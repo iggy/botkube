@@ -9,20 +9,20 @@
         test: annotation-1-level
       namespaces:
         include:
-            - namespace-include-1-level
+          - namespace-include-1-level
         exclude:
-            - namespace-exclude-1-level
+          - namespace-exclude-1-level
       updatesetting: null
       event:
         reason:
-            include:
-                - reason-include-1-level
-            exclude:
-                - reason-exclude-1-level
+          include:
+            - reason-include-1-level
+          exclude:
+            - reason-exclude-1-level
         message:
-            include:
-                - message-include-1-level
-            exclude:
-                - message-exclude-1-level
+          include:
+            - message-include-1-level
+          exclude:
+            - message-exclude-1-level
         types:
-            - delete
+          - delete

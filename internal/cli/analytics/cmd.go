@@ -1,3 +1,4 @@
+// Package analytics provides CLI analytics command utilities.
 package analytics
 
 import (
