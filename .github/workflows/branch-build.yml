@@ -114,7 +114,7 @@ jobs:
           credentials_json: ${{ secrets.E2E_TEST_GCP_PUB_SUB_CREDENTIALS }}
 
       - name: Install Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
         with:
           version: ${{ env.HELM_VERSION }}
 
