@@ -78,6 +78,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 	helm.sh/helm/v3 v3.20.2
+	helm.sh/helm/v4 v4.1.4
 	k8s.io/api v0.35.2
 	k8s.io/apimachinery v0.35.3
 	k8s.io/cli-runtime v0.35.2
