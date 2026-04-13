@@ -9,13 +9,13 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/avast/retry-go/v4"
-	"helm.sh/helm/v3/pkg/action"
-	"helm.sh/helm/v3/pkg/chart"
-	"helm.sh/helm/v3/pkg/chart/loader"
-	helmcli "helm.sh/helm/v3/pkg/cli"
-	"helm.sh/helm/v3/pkg/getter"
-	"helm.sh/helm/v3/pkg/release"
-	"helm.sh/helm/v3/pkg/storage/driver"
+	"helm.sh/helm/v4/pkg/action"
+	v2 "helm.sh/helm/v4/pkg/chart/v2"
+	"helm.sh/helm/v4/pkg/chart/v2/loader"
+	helmcli "helm.sh/helm/v4/pkg/cli"
+	"helm.sh/helm/v4/pkg/getter"
+	v1 "helm.sh/helm/v4/pkg/release/v1"
+	"helm.sh/helm/v4/pkg/storage/driver"
 
 	"github.com/kubeshop/botkube/internal/cli"
 	"github.com/kubeshop/botkube/internal/cli/helmx"
@@ -27,7 +27,7 @@ import (
 const restartAnnotationFmt = "extraAnnotations.cli\\.botkube\\.io\\/restart\\-timestamp=\"%d\""
 
 // Run provides single function signature both for install and upgrade.
-type Run func(ctx context.Context, relName string, chart *chart.Chart, vals map[string]any) (*release.Release, error)
+type Run func(ctx context.Context, relName string, chrt *v2.Chart, vals map[string]any) (*v1.Release, error)
 
 // Helm provides option to or update install Helm charts.
 type Helm struct {
@@ -44,15 +44,20 @@ func NewHelm(k8sCfg *kubex.ConfigWithMeta, forNamespace string) (*Helm, error) {
 }
 
 // Install installs a given Helm chart.
-func (c *Helm) Install(ctx context.Context, status *printer.StatusPrinter, opts Config) (*release.Release, error) {
+func (c *Helm) Install(ctx context.Context, status *printer.StatusPrinter, opts Config) (*v1.Release, error) {
 	histClient := action.NewHistory(c.helmCfg)
 	rels, err := histClient.Run(opts.ReleaseName)
 	var runFn Run
 	switch {
 	case err == nil:
 		if len(rels) > 0 { // it shouldn't happen, because there is not found error in such cases, however it better to be on the safe side.
-			if err := PrintReleaseStatus("Detected existing Botkube installation:", status, rels[len(rels)-1]); err != nil {
-				return nil, err
+			// Type assertion from release.Releaser interface to *v1.Release
+			if rel, ok := rels[len(rels)-1].(*v1.Release); ok {
+				if err := PrintReleaseStatus("Detected existing Botkube installation:", status, rel); err != nil {
+					return nil, err
+				}
+			} else {
+				status.Infof("Detected existing Botkube installation")
 			}
 		} else {
 			status.Infof("Detected existing Botkube installation")
@@ -112,7 +117,7 @@ func (c *Helm) Install(ctx context.Context, status *printer.StatusPrinter, opts 
 	status.Step("Scheduling %s Helm chart", opts.ChartName)
 	status.End(true)
 	//  We may run into in issue temporary network issues.
-	var rel *release.Release
+	var rel *v1.Release
 	err = retry.Do(func() error {
 		rel, err = runFn(ctx, opts.ReleaseName, loadedChart, vals)
 		return err
@@ -124,7 +129,7 @@ func (c *Helm) Install(ctx context.Context, status *printer.StatusPrinter, opts 
 	return rel, nil
 }
 
-func (c *Helm) getChart(repoLocation string, chartName string, version string) (*chart.Chart, func(), error) {
+func (c *Helm) getChart(repoLocation string, chartName string, version string) (*v2.Chart, func(), error) {
 	location := chartName
 	chartOptions := action.ChartPathOptions{
 		RepoURL: repoLocation,
@@ -164,21 +169,30 @@ func (c *Helm) installAction(opts Config) Run {
 
 	installCli.Namespace = opts.Namespace
 	installCli.SkipCRDs = opts.SkipCRDs
-	installCli.Wait = false // botkube CLI has a custom logic to do that
 	installCli.WaitForJobs = false
 	installCli.DisableHooks = opts.DisableHooks
-	installCli.DryRun = opts.DryRun
-	installCli.Force = opts.Force
+	// Note: Helm v4 removed Wait, DryRun, Force, and Atomic fields.
+	// Use WaitStrategy and DryRunStrategy instead if needed.
+	if opts.DryRun {
+		installCli.DryRunStrategy = action.DryRunClient
+	}
 
-	installCli.Atomic = opts.Atomic
 	installCli.SubNotes = opts.SubNotes
 	installCli.Description = opts.Description
 	installCli.DisableOpenAPIValidation = opts.DisableOpenAPIValidation
 	installCli.DependencyUpdate = opts.DependencyUpdate
 
-	return func(ctx context.Context, relName string, chart *chart.Chart, vals map[string]any) (*release.Release, error) {
+	return func(ctx context.Context, relName string, chrt *v2.Chart, vals map[string]any) (*v1.Release, error) {
 		installCli.ReleaseName = relName
-		return installCli.RunWithContext(ctx, chart, vals)
+		rel, err := installCli.RunWithContext(ctx, chrt, vals)
+		if err != nil {
+			return nil, err
+		}
+		// Type assertion from release.Releaser interface to *v1.Release
+		if r, ok := rel.(*v1.Release); ok {
+			return r, nil
+		}
+		return nil, fmt.Errorf("unexpected release type")
 	}
 }
 
@@ -187,21 +201,30 @@ func (c *Helm) upgradeAction(opts Config) Run {
 
 	upgradeAction.Namespace = opts.Namespace
 	upgradeAction.SkipCRDs = opts.SkipCRDs
-	upgradeAction.Wait = false // botkube CLI has a custom logic to do that
 	upgradeAction.WaitForJobs = false
 	upgradeAction.DisableHooks = opts.DisableHooks
-	upgradeAction.DryRun = opts.DryRun
-	upgradeAction.Force = opts.Force
+	// Note: Helm v4 removed Wait, DryRun, Force, and Atomic fields.
+	// Use WaitStrategy and DryRunStrategy instead if needed.
+	if opts.DryRun {
+		upgradeAction.DryRunStrategy = action.DryRunClient
+	}
 	upgradeAction.ResetValues = opts.ResetValues
 	upgradeAction.ReuseValues = opts.ReuseValues
-	upgradeAction.Atomic = opts.Atomic
 	upgradeAction.SubNotes = opts.SubNotes
 	upgradeAction.Description = opts.Description
 	upgradeAction.DisableOpenAPIValidation = opts.DisableOpenAPIValidation
 	upgradeAction.DependencyUpdate = opts.DependencyUpdate
 
-	return func(ctx context.Context, relName string, chart *chart.Chart, vals map[string]any) (*release.Release, error) {
-		return upgradeAction.RunWithContext(ctx, relName, chart, vals)
+	return func(ctx context.Context, relName string, chrt *v2.Chart, vals map[string]any) (*v1.Release, error) {
+		rel, err := upgradeAction.RunWithContext(ctx, relName, chrt, vals)
+		if err != nil {
+			return nil, err
+		}
+		// Type assertion from release.Releaser interface to *v1.Release
+		if r, ok := rel.(*v1.Release); ok {
+			return r, nil
+		}
+		return nil, fmt.Errorf("unexpected release type")
 	}
 }
 

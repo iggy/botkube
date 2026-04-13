@@ -6,7 +6,7 @@ import (
 
 	"github.com/muesli/reflow/indent"
 	"go.szostok.io/version/style"
-	"helm.sh/helm/v3/pkg/release"
+	v1 "helm.sh/helm/v4/pkg/release/v1"
 
 	"github.com/kubeshop/botkube/internal/cli/printer"
 )
@@ -21,7 +21,7 @@ var releaseGoTpl = `
 
 // PrintReleaseStatus returns release description similar to what Helm does,
 // based on https://github.com/helm/helm/blob/f31d4fb3aacabf6102b3ec9214b3433a3dbf1812/cmd/helm/status.go#L126C1-L138C3
-func PrintReleaseStatus(header string, status *printer.StatusPrinter, r *release.Release) error {
+func PrintReleaseStatus(header string, status *printer.StatusPrinter, r *v1.Release) error {
 	if r == nil {
 		return nil
 	}

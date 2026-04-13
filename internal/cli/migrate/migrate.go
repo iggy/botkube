@@ -10,7 +10,7 @@ import (
 	"github.com/mattn/go-shellwords"
 	flag "github.com/spf13/pflag"
 	"golang.org/x/oauth2"
-	"helm.sh/helm/v3/pkg/cli/values"
+	"helm.sh/helm/v4/pkg/cli/values"
 
 	"github.com/kubeshop/botkube/internal/cli"
 	"github.com/kubeshop/botkube/internal/cli/install"
