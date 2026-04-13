@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-viper/mapstructure/v2"
 	koanfyaml "github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/providers/env/v2"
 	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/knadh/koanf/v2"
 	"golang.org/x/text/cases"
@@ -719,9 +719,13 @@ func LoadWithDefaults(configs [][]byte) (*Config, LoadWithDefaultsDetails, error
 
 	// LoadWithDefaults environment variables and merge into the loaded config.
 	err := k.Load(env.Provider(
-		configEnvVariablePrefix,
 		configDelimiter,
-		normalizeConfigEnvName,
+		env.Opt{
+			Prefix: configEnvVariablePrefix,
+			TransformFunc: func(k, v string) (string, any) {
+				return normalizeConfigEnvName(k), v
+			},
+		},
 	), nil)
 	if err != nil {
 		return nil, LoadWithDefaultsDetails{}, err
