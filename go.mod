@@ -26,7 +26,6 @@ require (
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/google/go-github/v53 v53.2.0
-	github.com/google/go-github/v84 v84.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.0
 	github.com/gorilla/mux v1.8.1
@@ -58,7 +57,7 @@ require (
 	github.com/sanity-io/litter v1.5.8
 	github.com/segmentio/analytics-go v3.1.0+incompatible
 	github.com/sirupsen/logrus v1.9.4
-	github.com/slack-go/slack v0.21.1
+	github.com/slack-go/slack v0.22.0
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
