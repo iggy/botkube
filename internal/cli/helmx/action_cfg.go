@@ -3,7 +3,7 @@ package helmx
 import (
 	"fmt"
 
-	"helm.sh/helm/v3/pkg/action"
+	"helm.sh/helm/v4/pkg/action"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 
 	"github.com/kubeshop/botkube/internal/cli"
@@ -25,17 +25,15 @@ func GetActionConfiguration(k8sCfg *kubex.ConfigWithMeta, forNamespace string) (
 		Namespace:   ptr.FromType(forNamespace),
 	}
 
-	debugLog := func(format string, v ...interface{}) {
-		if cli.VerboseMode.IsTracing() {
-			fmt.Print("    Helm log: ") // if enabled, we need to nest that under Helm step which was already printed with 2 spaces.
-			fmt.Printf(format, v...)
-			fmt.Println()
-		}
-	}
-
-	err := actionConfig.Init(helmCfg, forNamespace, helmDriver, debugLog)
+	// Note: Helm v4 removed the debug logger parameter from Init.
+	// Debug logging must now be handled separately if needed.
+	err := actionConfig.Init(helmCfg, forNamespace, helmDriver)
 	if err != nil {
 		return nil, fmt.Errorf("while initializing Helm configuration: %v", err)
+	}
+
+	if cli.VerboseMode.IsTracing() {
+		fmt.Printf("    Helm configuration initialized for namespace: %s\n", forNamespace)
 	}
 
 	return actionConfig, nil

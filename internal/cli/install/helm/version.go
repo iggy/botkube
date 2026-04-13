@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/pkg/errors"
-	"helm.sh/helm/v3/pkg/repo"
+	"helm.sh/helm/v4/pkg/repo/v1"
 	"sigs.k8s.io/yaml"
 
 	"github.com/kubeshop/botkube/pkg/httpx"

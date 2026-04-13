@@ -1,7 +1,7 @@
 package helm
 
 import (
-	"helm.sh/helm/v3/pkg/cli/values"
+	"helm.sh/helm/v4/pkg/cli/values"
 )
 
 const (

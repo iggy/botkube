@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/avast/retry-go/v4"
-	"helm.sh/helm/v3/pkg/action"
+	"helm.sh/helm/v4/pkg/action"
 
 	"github.com/kubeshop/botkube/internal/cli/helmx"
 	"github.com/kubeshop/botkube/internal/cli/printer"
@@ -47,7 +47,8 @@ func (c *Helm) uninstallAction(opts Config) *action.Uninstall {
 	deleteAction.DisableHooks = opts.DisableHooks
 	deleteAction.DryRun = opts.DryRun
 	deleteAction.KeepHistory = opts.KeepHistory
-	deleteAction.Wait = opts.Wait
+	// Note: Helm v4 removed the Wait field from Uninstall action.
+	// Use WaitStrategy on Install/Upgrade actions instead.
 	deleteAction.DeletionPropagation = opts.DeletionPropagation
 	deleteAction.Timeout = opts.Timeout
 	deleteAction.Description = opts.Description
