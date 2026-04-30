@@ -32,7 +32,7 @@ require (
 	github.com/hashicorp/go-getter v1.8.6
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/hashicorp/go-plugin v1.7.0
+	github.com/hashicorp/go-plugin v1.8.0
 	github.com/hashicorp/go-version v1.9.0
 	github.com/hasura/go-graphql-client v0.16.0
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
