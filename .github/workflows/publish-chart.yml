@@ -19,15 +19,16 @@ jobs:
     name: Process Chart Updates
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Update Chart Version in YAML Files
         id: process-chart
         run: |
           CHART_VERSION="0.0.0-$(git rev-parse --short HEAD)"
-          HELM_FOLDER="${{ github.workspace }}/helm"
+          HELM_FOLDER="${GITHUB_WORKSPACE}/helm"
           CHART_CURRENT_VERSION=$(sed -nE 's/^version\s*:\s*([^\s\/]*).*/\1/p' "${HELM_FOLDER}/botkube/Chart.yaml")
           CHART_DEV_VERSION="v9.99.9-dev"
           find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s/${CHART_CURRENT_VERSION}/${CHART_VERSION}/g" {} +
@@ -36,7 +37,7 @@ jobs:
           echo "chart_version=$CHART_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.8.0
+        uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
 
       - name: Run chart-testing
         working-directory: ${{ github.workspace }}/helm
@@ -44,13 +45,22 @@ jobs:
           ct lint --all --chart-dirs . --config ./ct/lint-cfg.yaml --lint-conf ./ct/lint-rules.yaml
 
       - name: Package chart
+        env:
+          CHART_VERSION: ${{ steps.process-chart.outputs.chart_version }}
         run: |
-          mkdir -p "${{ github.workspace }}/main-chart"
-          helm package -d "${{ github.workspace }}/main-chart" ./helm/botkube --version ${{ steps.process-chart.outputs.chart_version }}
+          mkdir -p "${GITHUB_WORKSPACE}/main-chart"
+          helm package -d "${GITHUB_WORKSPACE}/main-chart" ./helm/botkube --version "${CHART_VERSION}"
 
       - name: Log in to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+        env:
+          GH_USER: ${{ github.actor }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "${GH_TOKEN}" | helm registry login ghcr.io -u "${GH_USER}" --password-stdin
 
       - name: Push chart to GHCR (OCI)
+        env:
+          CHART_VERSION: ${{ steps.process-chart.outputs.chart_version }}
+          OCI_REPO: ${{ env.CHART_OCI_REPO }}
         run: |
-          helm push "${{ github.workspace }}/main-chart/botkube-${{ steps.process-chart.outputs.chart_version }}.tgz" "${{ env.CHART_OCI_REPO }}"
+          helm push "${GITHUB_WORKSPACE}/main-chart/botkube-${CHART_VERSION}.tgz" "${OCI_REPO}"
