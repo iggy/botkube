@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.source="git@github.com:kubeshop/botkube.git" \
 
 COPY botkube-agent /usr/local/bin/botkube-agent
 
-RUN apk add --no-cache 'git=>2.38' 'openssh=~9.3' && \
+RUN apk add --no-cache git openssh && \
     mkdir /root/.ssh && \
     chmod 700 /root/.ssh && \
     ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
