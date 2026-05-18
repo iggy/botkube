@@ -1,3 +1,4 @@
+version: 2
 project_name: botkube
 env:
   - IMAGE_REGISTRY={{ if index .Env "IMAGE_REGISTRY"  }}{{ .Env.IMAGE_REGISTRY }}{{ else }}ghcr.io{{ end }}
@@ -88,7 +89,7 @@ release:
     - glob: ./plugins-dev-index.yaml
 
 changelog:
-  skip: false
+  disable: false
 
 dockers:
   # Botkube Agent
@@ -169,7 +170,7 @@ brews:
   - name: botkube
     ids:
       - botkube-cli
-    tap:
+    repository:
       owner: "{{.Env.HOMEBREW_REPO_OWNER}}"
       name: "{{.Env.HOMEBREW_REPO_NAME}}"
       token: "{{ .Env.GITHUB_TOKEN }}"

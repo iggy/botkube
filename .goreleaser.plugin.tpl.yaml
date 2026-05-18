@@ -1,3 +1,4 @@
+version: 2
 # GoReleaser already creates Botkube artifacts in the ./dist folder.
 # To not override them during release, we use a different folder
 dist: plugin-dist
