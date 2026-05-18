@@ -16,6 +16,7 @@ DISABLE_LINTERS:
 DISABLE_ERRORS_LINTERS:
   - REPOSITORY_CHECKOV
   - REPOSITORY_DEVSKIM
+  - ACTION_ZIZMOR
 
 # zizmor needs to call the GitHub API to perform the ref-confusion audit;
 # without GITHUB_TOKEN it gets 401-rate-limited and fails the whole job.
