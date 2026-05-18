@@ -7,26 +7,28 @@ on:
       - "main"
 
 env:
-  git-user: github-actions[bot]
-  git-email: 41898282+github-actions[bot]@users.noreply.github.com
   HELM_DOCS_VERSION: 1.11.0
-  CHART_REPOSITORY: https://storage.googleapis.com/botkube-latest-main-charts
-  LATEST_PLUGIN_INDEX_URL: https://storage.googleapis.com/botkube-plugins-latest/plugins-index.yaml
+  CHART_OCI_REPO: oci://ghcr.io/${{ github.repository_owner }}/charts
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   process-chart:
     name: Process Chart Updates
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Update Chart Version in YAML Files
         id: process-chart
         run: |
           CHART_VERSION="0.0.0-$(git rev-parse --short HEAD)"
-          HELM_FOLDER="${{ github.workspace }}/helm"
+          HELM_FOLDER="${GITHUB_WORKSPACE}/helm"
           CHART_CURRENT_VERSION=$(sed -nE 's/^version\s*:\s*([^\s\/]*).*/\1/p' "${HELM_FOLDER}/botkube/Chart.yaml")
           CHART_DEV_VERSION="v9.99.9-dev"
           find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s/${CHART_CURRENT_VERSION}/${CHART_VERSION}/g" {} +
@@ -35,29 +37,30 @@ jobs:
           echo "chart_version=$CHART_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.8.0
+        uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
 
       - name: Run chart-testing
         working-directory: ${{ github.workspace }}/helm
         run: |
           ct lint --all --chart-dirs . --config ./ct/lint-cfg.yaml --lint-conf ./ct/lint-rules.yaml
 
-      - name: Publish Chart
+      - name: Package chart
+        env:
+          CHART_VERSION: ${{ steps.process-chart.outputs.chart_version }}
         run: |
-          helm package -d ${{ github.workspace }}/main-chart ./helm/botkube --version ${{ steps.process-chart.outputs.chart_version }}
-          helm repo index --url "${{ env.CHART_REPOSITORY }}" --merge ${{ github.workspace }}/main-chart/index.yaml ${{ github.workspace }}/main-chart/
+          mkdir -p "${GITHUB_WORKSPACE}/main-chart"
+          helm package -d "${GITHUB_WORKSPACE}/main-chart" ./helm/botkube --version "${CHART_VERSION}"
 
-      - name: GCP auth
-        uses: "google-github-actions/auth@v3"
-        with:
-          credentials_json: ${{ secrets.PLUGINS_BUCKET_CREDENTIALS }}
+      - name: Log in to GHCR
+        env:
+          GH_USER: ${{ github.actor }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "${GH_TOKEN}" | helm registry login ghcr.io -u "${GH_USER}" --password-stdin
 
-      - name: "Set up Cloud SDK"
-        uses: "google-github-actions/setup-gcloud@v3"
-
-      - name: Upload chart to GCS
-        uses: google-github-actions/upload-cloud-storage@v3
-        with:
-          path: ${{ github.workspace }}/main-chart
-          destination: "botkube-latest-main-charts/"
-          parent: false
+      - name: Push chart to GHCR (OCI)
+        env:
+          CHART_VERSION: ${{ steps.process-chart.outputs.chart_version }}
+          OCI_REPO: ${{ env.CHART_OCI_REPO }}
+        run: |
+          helm push "${GITHUB_WORKSPACE}/main-chart/botkube-${CHART_VERSION}.tgz" "${OCI_REPO}"

@@ -17,7 +17,7 @@ prepare() {
 
 release_snapshot() {
 	prepare
-	goreleaser release --clean --snapshot --skip-publish
+	goreleaser release --clean --snapshot --skip=publish
 
 	# Push images
 	docker push "${IMAGE_REGISTRY}/${IMAGE_REPOSITORY}:${GORELEASER_CURRENT_TAG}"-amd64
@@ -59,7 +59,7 @@ save_images() {
 	export GORELEASER_CURRENT_TAG=${IMAGE_TAG}
 
 	GORELEASER_FILE="$(prepare_goreleaser)"
-	goreleaser release --clean --snapshot --skip-publish --config="${GORELEASER_FILE}"
+	goreleaser release --clean --snapshot --skip=publish --config="${GORELEASER_FILE}"
 
 	mkdir -p "${IMAGE_SAVE_LOAD_DIR}"
 
@@ -144,7 +144,7 @@ build() {
 		-e GORELEASER_CURRENT_TAG=v9.99.9-dev \
 		-e ANALYTICS_API_KEY="${ANALYTICS_API_KEY}" \
 		-e CLI_ANALYTICS_API_KEY="${CLI_ANALYTICS_API_KEY}" \
-		goreleaser/goreleaser release --clean --snapshot --skip-publish
+		goreleaser/goreleaser release --clean --snapshot --skip=publish
 }
 
 build_plugins_command() {
