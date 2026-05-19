@@ -77,8 +77,8 @@ require (
 	helm.sh/helm/v4 v4.1.4
 	k8s.io/api v0.36.1
 	k8s.io/apimachinery v0.36.1
-	k8s.io/cli-runtime v0.35.4
-	k8s.io/client-go v0.35.4
+	k8s.io/cli-runtime v0.36.1
+	k8s.io/client-go v0.36.1
 	k8s.io/klog/v2 v2.140.0
 	k8s.io/kubectl v0.35.4
 	k8s.io/utils v0.0.0-20260319190234-28399d86e0b5
@@ -193,7 +193,6 @@ require (
 	github.com/googleapis/gax-go/v2 v2.18.0 // indirect
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
 	github.com/gosuri/uitable v0.0.4 // indirect
-	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/hashicorp/aws-sdk-go-base/v2 v2.0.0-beta.72 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
