@@ -25,7 +25,7 @@ require (
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/go-viper/mapstructure/v2 v2.5.0
-	github.com/google/go-github/v53 v53.2.0
+	github.com/google/go-github/v87 v87.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.1
 	github.com/gorilla/mux v1.8.1
