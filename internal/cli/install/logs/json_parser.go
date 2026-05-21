@@ -3,10 +3,10 @@ package logs
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"sort"
 	"strings"
 
-	charmlog "github.com/charmbracelet/log"
 	"golang.org/x/exp/maps"
 
 	"github.com/kubeshop/botkube/internal/cli"
@@ -15,18 +15,18 @@ import (
 // JSONParser knows how to parse JSON formatted logs.
 type JSONParser struct{}
 
-// ParseLineIntoCharm returns parsed log line with charm logger support.
-func (j *JSONParser) ParseLineIntoCharm(line string) ([]any, charmlog.Level) {
+// ParseLine returns the parsed log line as a message, level, and additional
+// structured attributes suitable for use with log/slog.
+func (j *JSONParser) ParseLine(line string) (msg string, lvl slog.Level, attrs []slog.Attr, ok bool) {
 	result := j.parseLine(line)
 	if result == nil {
-		return nil, 0
+		return "", 0, nil, false
 	}
 
-	var fields []any
-
-	lvl := parseLevel(fmt.Sprint(result["level"]))
-	fields = append(fields, charmlog.LevelKey, lvl)
-	fields = append(fields, charmlog.MessageKey, result["msg"])
+	lvl = parseLevel(fmt.Sprint(result["level"]))
+	if m, mOk := result["msg"]; mOk {
+		msg = fmt.Sprint(m)
+	}
 
 	keys := maps.Keys(result)
 	sort.Strings(keys)
@@ -39,10 +39,10 @@ func (j *JSONParser) ParseLineIntoCharm(line string) ([]any, charmlog.Level) {
 				continue // ignore those fields if verbose is not enabled
 			}
 		}
-		fields = append(fields, k, result[k])
+		attrs = append(attrs, slog.Any(k, result[k]))
 	}
 
-	return fields, lvl
+	return msg, lvl, attrs, true
 }
 
 func (*JSONParser) parseLine(line string) map[string]any {
@@ -54,20 +54,22 @@ func (*JSONParser) parseLine(line string) map[string]any {
 	return out
 }
 
-// parseLevel takes a string level and returns the charm log level constant.
-func parseLevel(lvl string) charmlog.Level {
+// parseLevel takes a string level and returns the corresponding slog.Level.
+// Panic and fatal are mapped to slog.LevelError + 4 to preserve their
+// higher-than-error severity ordering.
+func parseLevel(lvl string) slog.Level {
 	switch strings.ToLower(lvl) {
 	case "panic", "fatal":
-		return charmlog.FatalLevel
+		return slog.LevelError + 4
 	case "error", "err":
-		return charmlog.ErrorLevel
+		return slog.LevelError
 	case "warn", "warning":
-		return charmlog.WarnLevel
+		return slog.LevelWarn
 	case "info":
-		return charmlog.InfoLevel
+		return slog.LevelInfo
 	case "debug", "trace":
-		return charmlog.DebugLevel
+		return slog.LevelDebug
 	default:
-		return charmlog.InfoLevel
+		return slog.LevelInfo
 	}
 }
