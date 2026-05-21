@@ -1,10 +1,11 @@
 package logs
 
 import (
+	"context"
 	"fmt"
+	"log/slog"
 	"os"
 
-	"github.com/charmbracelet/log"
 	"github.com/morikuni/aec"
 
 	"github.com/kubeshop/botkube/internal/cli"
@@ -16,7 +17,7 @@ type Printer struct {
 	newLog  chan string
 	stop    chan struct{}
 	parser  JSONParser
-	logger  *log.Logger
+	logger  *slog.Logger
 }
 
 // NewPrinter creates a new Printer instance.
@@ -24,27 +25,27 @@ func NewPrinter(podName string) *Printer {
 	return &Printer{
 		newLog: make(chan string, 10),
 		stop:   make(chan struct{}),
-		logger: log.NewWithOptions(os.Stdout, log.Options{
-			Formatter: log.TextFormatter,
-		}),
+		logger: slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		})),
 		podName: podName,
 		parser:  JSONParser{},
 	}
 }
 
 func (f *Printer) PrintLine(line string) {
-	fields, lvl := f.parser.ParseLineIntoCharm(line)
-	if fields == nil { // it was not recognized as JSON log entry, so let's print it as plain text.
+	msg, lvl, attrs, ok := f.parser.ParseLine(line)
+	if !ok { // it was not recognized as JSON log entry, so let's print it as plain text.
 		f.printLogLine(line)
 		return
 	}
-	if lvl == log.DebugLevel && !cli.VerboseMode.IsEnabled() {
+	if lvl == slog.LevelDebug && !cli.VerboseMode.IsEnabled() {
 		return
 	}
 
 	fmt.Print(aec.EraseLine(aec.EraseModes.Tail))
 	fmt.Print(aec.Column(6))
-	f.logger.With(fields...).Print(nil)
+	f.logger.LogAttrs(context.Background(), lvl, msg, attrs...)
 }
 
 func (f *Printer) printLogLine(line string) {
