@@ -38,6 +38,9 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.extract-metadata.outputs.versions) }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     env:
       GO111MODULE: on
       GOPATH: /home/runner/work/botkube
