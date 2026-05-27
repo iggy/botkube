@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	"github.com/google/uuid"
 	"github.com/sanity-io/litter"
 	"github.com/sirupsen/logrus"
@@ -747,12 +747,11 @@ func (b *SocketSlack) getThreadOptionIfNeeded(ctx context.Context, event slackMe
 }
 
 func (b *SocketSlack) withRetry(ctx context.Context, fn func() error) error {
-	err := retry.Do(
-		fn,
+	err := retry.New(
 		retry.Attempts(maxRetries),
 		retry.LastErrorOnly(true),
 		retry.Context(ctx),
-	)
+	).Do(fn)
 	if err != nil {
 		return fmt.Errorf("while retrying: %w", err)
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MakeNowJust/heredoc"
+	"github.com/MakeNowJust/heredoc/v2"
 )
 
 func Example_parseCommand() {

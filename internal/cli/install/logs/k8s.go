@@ -7,7 +7,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -25,7 +25,7 @@ const (
 // Because the function is defined to read from request until io.EOF, it does
 // not treat an io.EOF as an error to be reported.
 func StartsLogsStreaming(ctx context.Context, clientset *kubernetes.Clientset, namespace, name string, out chan<- []byte) error {
-	return retry.Do(func() error {
+	return retry.New(retry.Attempts(3), retry.Delay(time.Second)).Do(func() error {
 		req := clientset.CoreV1().Pods(namespace).GetLogs(name, &v1.PodLogOptions{
 			Container:  containerName,
 			Follow:     true,
@@ -52,5 +52,5 @@ func StartsLogsStreaming(ctx context.Context, clientset *kubernetes.Clientset, n
 				return fmt.Errorf("while reading log stream: %v", readErr)
 			}
 		}
-	}, retry.Attempts(3), retry.Delay(time.Second))
+	})
 }

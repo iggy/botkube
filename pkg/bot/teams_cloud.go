@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	"github.com/infracloudio/msbotbuilder-go/core/activity"
 	"github.com/infracloudio/msbotbuilder-go/schema"
 	"github.com/mitchellh/mapstructure"
@@ -223,7 +223,7 @@ func (b *CloudTeams) start(ctx context.Context) error {
 func (b *CloudTeams) withRetries(ctx context.Context, log logrus.FieldLogger, maxRetries int, fn func() error) error {
 	b.failuresNo = 0
 	var lastFailureTimestamp time.Time
-	resettableBackoff := func(n uint, err error, cfg *retry.Config) time.Duration {
+	resettableBackoff := func(n uint, err error, cfg retry.DelayContext) time.Duration {
 		if !lastFailureTimestamp.IsZero() && time.Since(lastFailureTimestamp) >= successIntervalDuration {
 			// if the last run was long enough, we treat is as success, so we reset failures
 			log.Infof("Resetting failures counter as last failure was more than %s ago", successIntervalDuration)
@@ -236,16 +236,7 @@ func (b *CloudTeams) withRetries(ctx context.Context, log logrus.FieldLogger, ma
 
 		return retry.BackOffDelay(uint(b.failuresNo), err, cfg)
 	}
-	return retry.Do(
-		func() error {
-			err := fn()
-			if b.failuresNo >= maxRetries {
-				b.setFailureReason(health.FailureReasonMaxRetriesExceeded, fmt.Sprintf("Reached max number of %d retries", maxRetries))
-				log.Debugf("Reached max number of %d retries: %s", maxRetries, err)
-				return retry.Unrecoverable(err)
-			}
-			return err
-		},
+	return retry.New(
 		retry.OnRetry(func(_ uint, err error) {
 			log.Warnf("Retrying Cloud Teams startup (attempt no %d/%d): %s", b.failuresNo, maxRetries, err)
 		}),
@@ -253,7 +244,15 @@ func (b *CloudTeams) withRetries(ctx context.Context, log logrus.FieldLogger, ma
 		retry.Attempts(0), // infinite, we cancel that by our own
 		retry.LastErrorOnly(true),
 		retry.Context(ctx),
-	)
+	).Do(func() error {
+		err := fn()
+		if b.failuresNo >= maxRetries {
+			b.setFailureReason(health.FailureReasonMaxRetriesExceeded, fmt.Sprintf("Reached max number of %d retries", maxRetries))
+			log.Debugf("Reached max number of %d retries: %s", maxRetries, err)
+			return retry.Unrecoverable(err)
+		}
+		return err
+	})
 }
 
 func (b *CloudTeams) handleStreamMessage(ctx context.Context, data *pb.CloudActivity) (*pb.AgentActivity, error) {

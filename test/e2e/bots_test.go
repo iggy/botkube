@@ -15,14 +15,14 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 
 	"github.com/iggy/botkube/test/helmx"
 
 	"github.com/iggy/botkube/test/botkubex"
 	"github.com/iggy/botkube/test/commplatform"
 	"github.com/iggy/botkube/test/diff"
-	"github.com/MakeNowJust/heredoc"
+	"github.com/MakeNowJust/heredoc/v2"
 	"github.com/anthhub/forwarder"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -240,13 +240,13 @@ func runBotTest(t *testing.T,
 			assert.NoError(t, err)
 
 			t.Log("Deleting Botkube Cloud instance...")
-			err = retry.Do(func() error {
-				return gqlCli.DeleteDeployment(t, deployment.ID)
-			},
+			err = retry.New(
 				retry.Attempts(5),
 				retry.Delay(500*time.Millisecond),
 				retry.LastErrorOnly(false),
-			)
+			).Do(func() error {
+				return gqlCli.DeleteDeployment(t, deployment.ID)
+			})
 			if err != nil {
 				t.Logf("Failed to delete deployment: %s", err.Error())
 			}

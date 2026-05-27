@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v88/github"
 	"github.com/sirupsen/logrus"
 
 	"github.com/kubeshop/botkube/pkg/bot"
@@ -75,7 +75,10 @@ func (c *UpgradeChecker) Run(ctx context.Context) error {
 }
 
 func (c *UpgradeChecker) notifyAboutUpgradeIfShould(ctx context.Context) (bool, error) {
-	client := github.NewClient(nil)
+	client, err := github.NewClient()
+	if err != nil {
+		return false, fmt.Errorf("while creating GitHub client: %w", err)
+	}
 	release, _, err := client.Repositories.GetLatestRelease(ctx, repoOwner, repoName)
 	if err != nil {
 		return false, fmt.Errorf("while getting latest release from GitHub: %w", err)

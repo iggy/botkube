@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	"helm.sh/helm/v4/pkg/action"
 	v2 "helm.sh/helm/v4/pkg/chart/v2"
 	"helm.sh/helm/v4/pkg/chart/v2/loader"
@@ -118,10 +118,10 @@ func (c *Helm) Install(ctx context.Context, status *printer.StatusPrinter, opts 
 	status.End(true)
 	//  We may run into in issue temporary network issues.
 	var rel *v1.Release
-	err = retry.Do(func() error {
+	err = retry.New(retry.Attempts(3), retry.Delay(time.Second)).Do(func() error {
 		rel, err = runFn(ctx, opts.ReleaseName, loadedChart, vals)
 		return err
-	}, retry.Attempts(3), retry.Delay(time.Second))
+	})
 	if err != nil {
 		return nil, err
 	}

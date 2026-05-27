@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/MakeNowJust/heredoc"
+	"github.com/MakeNowJust/heredoc/v2"
 	semver "github.com/hashicorp/go-version"
 	"github.com/spf13/pflag"
 	"go.szostok.io/version"

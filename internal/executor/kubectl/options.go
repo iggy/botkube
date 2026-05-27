@@ -1,7 +1,7 @@
 package kubectl
 
 import (
-	"github.com/MakeNowJust/heredoc"
+	"github.com/MakeNowJust/heredoc/v2"
 )
 
 func optionsCommandOutput() string {

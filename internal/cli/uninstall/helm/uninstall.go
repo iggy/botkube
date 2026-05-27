@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	"helm.sh/helm/v4/pkg/action"
 
 	"github.com/kubeshop/botkube/internal/cli/helmx"
@@ -31,14 +31,14 @@ func (c *Helm) Uninstall(ctx context.Context, status *printer.StatusPrinter, opt
 	status.Step("Uninstalling...")
 	uninstall := c.uninstallAction(opts)
 	//  We may run into in issue temporary network issues.
-	return retry.Do(func() error {
+	return retry.New(retry.Attempts(3), retry.Delay(time.Second)).Do(func() error {
 		if ctx.Err() != nil {
 			return ctx.Err() // context cancelled or timed out.
 		}
 
 		_, err := uninstall.Run(opts.ReleaseName)
 		return err
-	}, retry.Attempts(3), retry.Delay(time.Second))
+	})
 }
 
 func (c *Helm) uninstallAction(opts Config) *action.Uninstall {

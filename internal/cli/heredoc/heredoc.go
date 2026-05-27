@@ -3,7 +3,7 @@ package heredoc
 import (
 	"strings"
 
-	"github.com/MakeNowJust/heredoc"
+	"github.com/MakeNowJust/heredoc/v2"
 )
 
 const cliTag = "<cli>"
