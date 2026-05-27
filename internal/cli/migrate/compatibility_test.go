@@ -73,7 +73,7 @@ func TestIsCompatible(t *testing.T) {
 			BotkubeVersionStr:            "1.8.0",
 			BotkubeVersionConstraintsStr: ">= 1.0, <= dev",
 			ExpectedResult:               false,
-			ExpectedErrMessage:           "unable to parse Botkube semver version constraints: improper constraint: >= 1.0, <= dev",
+			ExpectedErrMessage:           `unable to parse Botkube semver version constraints: improper constraint: ">= 1.0, <= dev"`,
 		},
 	}
 

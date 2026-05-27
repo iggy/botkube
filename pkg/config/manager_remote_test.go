@@ -49,7 +49,7 @@ func TestPersistNotificationsEnabled(t *testing.T) {
 		},
 		{
 			Name:   "Received error",
-			ErrMsg: "while persisting notifications config: while retrying: Message: this is an error, Locations: []",
+			ErrMsg: "while persisting notifications config: while retrying: Message: this is an error, Locations: [], Extensions: map[], Path: []",
 			m: newRemotePersistenceManager(`{
 				"errors": [
 					{
@@ -111,7 +111,7 @@ func TestPersistSourceBindings(t *testing.T) {
 		},
 		{
 			Name:   "Received error",
-			ErrMsg: "while persisting source bindings config: while retrying: Message: this is an error, Locations: []",
+			ErrMsg: "while persisting source bindings config: while retrying: Message: this is an error, Locations: [], Extensions: map[], Path: []",
 			m: newRemotePersistenceManager(`{
 				"errors": [
 					{
@@ -161,7 +161,7 @@ func TestPersistAction(t *testing.T) {
 		},
 		{
 			Name:   "Received error",
-			ErrMsg: "while persisting action: while retrying: Message: this is an error, Locations: []",
+			ErrMsg: "while persisting action: while retrying: Message: this is an error, Locations: [], Extensions: map[], Path: []",
 			m: newRemotePersistenceManager(`{
 				"errors": [
 					{
