@@ -3,8 +3,8 @@ package telemetry
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/heredoc"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/heredoc"
 )
 
 // NewEnable returns a new cobra.Command for enabling telemetry.

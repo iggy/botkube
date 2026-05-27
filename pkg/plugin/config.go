@@ -7,9 +7,9 @@ import (
 	"github.com/knadh/koanf/providers/structs"
 	"github.com/knadh/koanf/v2"
 
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/api/source"
-	"github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/api/source"
+	"github.com/iggy/botkube/pkg/multierror"
 )
 
 // MergeExecutorConfigs merges input configuration into a given destination.

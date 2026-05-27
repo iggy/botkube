@@ -3,8 +3,8 @@ package interactive
 import (
 	"fmt"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 type pluginHelpProviderFn func(platform config.CommPlatformIntegration, btnBuilder *api.ButtonBuilder) api.Section

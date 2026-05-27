@@ -8,9 +8,9 @@ import (
 	segment "github.com/segmentio/analytics-go"
 	"go.szostok.io/version"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 var _ Reporter = &SegmentReporter{}

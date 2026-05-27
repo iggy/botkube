@@ -12,11 +12,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/pkg/api/cloudplatform"
-	pb "github.com/kubeshop/botkube/pkg/api/cloudteams"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/grpcx"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/pkg/api/cloudplatform"
+	pb "github.com/iggy/botkube/pkg/api/cloudteams"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/grpcx"
 )
 
 type grpcCloudTeamsConnector struct {

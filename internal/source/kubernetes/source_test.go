@@ -8,9 +8,9 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-// TODO: Refactor these tests as a part of https://github.com/kubeshop/botkube/issues/589
+// TODO: Refactor these tests as a part of https://github.com/iggy/botkube/issues/589
 //  These tests were moved from old E2E package with fake K8s and Slack API
-//  (deleted in https://github.com/kubeshop/botkube/pull/627) and adjusted to become unit tests.
+//  (deleted in https://github.com/iggy/botkube/pull/627) and adjusted to become unit tests.
 
 func TestController_strToGVR(t *testing.T) {
 	// test scenarios

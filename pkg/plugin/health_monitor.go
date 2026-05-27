@@ -6,9 +6,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/api/source"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/api/source"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // HealthMonitor restarts a failed plugin process and inform scheduler to start dispatching loop again with a new client that was generated.

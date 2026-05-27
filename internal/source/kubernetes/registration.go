@@ -14,11 +14,11 @@ import (
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/tools/cache"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/event"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/k8sutil"
-	"github.com/kubeshop/botkube/pkg/k8sx"
-	"github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/event"
+	"github.com/iggy/botkube/internal/source/kubernetes/k8sutil"
+	"github.com/iggy/botkube/pkg/k8sx"
+	"github.com/iggy/botkube/pkg/multierror"
 )
 
 type registration struct {

@@ -11,12 +11,12 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/kubeshop/botkube/internal/command"
-	"github.com/kubeshop/botkube/internal/executor/kubectl/builder"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/execute/kubectl"
-	"github.com/kubeshop/botkube/pkg/loggerx"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/internal/command"
+	"github.com/iggy/botkube/internal/executor/kubectl/builder"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/execute/kubectl"
+	"github.com/iggy/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 const (

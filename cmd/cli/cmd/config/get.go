@@ -8,12 +8,12 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/analytics"
-	"github.com/kubeshop/botkube/internal/cli/config"
-	"github.com/kubeshop/botkube/internal/cli/heredoc"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/kubex"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/analytics"
+	"github.com/iggy/botkube/internal/cli/config"
+	"github.com/iggy/botkube/internal/cli/heredoc"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/kubex"
 )
 
 type GetOptions struct {

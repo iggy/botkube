@@ -11,9 +11,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/internal/health"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/multierror"
 )
 
 const defaultHTTPCliTimeout = 30 * time.Second

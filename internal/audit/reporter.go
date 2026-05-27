@@ -5,7 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/remote/graphql"
+	"github.com/iggy/botkube/internal/remote/graphql"
 )
 
 // AuditReporter defines interface for reporting audit events

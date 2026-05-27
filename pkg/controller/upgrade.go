@@ -9,9 +9,9 @@ import (
 	"github.com/google/go-github/v88/github"
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/pkg/bot"
-	"github.com/kubeshop/botkube/pkg/notifier"
-	"github.com/kubeshop/botkube/pkg/version"
+	"github.com/iggy/botkube/pkg/bot"
+	"github.com/iggy/botkube/pkg/notifier"
+	"github.com/iggy/botkube/pkg/version"
 )
 
 const (

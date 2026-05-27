@@ -12,7 +12,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 
-	"github.com/kubeshop/botkube/pkg/k8sx"
+	"github.com/iggy/botkube/pkg/k8sx"
 )
 
 // GetObjectMetaData returns metadata of the given object

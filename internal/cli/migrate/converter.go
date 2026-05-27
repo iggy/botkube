@@ -7,10 +7,10 @@ import (
 
 	"github.com/xyproto/randomstring"
 
-	gqlModel "github.com/kubeshop/botkube/internal/remote/graphql"
-	bkconfig "github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	gqlModel "github.com/iggy/botkube/internal/remote/graphql"
+	bkconfig "github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 const (

@@ -3,7 +3,7 @@ package analytics
 import (
 	"time"
 
-	"github.com/kubeshop/botkube/internal/analytics/batched"
+	"github.com/iggy/botkube/internal/analytics/batched"
 )
 
 func (r *SegmentReporter) SetIdentity(identity *Identity) {

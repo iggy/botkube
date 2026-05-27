@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/httpx"
+	"github.com/iggy/botkube/pkg/httpx"
 )
 
 func TestCanonicalURLPath(t *testing.T) {

@@ -7,9 +7,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 
-	"github.com/kubeshop/botkube/pkg/config"
-	conversationx "github.com/kubeshop/botkube/pkg/conversation"
-	"github.com/kubeshop/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/config"
+	conversationx "github.com/iggy/botkube/pkg/conversation"
+	"github.com/iggy/botkube/pkg/execute/command"
 )
 
 const slackBotMentionPrefixFmt = "^<@%s>"

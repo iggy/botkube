@@ -1,6 +1,6 @@
 package kubectl
 
-import "github.com/kubeshop/botkube/internal/command"
+import "github.com/iggy/botkube/internal/command"
 
 // FakeCommandGuard provides functionality to resolve correlations between kubectl verbs and resource types.
 // It's used for test purposes.

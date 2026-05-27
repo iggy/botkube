@@ -1,7 +1,7 @@
 // Package interactive provides utilities for building interactive bot messages.
 package interactive
 
-import "github.com/kubeshop/botkube/pkg/api"
+import "github.com/iggy/botkube/pkg/api"
 
 // Feedback generates Message structure.
 func Feedback() CoreMessage {

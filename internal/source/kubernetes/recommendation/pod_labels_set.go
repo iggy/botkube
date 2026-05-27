@@ -7,9 +7,9 @@ import (
 	coreV1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/event"
-	"github.com/kubeshop/botkube/pkg/k8sx"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/event"
+	"github.com/iggy/botkube/pkg/k8sx"
 )
 
 const podLabelsSetName = "PodLabelsSet"

@@ -3,7 +3,7 @@ package bot
 import (
 	"time"
 
-	"github.com/kubeshop/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api"
 )
 
 func FixNonInteractiveSingleSection() api.Message {

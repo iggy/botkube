@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
+	"github.com/iggy/botkube/internal/config/remote"
 )
 
 func TestGql_GetDeployment(t *testing.T) {

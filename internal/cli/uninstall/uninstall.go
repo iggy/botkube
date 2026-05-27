@@ -9,10 +9,10 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/morikuni/aec"
 
-	"github.com/kubeshop/botkube/internal/cli/install/iox"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/cli/uninstall/helm"
-	"github.com/kubeshop/botkube/internal/kubex"
+	"github.com/iggy/botkube/internal/cli/install/iox"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/cli/uninstall/helm"
+	"github.com/iggy/botkube/internal/kubex"
 )
 
 // Uninstall deletes Botkube Helm release.

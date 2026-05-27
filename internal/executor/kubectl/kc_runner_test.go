@@ -3,7 +3,7 @@ package kubectl
 import (
 	"context"
 
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 type executeFn func(ctx context.Context, rawCmd string, mutators ...plugin.ExecuteCommandMutation) (plugin.ExecuteCommandOutput, error)

@@ -6,7 +6,7 @@ import (
 	"github.com/hasura/go-graphql-client"
 	"github.com/sirupsen/logrus"
 
-	gqlmodel "github.com/kubeshop/botkube/internal/remote/graphql"
+	gqlmodel "github.com/iggy/botkube/internal/remote/graphql"
 )
 
 var _ AuditReporter = (*GraphQLAuditReporter)(nil)

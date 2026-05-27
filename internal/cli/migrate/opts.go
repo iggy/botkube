@@ -3,7 +3,7 @@ package migrate
 import (
 	"time"
 
-	"github.com/kubeshop/botkube/internal/cli/config"
+	"github.com/iggy/botkube/internal/cli/config"
 )
 
 // Options holds migrate possible configuration options.

@@ -7,12 +7,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/analytics"
-	"github.com/kubeshop/botkube/internal/cli/heredoc"
-	"github.com/kubeshop/botkube/internal/cli/install"
-	"github.com/kubeshop/botkube/internal/cli/install/helm"
-	"github.com/kubeshop/botkube/internal/kubex"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/analytics"
+	"github.com/iggy/botkube/internal/cli/heredoc"
+	"github.com/iggy/botkube/internal/cli/install"
+	"github.com/iggy/botkube/internal/cli/install/helm"
+	"github.com/iggy/botkube/internal/kubex"
 )
 
 // NewInstall returns a cobra.Command for installing Botkube.

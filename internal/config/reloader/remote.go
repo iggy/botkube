@@ -10,8 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 var _ Reloader = &RemoteConfigReloader{}
@@ -185,7 +185,7 @@ func (u *RemoteConfigReloader) processNewConfig(newCfgBytes []byte, newResVer in
 	}
 	u.log.Debugf("detected config changes on paths:\n%s", strings.Join(paths, "\n"))
 
-	// TODO(https://github.com/kubeshop/botkube/issues/1012): check if notifications are enabled and if so, do not restart the app
+	// TODO(https://github.com/iggy/botkube/issues/1012): check if notifications are enabled and if so, do not restart the app
 
 	u.currentCfg = *newCfg
 	u.log.Debugf("Successfully set newer config version (%d). Config should be reloaded soon", newResVer)

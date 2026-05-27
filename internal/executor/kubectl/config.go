@@ -5,10 +5,10 @@ import (
 
 	"golang.org/x/exp/slices"
 
-	"github.com/kubeshop/botkube/internal/executor/kubectl/builder"
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/internal/executor/kubectl/builder"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 // Config holds Kubectl plugin configuration parameters.

@@ -1,6 +1,6 @@
 package batched
 
-import "github.com/kubeshop/botkube/pkg/config"
+import "github.com/iggy/botkube/pkg/config"
 
 type HeartbeatProperties struct {
 	TimeWindowInHours int                         `json:"timeWindowInHours"`

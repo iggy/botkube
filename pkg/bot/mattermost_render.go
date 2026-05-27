@@ -7,9 +7,9 @@ import (
 
 	"github.com/mattermost/mattermost/server/public/model"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/formatx"
 )
 
 // MattermostRenderer provides functionality to render Mattermost specific messages from a generic models.

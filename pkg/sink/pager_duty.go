@@ -12,10 +12,10 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/sliceutil"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/internal/health"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/sliceutil"
 )
 
 const missingCloudAccountMessage = "PagerDuty integration requires an account on the Botkube Web App. You can try it for free. For detailed instructions, visit https://docs.botkube.io/next/installation/pagerduty/"

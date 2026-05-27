@@ -17,9 +17,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/xeipuuv/gojsonschema"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/multierror"
 )
 
 type metadataGetter interface {

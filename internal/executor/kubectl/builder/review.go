@@ -10,8 +10,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/client-go/kubernetes/typed/authorization/v1"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 // resourceVerbs is a list of verbs that are supported by Kubernetes api-server natively.

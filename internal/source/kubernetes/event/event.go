@@ -9,9 +9,9 @@ import (
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/k8sutil"
-	"github.com/kubeshop/botkube/pkg/k8sx"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/k8sutil"
+	"github.com/iggy/botkube/pkg/k8sx"
 )
 
 // Event stores data about a given event for Kubernetes object.

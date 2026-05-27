@@ -7,8 +7,8 @@ import (
 
 	cards "github.com/DanielTitkov/go-adaptive-cards"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
 )
 
 // TeamsRenderer provides functionality to render MS Teams specific messages from a generic models.

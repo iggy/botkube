@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
+	"github.com/iggy/botkube/internal/config/remote"
 )
 
 const (

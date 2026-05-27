@@ -1,6 +1,6 @@
 package uninstall
 
-import "github.com/kubeshop/botkube/internal/cli/uninstall/helm"
+import "github.com/iggy/botkube/internal/cli/uninstall/helm"
 
 // Config holds parameters for Botkube deletion.
 type Config struct {

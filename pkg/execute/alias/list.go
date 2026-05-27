@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute/command"
 )
 
 // ListExactForExecutor lists aliases for configured commands that are equal to the executor name.

@@ -12,14 +12,14 @@ import (
 	"golang.org/x/oauth2"
 	"helm.sh/helm/v4/pkg/cli/values"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/install"
-	"github.com/kubeshop/botkube/internal/cli/install/helm"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/kubex"
-	gqlModel "github.com/kubeshop/botkube/internal/remote/graphql"
-	bkconfig "github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/install"
+	"github.com/iggy/botkube/internal/cli/install/helm"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/kubex"
+	gqlModel "github.com/iggy/botkube/internal/remote/graphql"
+	bkconfig "github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/multierror"
 )
 
 const (

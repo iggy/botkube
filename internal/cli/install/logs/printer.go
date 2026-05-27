@@ -8,7 +8,7 @@ import (
 
 	"github.com/morikuni/aec"
 
-	"github.com/kubeshop/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli"
 )
 
 // Printer knows how to print Botkube logs.

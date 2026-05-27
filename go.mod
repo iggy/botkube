@@ -1,4 +1,4 @@
-module github.com/kubeshop/botkube
+module github.com/iggy/botkube
 
 go 1.26.3
 

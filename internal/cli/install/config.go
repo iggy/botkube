@@ -3,7 +3,7 @@ package install
 import (
 	"time"
 
-	"github.com/kubeshop/botkube/internal/cli/install/helm"
+	"github.com/iggy/botkube/internal/cli/install/helm"
 )
 
 // Config holds parameters for Botkube installation on cluster.

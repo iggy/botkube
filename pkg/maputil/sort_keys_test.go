@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/maputil"
+	"github.com/iggy/botkube/pkg/maputil"
 )
 
 func TestSortKeys(t *testing.T) {

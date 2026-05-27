@@ -137,7 +137,7 @@ require (
 	github.com/knadh/koanf v1.4.5 // indirect
 	github.com/knadh/koanf/providers/env/v2 v2.0.0 // indirect
 	github.com/knadh/koanf/v2 v2.3.4 // indirect
-	github.com/kubeshop/botkube v1.14.0 // indirect
+	github.com/iggy/botkube v1.14.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect

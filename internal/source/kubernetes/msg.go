@@ -9,11 +9,11 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/slices"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/commander"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/event"
-	"github.com/kubeshop/botkube/pkg/api"
-	multierrx "github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/internal/source/kubernetes/commander"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/event"
+	"github.com/iggy/botkube/pkg/api"
+	multierrx "github.com/iggy/botkube/pkg/multierror"
 )
 
 var emojiForLevel = map[config.Level]string{

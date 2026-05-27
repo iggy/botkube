@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/exp/maps"
 
-	"github.com/kubeshop/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli"
 )
 
 // JSONParser knows how to parse JSON formatted logs.

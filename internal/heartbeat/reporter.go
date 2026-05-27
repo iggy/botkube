@@ -5,7 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/health"
+	"github.com/iggy/botkube/internal/health"
 )
 
 type DeploymentHeartbeatInput struct {

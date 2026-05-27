@@ -8,9 +8,9 @@ import (
 	"github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/kubeshop/botkube/internal/command"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/event"
+	"github.com/iggy/botkube/internal/command"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/event"
 )
 
 // Command defines a command that is executed by the app.
@@ -29,7 +29,7 @@ type Commander struct {
 
 // unsupportedEventCommandVerbs contains list of verbs that are not supported for the actionable event notifications.
 var unsupportedEventCommandVerbs = map[string]struct{}{
-	"delete": {}, // See https://github.com/kubeshop/botkube/issues/824
+	"delete": {}, // See https://github.com/iggy/botkube/issues/824
 }
 
 // CmdGuard is responsible for guarding kubectl commands.

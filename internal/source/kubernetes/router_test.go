@@ -12,8 +12,8 @@ import (
 	"gopkg.in/yaml.v3"
 	"gotest.tools/v3/golden"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 func TestRouter_BuildTable_CreatesRoutesWithProperEventsList(t *testing.T) {

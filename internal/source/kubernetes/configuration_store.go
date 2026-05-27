@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/kubeshop/botkube/pkg/maputil"
+	"github.com/iggy/botkube/pkg/maputil"
 )
 
 // configurationStore stores all source configurations in a thread-safe way.

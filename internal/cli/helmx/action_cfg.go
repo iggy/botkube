@@ -6,9 +6,9 @@ import (
 	"helm.sh/helm/v4/pkg/action"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/kubex"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/kubex"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 const helmDriver = "secrets"

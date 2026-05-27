@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 const (

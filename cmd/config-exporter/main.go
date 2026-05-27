@@ -11,8 +11,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlutil "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	cfginternal "github.com/kubeshop/botkube/internal/config"
-	"github.com/kubeshop/botkube/pkg/config"
+	cfginternal "github.com/iggy/botkube/internal/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 const (

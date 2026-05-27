@@ -10,16 +10,16 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/internal/audit"
-	remoteapi "github.com/kubeshop/botkube/internal/remote"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute/alias"
-	"github.com/kubeshop/botkube/pkg/execute/command"
-	"github.com/kubeshop/botkube/pkg/formatx"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/internal/audit"
+	remoteapi "github.com/iggy/botkube/internal/remote"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute/alias"
+	"github.com/iggy/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 const (
@@ -146,7 +146,7 @@ func (e *DefaultExecutor) Execute(ctx context.Context) interactive.CoreMessage {
 		case IsExecutionCommandError(err):
 			return respond(err.Error(), cmdCtx)
 		default:
-			// TODO: Return error when the DefaultExecutor is refactored as a part of https://github.com/kubeshop/botkube/issues/589
+			// TODO: Return error when the DefaultExecutor is refactored as a part of https://github.com/iggy/botkube/issues/589
 			e.log.Errorf("while executing command %q: %s", cmdCtx.CleanCmd, err.Error())
 			return empty
 		}

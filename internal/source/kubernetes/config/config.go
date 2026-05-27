@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kubeshop/botkube/pkg/api/source"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/plugin"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/pkg/api/source"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 // Config Kubernetes configuration

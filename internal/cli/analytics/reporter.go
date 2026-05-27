@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/utils/strings"
 
-	"github.com/kubeshop/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli"
 )
 
 const (

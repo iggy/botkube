@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/kubeshop/botkube/internal/heartbeat"
+	"github.com/iggy/botkube/internal/heartbeat"
 )
 
 type K8sCollector struct {

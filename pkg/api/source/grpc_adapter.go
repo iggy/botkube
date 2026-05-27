@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/kubeshop/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api"
 )
 
 // Source defines the Botkube source plugin functionality.

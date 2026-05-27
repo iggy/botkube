@@ -7,9 +7,9 @@ import (
 	"github.com/avast/retry-go/v5"
 	"helm.sh/helm/v4/pkg/action"
 
-	"github.com/kubeshop/botkube/internal/cli/helmx"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/kubex"
+	"github.com/iggy/botkube/internal/cli/helmx"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/kubex"
 )
 
 // Helm provides option to or delete Helm release.

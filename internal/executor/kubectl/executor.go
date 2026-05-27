@@ -10,12 +10,12 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/kubeshop/botkube/internal/command"
-	"github.com/kubeshop/botkube/internal/executor/kubectl/builder"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/loggerx"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/internal/command"
+	"github.com/iggy/botkube/internal/executor/kubectl/builder"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 const (

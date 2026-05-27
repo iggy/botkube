@@ -12,7 +12,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"gotest.tools/v3/golden"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // This test is based on golden file. To update golden file, run:

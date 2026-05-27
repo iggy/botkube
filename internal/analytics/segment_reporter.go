@@ -12,12 +12,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/kubeshop/botkube/internal/analytics/batched"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/maputil"
-	"github.com/kubeshop/botkube/pkg/plugin"
-	"github.com/kubeshop/botkube/pkg/ptr"
-	"github.com/kubeshop/botkube/pkg/version"
+	"github.com/iggy/botkube/internal/analytics/batched"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/maputil"
+	"github.com/iggy/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/ptr"
+	"github.com/iggy/botkube/pkg/version"
 )
 
 const (

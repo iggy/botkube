@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/require"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/kubeshop/botkube/internal/command"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/event"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/internal/command"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/event"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 func TestCommander_GetCommandsForEvent(t *testing.T) {

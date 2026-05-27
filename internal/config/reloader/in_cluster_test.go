@@ -19,9 +19,9 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	clienttesting "k8s.io/client-go/testing"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 var (

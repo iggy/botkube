@@ -3,8 +3,8 @@ package notifier
 import (
 	"context"
 
-	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/internal/health"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // Sink sends event notifications to the sinks.
