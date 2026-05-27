@@ -15,17 +15,17 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/sourcegraph/conc/pool"
 
-	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute"
-	"github.com/kubeshop/botkube/pkg/execute/command"
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/sliceutil"
+	"github.com/iggy/botkube/internal/health"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute"
+	"github.com/iggy/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/sliceutil"
 )
 
-// TODO: Refactor this file as a part of https://github.com/kubeshop/botkube/issues/667
+// TODO: Refactor this file as a part of https://github.com/iggy/botkube/issues/667
 //    - split to multiple files in a separate package,
 //    - review all the methods and see if they can be simplified.
 
@@ -176,7 +176,7 @@ func (b *Mattermost) Start(ctx context.Context) error {
 
 	// It is observed that Mattermost server closes connections unexpectedly after some time.
 	// For now, we are adding retry logic to reconnect to the server
-	// https://github.com/kubeshop/botkube/issues/201
+	// https://github.com/iggy/botkube/issues/201
 	b.log.Info("Botkube connected to Mattermost!")
 	b.setStatusReason("", "")
 	go b.startMessageProcessor(ctx)

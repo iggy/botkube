@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 type fakeCfgPersistenceManager struct {

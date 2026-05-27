@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 
-	"github.com/kubeshop/botkube/internal/cli/frontmatter"
+	"github.com/iggy/botkube/internal/cli/frontmatter"
 )
 
 const (

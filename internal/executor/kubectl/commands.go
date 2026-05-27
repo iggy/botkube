@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/multierror"
 )
 
 // notSupportedSubcommands defines all explicitly not supported Kubectl plugin commands.

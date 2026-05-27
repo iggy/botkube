@@ -3,11 +3,11 @@ package bot
 import (
 	"context"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute"
-	"github.com/kubeshop/botkube/pkg/notifier"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/internal/health"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute"
+	"github.com/iggy/botkube/pkg/notifier"
 )
 
 const (

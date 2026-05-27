@@ -12,9 +12,9 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/kubeshop/botkube/pkg/conversation"
-	"github.com/kubeshop/botkube/pkg/execute/command"
-	multierrx "github.com/kubeshop/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/conversation"
+	"github.com/iggy/botkube/pkg/execute/command"
+	multierrx "github.com/iggy/botkube/pkg/multierror"
 )
 
 const (

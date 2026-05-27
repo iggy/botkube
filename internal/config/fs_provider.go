@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 const specialConfigFileNamePrefix = "_"

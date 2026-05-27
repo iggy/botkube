@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kubeshop/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/execute/command"
 )
 
 func TestExtractExplicitOrigin(t *testing.T) {

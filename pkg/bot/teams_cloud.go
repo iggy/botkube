@@ -17,16 +17,16 @@ import (
 	"golang.org/x/exp/maps"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kubeshop/botkube/internal/health"
-	"github.com/kubeshop/botkube/pkg/api"
-	pb "github.com/kubeshop/botkube/pkg/api/cloudteams"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute"
-	"github.com/kubeshop/botkube/pkg/execute/command"
-	"github.com/kubeshop/botkube/pkg/formatx"
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/sliceutil"
+	"github.com/iggy/botkube/internal/health"
+	"github.com/iggy/botkube/pkg/api"
+	pb "github.com/iggy/botkube/pkg/api/cloudteams"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute"
+	"github.com/iggy/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/sliceutil"
 )
 
 const (
@@ -318,7 +318,7 @@ func (b *CloudTeams) processMessage(ctx context.Context, act schema.Activity, ch
 		Message: trimmedMsg,
 		User: execute.UserInput{
 			// Note: this is a plain text mention, a native mentions will be provided as a part of:
-			// https://github.com/kubeshop/botkube/issues/1331
+			// https://github.com/iggy/botkube/issues/1331
 			Mention:     act.From.Name,
 			DisplayName: act.From.Name,
 		},

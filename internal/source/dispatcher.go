@@ -11,16 +11,16 @@ import (
 	"google.golang.org/grpc/status"
 	"k8s.io/client-go/rest"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/internal/audit"
-	"github.com/kubeshop/botkube/pkg/action"
-	"github.com/kubeshop/botkube/pkg/api/source"
-	"github.com/kubeshop/botkube/pkg/bot"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/notifier"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/internal/audit"
+	"github.com/iggy/botkube/pkg/action"
+	"github.com/iggy/botkube/pkg/api/source"
+	"github.com/iggy/botkube/pkg/bot"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/notifier"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 // Dispatcher provides functionality to starts a given plugin, watches for incoming events and calling all notifiers to dispatch received event.

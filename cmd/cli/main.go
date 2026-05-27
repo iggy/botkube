@@ -6,7 +6,7 @@ import (
 
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 
-	"github.com/kubeshop/botkube/cmd/cli/cmd"
+	"github.com/iggy/botkube/cmd/cli/cmd"
 )
 
 func main() {

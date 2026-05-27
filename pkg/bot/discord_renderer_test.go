@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/golden"
 
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/bot/interactive"
 )
 
 func TestDiscordNonInteractiveSectionToCard(t *testing.T) {

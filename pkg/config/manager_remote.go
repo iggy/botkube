@@ -12,8 +12,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	remoteapi "github.com/kubeshop/botkube/internal/remote"
-	gqlmodel "github.com/kubeshop/botkube/internal/remote/graphql"
+	remoteapi "github.com/iggy/botkube/internal/remote"
+	gqlmodel "github.com/iggy/botkube/internal/remote/graphql"
 )
 
 // ResVerClient defines client for getting resource version.

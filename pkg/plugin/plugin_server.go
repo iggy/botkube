@@ -9,7 +9,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 const indexFileEndpoint = "/botkube.yaml"

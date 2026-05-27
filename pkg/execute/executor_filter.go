@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/bot/interactive"
 )
 
 var _ executorFilter = &executorTextFilter{}

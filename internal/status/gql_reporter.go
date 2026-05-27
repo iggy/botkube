@@ -10,8 +10,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	gqlmodel "github.com/kubeshop/botkube/internal/remote/graphql"
-	"github.com/kubeshop/botkube/pkg/version"
+	gqlmodel "github.com/iggy/botkube/internal/remote/graphql"
+	"github.com/iggy/botkube/pkg/version"
 )
 
 var _ StatusReporter = (*GraphQLStatusReporter)(nil)

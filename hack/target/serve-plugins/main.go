@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/kubeshop/botkube/pkg/loggerx"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 func main() {

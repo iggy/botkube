@@ -4,8 +4,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/dynamic"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 const (

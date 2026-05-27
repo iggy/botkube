@@ -17,11 +17,11 @@ import (
 	v1 "helm.sh/helm/v4/pkg/release/v1"
 	"helm.sh/helm/v4/pkg/storage/driver"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/helmx"
-	"github.com/kubeshop/botkube/internal/cli/install/iox"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/kubex"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/helmx"
+	"github.com/iggy/botkube/internal/cli/install/iox"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/kubex"
 )
 
 const restartAnnotationFmt = "extraAnnotations.cli\\.botkube\\.io\\/restart\\-timestamp=\"%d\""

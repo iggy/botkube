@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 type DeploymentClient interface {

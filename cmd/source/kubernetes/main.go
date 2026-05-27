@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/hashicorp/go-plugin"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes"
-	"github.com/kubeshop/botkube/pkg/api/source"
+	"github.com/iggy/botkube/internal/source/kubernetes"
+	"github.com/iggy/botkube/pkg/api/source"
 )
 
 // version is set via ldflags by GoReleaser.

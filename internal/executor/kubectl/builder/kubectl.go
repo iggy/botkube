@@ -11,8 +11,8 @@ import (
 	"github.com/slack-go/slack"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/kubeshop/botkube/internal/command"
-	"github.com/kubeshop/botkube/pkg/api"
+	"github.com/iggy/botkube/internal/command"
+	"github.com/iggy/botkube/pkg/api"
 )
 
 var (

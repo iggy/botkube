@@ -6,7 +6,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // New returns a new logger based on a given configuration.

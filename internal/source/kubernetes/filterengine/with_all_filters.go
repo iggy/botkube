@@ -5,8 +5,8 @@ import (
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/client-go/dynamic"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/filterengine/filters"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/filterengine/filters"
 )
 
 const (

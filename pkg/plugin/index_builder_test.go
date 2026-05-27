@@ -6,7 +6,7 @@ import (
 	"github.com/MakeNowJust/heredoc/v2"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 func TestIndexBuilder_ValidateJSONSchemas(t *testing.T) {

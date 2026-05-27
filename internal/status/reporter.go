@@ -5,8 +5,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 type StatusReporter interface {

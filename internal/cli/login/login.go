@@ -11,8 +11,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/pkg/browser"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/heredoc"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/heredoc"
 )
 
 const (

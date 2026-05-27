@@ -26,11 +26,11 @@ import (
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/kubernetes/fake"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute/command"
-	"github.com/kubeshop/botkube/pkg/loggerx"
-	"github.com/kubeshop/botkube/pkg/version"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/version"
 )
 
 func TestSegmentReporter_RegisterCurrentIdentity(t *testing.T) {

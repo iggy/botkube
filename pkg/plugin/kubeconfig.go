@@ -11,7 +11,7 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api/v1"
 	"sigs.k8s.io/yaml"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 const (

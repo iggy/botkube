@@ -4,10 +4,10 @@ import (
 	"github.com/spf13/cobra"
 	"go.szostok.io/version/extension"
 
-	"github.com/kubeshop/botkube/cmd/cli/cmd/config"
-	"github.com/kubeshop/botkube/cmd/cli/cmd/telemetry"
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/heredoc"
+	"github.com/iggy/botkube/cmd/cli/cmd/config"
+	"github.com/iggy/botkube/cmd/cli/cmd/telemetry"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/heredoc"
 )
 
 const (

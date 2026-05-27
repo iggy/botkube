@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api"
 )
 
 func TestMessage_ReplaceBotNameInCommands(t *testing.T) {

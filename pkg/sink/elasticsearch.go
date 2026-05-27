@@ -23,10 +23,10 @@ import (
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/health"
-	botkubeconfig "github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/sliceutil"
+	"github.com/iggy/botkube/internal/health"
+	botkubeconfig "github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/sliceutil"
 )
 
 // awsSigningTransport is an http.RoundTripper that signs every request with

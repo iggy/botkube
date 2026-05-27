@@ -13,7 +13,7 @@ import (
 	"go.szostok.io/version/style"
 	"k8s.io/apimachinery/pkg/util/duration"
 
-	"github.com/kubeshop/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli"
 )
 
 // Spinner defines interface for terminal spinner.

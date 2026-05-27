@@ -18,15 +18,15 @@ import (
 	"github.com/sirupsen/logrus"
 	stringutil "k8s.io/utils/strings"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/api/source"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/formatx"
-	"github.com/kubeshop/botkube/pkg/httpx"
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/templatex"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/api/source"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/httpx"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/templatex"
 )
 
 const (

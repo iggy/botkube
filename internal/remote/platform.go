@@ -3,7 +3,7 @@ package remote
 import (
 	"strings"
 
-	"github.com/kubeshop/botkube/internal/remote/graphql"
+	"github.com/iggy/botkube/internal/remote/graphql"
 )
 
 // NewBotPlatform creates new BotPlatform from string

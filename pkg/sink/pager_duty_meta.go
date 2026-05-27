@@ -9,8 +9,8 @@ import (
 
 	"github.com/prometheus/common/model"
 
-	k8sconfig "github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/pkg/config"
+	k8sconfig "github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 var mdEmojiTag = regexp.MustCompile(`:(\w+):`)

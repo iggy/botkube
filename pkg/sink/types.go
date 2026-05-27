@@ -1,8 +1,8 @@
 package sink
 
 import (
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/notifier"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/notifier"
 )
 
 // Sink sends messages to communication channels. It is a one-way integration.

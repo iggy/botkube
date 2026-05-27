@@ -10,7 +10,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 const (

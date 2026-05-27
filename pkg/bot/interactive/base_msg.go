@@ -1,7 +1,7 @@
 package interactive
 
 import (
-	"github.com/kubeshop/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api"
 )
 
 // CoreMessage holds Botkube internal message model. It's useful to add Botkube specific header or description to plugin messages.

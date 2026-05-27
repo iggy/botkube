@@ -7,13 +7,13 @@ import (
 	"github.com/slack-go/slack"
 	"k8s.io/client-go/rest"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/internal/audit"
-	guard "github.com/kubeshop/botkube/internal/command"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/execute/command"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/internal/audit"
+	guard "github.com/iggy/botkube/internal/command"
+	"github.com/iggy/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/execute/command"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 // DefaultExecutorFactory facilitates creation of the Executor instances.

@@ -15,11 +15,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/install/helm"
-	"github.com/kubeshop/botkube/internal/cli/install/logs"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/kubex"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/install/helm"
+	"github.com/iggy/botkube/internal/cli/install/logs"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/kubex"
 )
 
 const messageInitialBufferSize = 100

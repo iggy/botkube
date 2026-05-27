@@ -5,7 +5,7 @@ import (
 
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 var _ Reporter = &NoopReporter{}

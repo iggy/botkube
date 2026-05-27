@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/formatx"
 )
 
 func TestRemoveHyperlinks(t *testing.T) {

@@ -18,9 +18,9 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	watchtools "k8s.io/client-go/tools/watch"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/api/source"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api/source"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 var (

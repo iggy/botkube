@@ -14,9 +14,9 @@ import (
 	"k8s.io/client-go/dynamic/dynamicinformer"
 	"k8s.io/client-go/tools/cache"
 
-	"github.com/kubeshop/botkube/internal/analytics"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/formatx"
+	"github.com/iggy/botkube/internal/analytics"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/formatx"
 )
 
 const (

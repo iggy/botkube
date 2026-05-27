@@ -5,7 +5,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 const (

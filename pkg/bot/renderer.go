@@ -3,8 +3,8 @@ package bot
 import (
 	"fmt"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
 )
 
 func IsValidNonInteractiveSingleSection(msg interactive.CoreMessage) error {

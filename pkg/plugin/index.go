@@ -10,8 +10,8 @@ import (
 
 	"github.com/dustin/go-humanize"
 
-	"github.com/kubeshop/botkube/pkg/multierror"
-	"github.com/kubeshop/botkube/pkg/stringx"
+	"github.com/iggy/botkube/pkg/multierror"
+	"github.com/iggy/botkube/pkg/stringx"
 )
 
 // Type represents the plugin type.

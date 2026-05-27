@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kubeshop/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli"
 )
 
 func TestVerboseModeFlagHappPath(t *testing.T) {

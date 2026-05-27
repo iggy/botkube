@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 func TestSetDefaultNamespace(t *testing.T) {

@@ -7,10 +7,10 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubeshop/botkube/internal/status"
-	"github.com/kubeshop/botkube/pkg/bot"
-	"github.com/kubeshop/botkube/pkg/config"
-	"github.com/kubeshop/botkube/pkg/notifier"
+	"github.com/iggy/botkube/internal/status"
+	"github.com/iggy/botkube/pkg/bot"
+	"github.com/iggy/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/notifier"
 )
 
 const (

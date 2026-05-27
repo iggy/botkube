@@ -6,10 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/recommendation"
-	"github.com/kubeshop/botkube/pkg/loggerx"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/recommendation"
+	"github.com/iggy/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 func TestFactory_New(t *testing.T) {

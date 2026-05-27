@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/kubeshop/botkube/pkg/mathx"
+	"github.com/iggy/botkube/pkg/mathx"
 )
 
 // Table holds table data.

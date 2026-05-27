@@ -7,7 +7,7 @@ import (
 	"gotest.tools/v3/assert"
 	"gotest.tools/v3/golden"
 
-	"github.com/kubeshop/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api"
 )
 
 // go test -run=TestInteractiveMessageToMarkdownMultiSelect ./pkg/bot/interactive/... -test.update-golden

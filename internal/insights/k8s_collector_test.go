@@ -15,9 +15,9 @@ import (
 	fake2 "k8s.io/client-go/kubernetes/typed/core/v1/fake"
 	testing2 "k8s.io/client-go/testing"
 
-	"github.com/kubeshop/botkube/internal/heartbeat"
-	"github.com/kubeshop/botkube/internal/insights"
-	"github.com/kubeshop/botkube/pkg/loggerx"
+	"github.com/iggy/botkube/internal/heartbeat"
+	"github.com/iggy/botkube/internal/insights"
+	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 func Test_Start_Success(t *testing.T) {

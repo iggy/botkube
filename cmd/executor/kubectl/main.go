@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/hashicorp/go-plugin"
 
-	"github.com/kubeshop/botkube/internal/executor/kubectl"
-	"github.com/kubeshop/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/internal/executor/kubectl"
+	"github.com/iggy/botkube/pkg/api/executor"
 )
 
 // version is set via ldflags by GoReleaser.

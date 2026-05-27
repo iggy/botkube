@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
+	"github.com/iggy/botkube/internal/config/remote"
 )
 
 var _ DeploymentClient = &fakeGqlClient{}

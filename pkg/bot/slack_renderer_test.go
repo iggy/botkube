@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/golden"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/bot/interactive"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/bot/interactive"
 )
 
 func TestSlackNonInteractiveSectionMessage(t *testing.T) {

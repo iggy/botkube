@@ -6,9 +6,9 @@ import (
 
 	"golang.org/x/exp/slices"
 
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // RunCommandName defines the button name for the run commands.

@@ -9,7 +9,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/spf13/pflag"
 
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 const binaryName = "kubectl"

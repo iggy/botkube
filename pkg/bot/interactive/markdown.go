@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/formatx"
 )
 
 // MDFormatter represents the capability of Markdown Formatter

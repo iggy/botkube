@@ -1,6 +1,6 @@
 package interactive
 
-import "github.com/kubeshop/botkube/pkg/api"
+import "github.com/iggy/botkube/pkg/api"
 
 // EventCommandsSection defines a structure of commands for a given event.
 func EventCommandsSection(cmdPrefix string, optionItems []api.OptionItem) api.Section {

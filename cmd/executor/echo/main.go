@@ -9,9 +9,9 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	"github.com/kubeshop/botkube/pkg/api"
-	"github.com/kubeshop/botkube/pkg/api/executor"
-	"github.com/kubeshop/botkube/pkg/plugin"
+	"github.com/iggy/botkube/pkg/api"
+	"github.com/iggy/botkube/pkg/api/executor"
+	"github.com/iggy/botkube/pkg/plugin"
 )
 
 var (

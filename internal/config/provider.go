@@ -3,7 +3,7 @@ package config
 import (
 	"os"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // GetProvider resolves and returns paths for config files.

@@ -22,12 +22,12 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	"github.com/kubeshop/botkube/internal/cli"
-	"github.com/kubeshop/botkube/internal/cli/install/iox"
-	"github.com/kubeshop/botkube/internal/cli/printer"
-	"github.com/kubeshop/botkube/internal/config/remote"
-	"github.com/kubeshop/botkube/pkg/formatx"
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/internal/cli"
+	"github.com/iggy/botkube/internal/cli/install/iox"
+	"github.com/iggy/botkube/internal/cli/printer"
+	"github.com/iggy/botkube/internal/config/remote"
+	"github.com/iggy/botkube/pkg/formatx"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 const (

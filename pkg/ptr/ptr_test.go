@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/ptr"
+	"github.com/iggy/botkube/pkg/ptr"
 )
 
 func TestToSlice(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/maps"
 
-	"github.com/kubeshop/botkube/pkg/config"
+	"github.com/iggy/botkube/pkg/config"
 )
 
 // Collector provides functionality to collect all enabled plugins based on the Botkube configuration.

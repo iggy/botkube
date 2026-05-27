@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kubeshop/botkube/pkg/sliceutil"
+	"github.com/iggy/botkube/pkg/sliceutil"
 )
 
 func TestIntersect_IsCaseInsensitive(t *testing.T) {

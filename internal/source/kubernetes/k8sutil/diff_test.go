@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kubeshop/botkube/internal/source/kubernetes/config"
-	"github.com/kubeshop/botkube/internal/source/kubernetes/k8sutil"
+	"github.com/iggy/botkube/internal/source/kubernetes/config"
+	"github.com/iggy/botkube/internal/source/kubernetes/k8sutil"
 )
 
 // Object mocks kubernetes objects
