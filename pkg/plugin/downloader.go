@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hashicorp/go-getter"
+	getter "github.com/hashicorp/go-getter/v2"
 )
 
 var allowedExt = map[string]struct{}{
@@ -50,15 +50,18 @@ func downloadBinary(ctx context.Context, destPath string, binaryURL URL, autoDet
 	urlWithGoGetterMagicParams := parsedURL.String()
 
 	getterCli := &getter.Client{
-		Ctx:  ctx,
-		Src:  urlWithGoGetterMagicParams,
-		Dst:  tmpDestPath,
-		Pwd:  pwd,
-		Mode: getter.ClientModeAny,
+		Getters:       getter.Getters,
+		Decompressors: getter.Decompressors,
 	}
 
-	err = getterCli.Get()
-	if err != nil {
+	req := &getter.Request{
+		Src:     urlWithGoGetterMagicParams,
+		Dst:     tmpDestPath,
+		Pwd:     pwd,
+		GetMode: getter.ModeAny,
+	}
+
+	if _, err := getterCli.Get(ctx, req); err != nil {
 		return fmt.Errorf("while downloading binary with go-getter via url %s: %w", urlWithGoGetterMagicParams, err)
 	}
 

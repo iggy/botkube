@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v88/github"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	segment "github.com/segmentio/analytics-go"
@@ -374,9 +374,12 @@ func run(ctx context.Context) (err error) {
 	}
 
 	// Start upgrade checker
-	ghCli := github.NewClient(&http.Client{
+	ghCli, err := github.NewClient(github.WithHTTPClient(&http.Client{
 		Timeout: 1 * time.Minute,
-	})
+	}))
+	if err != nil {
+		return fmt.Errorf("while creating GitHub client: %w", err)
+	}
 	if conf.Settings.UpgradeNotifier {
 		upgradeChecker := controller.NewUpgradeChecker(
 			logger.WithField(componentLogFieldKey, "Upgrade Checker"),

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	"github.com/hasura/go-graphql-client"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -184,8 +184,7 @@ const (
 )
 
 func (m *RemotePersistenceManager) withRetry(ctx context.Context, logger logrus.FieldLogger, fn func() error) error {
-	err := retry.Do(
-		fn,
+	err := retry.New(
 		retry.OnRetry(func(n uint, err error) {
 			logger.Debugf("Retrying (attempt no %d/%d): %s.\nFetching latest resource version...", n+1, retries, err)
 			resVer, err := m.resVerClient.GetResourceVersion(ctx)
@@ -198,7 +197,7 @@ func (m *RemotePersistenceManager) withRetry(ctx context.Context, logger logrus.
 		retry.Attempts(retries),
 		retry.LastErrorOnly(true),
 		retry.Context(ctx),
-	)
+	).Do(fn)
 	if err != nil {
 		return errors.Wrap(err, "while retrying")
 	}
