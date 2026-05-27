@@ -504,7 +504,7 @@ type Communications struct {
 // SocketSlack configuration to authentication and send notifications
 type SocketSlack struct {
 	Enabled  bool                                   `yaml:"enabled"`
-	Channels IdentifiableMap[ChannelBindingsByName] `yaml:"channels"  validate:"required_if=Enabled true,dive,omitempty,min=1"`
+	Channels IdentifiableMap[ChannelBindingsByName] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
 	BotToken string                                 `yaml:"botToken,omitempty"`
 	AppToken string                                 `yaml:"appToken,omitempty"`
 }
@@ -512,7 +512,7 @@ type SocketSlack struct {
 // CloudSlack configuration for multi-slack support
 type CloudSlack struct {
 	Enabled                         bool                               `yaml:"enabled"`
-	Channels                        IdentifiableMap[CloudSlackChannel] `yaml:"channels"  validate:"required_if=Enabled true,dive,omitempty,min=1"`
+	Channels                        IdentifiableMap[CloudSlackChannel] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
 	Token                           string                             `yaml:"token"`
 	BotID                           string                             `yaml:"botID,omitempty"`
 	Server                          GRPCServer                         `yaml:"server"`
@@ -541,7 +541,7 @@ type Elasticsearch struct {
 	Server        string              `yaml:"server"`
 	SkipTLSVerify bool                `yaml:"skipTLSVerify"`
 	AWSSigning    AWSSigning          `yaml:"awsSigning"`
-	Indices       map[string]ELSIndex `yaml:"indices"  validate:"required_if=Enabled true,dive,omitempty,min=1"`
+	Indices       map[string]ELSIndex `yaml:"indices"  validate:"required_if=Enabled true,dive"`
 	LogLevel      string              `yaml:"logLevel"`
 }
 
@@ -569,7 +569,7 @@ type Mattermost struct {
 	URL      string                                 `yaml:"url"`
 	Token    string                                 `yaml:"token"`
 	Team     string                                 `yaml:"team"`
-	Channels IdentifiableMap[ChannelBindingsByName] `yaml:"channels"  validate:"required_if=Enabled true,dive,omitempty,min=1"`
+	Channels IdentifiableMap[ChannelBindingsByName] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
 }
 
 // Teams creds for authentication with MS Teams
@@ -588,12 +588,12 @@ type CloudTeams struct {
 	Enabled bool            `yaml:"enabled"`
 	BotName string          `yaml:"botName"`
 	Server  GRPCServer      `yaml:"server"`
-	Teams   []TeamsBindings `yaml:"teams" validate:"required_if=Enabled true,dive,omitempty,min=1"`
+	Teams   []TeamsBindings `yaml:"teams" validate:"required_if=Enabled true,dive"`
 }
 
 type TeamsBindings struct {
 	ID       string                               `yaml:"id"`
-	Channels IdentifiableMap[ChannelBindingsByID] `yaml:"channels" validate:"dive,omitempty,min=1"`
+	Channels IdentifiableMap[ChannelBindingsByID] `yaml:"channels" validate:"dive"`
 }
 
 // Discord configuration for authentication and send notifications
@@ -601,7 +601,7 @@ type Discord struct {
 	Enabled  bool                                 `yaml:"enabled"`
 	Token    string                               `yaml:"token"`
 	BotID    string                               `yaml:"botID"`
-	Channels IdentifiableMap[ChannelBindingsByID] `yaml:"channels"  validate:"required_if=Enabled true,dive,omitempty,min=1"`
+	Channels IdentifiableMap[ChannelBindingsByID] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
 }
 
 // Webhook configuration to send notifications

@@ -1,6 +1,7 @@
 package config_test
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
@@ -43,10 +44,13 @@ func TestLoadConfigSuccess(t *testing.T) {
 	//then
 	require.NoError(t, err)
 	require.NotNil(t, gotCfg)
-	gotData, err := yaml.Marshal(gotCfg)
-	require.NoError(t, err)
+	var buf bytes.Buffer
+	enc := yaml.NewEncoder(&buf)
+	enc.SetIndent(2)
+	require.NoError(t, enc.Encode(gotCfg))
+	require.NoError(t, enc.Close())
 
-	golden.Assert(t, string(gotData), filepath.Join(t.Name(), "config.golden.yaml"))
+	golden.Assert(t, buf.String(), filepath.Join(t.Name(), "config.golden.yaml"))
 }
 
 func TestNormalizeConfigEnvName(t *testing.T) {
