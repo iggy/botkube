@@ -65,7 +65,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/xyproto/randomstring v1.2.0
 	go.szostok.io/version v1.2.0
-	golang.org/x/exp v0.0.0-20260527015227-08cc5374adb3
+	golang.org/x/exp v0.0.0-20260528193900-50dc527dd6c7
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.20.0
 	golang.org/x/text v0.37.0
