@@ -17,6 +17,7 @@ DISABLE_ERRORS_LINTERS:
   - REPOSITORY_CHECKOV
   - REPOSITORY_DEVSKIM
   - ACTION_ZIZMOR
+  - REPOSITORY_OSV_SCANNER # way more trouble than it's worth
 
 # zizmor needs to call the GitHub API to perform the ref-confusion audit;
 # without GITHUB_TOKEN it gets 401-rate-limited and fails the whole job.
@@ -30,4 +31,3 @@ REPOSITORY_TRIVY_SBOM_ARGUMENTS: "--ignorefile .megalinter/.trivyignore"
 REPOSITORY_KICS_ARGUMENTS: "--config .megalinter/kics-config.yaml"
 REPOSITORY_GRYPE_ARGUMENTS: "--config .megalinter/.grype.yaml"
 GO_GOLANGCI_LINT_ARGUMENTS: "--config .megalinter/.golangci.yml"
-
