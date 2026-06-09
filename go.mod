@@ -10,7 +10,7 @@ require (
 	github.com/PagerDuty/go-pagerduty v1.8.0
 	github.com/alexflint/go-arg v1.6.1
 	github.com/avast/retry-go/v5 v5.0.0
-	github.com/aws/aws-sdk-go-v2 v1.41.12
+	github.com/aws/aws-sdk-go-v2 v1.42.0
 	github.com/aws/aws-sdk-go-v2/config v1.32.23
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.22
 	github.com/aws/aws-sdk-go-v2/service/sts v1.43.2
