@@ -400,6 +400,29 @@ func run(ctx context.Context) (err error) {
 	actionProvider := action.NewProvider(logger.WithField(componentLogFieldKey, "Action Provider"), conf.Actions, executorFactory)
 
 	sourcePluginDispatcher := source.NewDispatcher(logger, conf.Settings.ClusterName, bots, sinkNotifiers, pluginManager, actionProvider, analyticsReporter, auditReporter, kubeConfig)
+
+	if conf.Settings.StatusCanvas.Enabled {
+		canvasClient, err := statusCanvasClient(bots)
+		if err != nil {
+			logger.Warnf("Status canvas is enabled but no usable Slack bot was found: %s", err.Error())
+		} else {
+			statusCollector, err := status.NewCollector(logger.WithField(componentLogFieldKey, "Status Canvas Collector"), k8sCli, conf.Settings.StatusCanvas)
+			if err != nil {
+				return reportFatalError("while creating status canvas collector", err)
+			}
+
+			clusterState := status.NewClusterState(conf.Settings.ClusterName, conf.Settings.StatusCanvas.Sections.Warnings.Limit)
+			statusObserver := status.NewObserver(logger.WithField(componentLogFieldKey, "Status Canvas Observer"), clusterState, conf.Settings.StatusCanvas)
+			sourcePluginDispatcher = sourcePluginDispatcher.WithStateObserver(statusObserver)
+
+			statusPublisher := status.NewPublisher(logger.WithField(componentLogFieldKey, "Status Canvas Publisher"), conf.Settings.StatusCanvas, canvasClient, statusCollector, clusterState)
+			errGroup.Go(func() error {
+				defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
+				return statusPublisher.Start(ctx)
+			})
+		}
+	}
+
 	scheduler := source.NewScheduler(ctx, logger, conf, sourcePluginDispatcher, schedulerChan)
 	err = scheduler.Start(ctx)
 	if err != nil {
@@ -511,6 +534,20 @@ func getK8sClients(cfg *rest.Config) (dynamic.Interface, discovery.DiscoveryInte
 
 	discoCacheClient := memory.NewMemCacheClient(discoveryClient)
 	return dynamicK8sCli, discoCacheClient, nil
+}
+
+// statusCanvasClient picks a Socket Slack bot to drive the status canvas.
+//
+// Botkube Cloud no longer exists, so only Socket Mode Slack (with its own token and canvases:write
+// scope) can host a channel canvas. Selection is stable across restarts by sorting the keys, so the
+// canvas does not jump between bots as configuration changes elsewhere.
+func statusCanvasClient(bots map[string]bot.Bot) (status.CanvasClient, error) {
+	for _, key := range maputil.SortKeys(bots) {
+		if socketSlack, ok := bots[key].(*bot.SocketSlack); ok {
+			return socketSlack.Client(), nil
+		}
+	}
+	return nil, errors.New("no Socket Slack bot is configured")
 }
 
 func reportFatalErrFn(logger logrus.FieldLogger, reporter analytics.Reporter, status status.StatusReporter) func(ctx string, err error) error {

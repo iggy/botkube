@@ -654,6 +654,44 @@ type Settings struct {
 	InformersResyncPeriod   time.Duration    `yaml:"informersResyncPeriod"`
 	Kubeconfig              string           `yaml:"kubeconfig"`
 	SACredentialsPathPrefix string           `yaml:"saCredentialsPathPrefix"`
+	StatusCanvas            StatusCanvas     `yaml:"statusCanvas"`
+}
+
+// StatusCanvas describes the Slack channel canvas that mirrors the current cluster status.
+//
+// Botkube keeps a channel canvas (a canvas attached to a Slack channel tab) up to date with a
+// rendered view of the cluster. Standalone canvases are intentionally not supported: Slack rejects
+// them on free plans, while channel canvases work on every tier and need no persisted canvas ID,
+// because the ID is discoverable from the channel itself.
+type StatusCanvas struct {
+	Enabled          bool                 `yaml:"enabled"`
+	Channels         []string             `yaml:"channels" validate:"required_if=Enabled true"`
+	Title            string               `yaml:"title"`
+	UpdateInterval   time.Duration        `yaml:"updateInterval"`
+	SnapshotInterval time.Duration        `yaml:"snapshotInterval"`
+	Namespaces       RegexConstraints     `yaml:"namespaces"`
+	Sections         StatusCanvasSections `yaml:"sections"`
+}
+
+// StatusCanvasSections configures which sections the canvas renders.
+type StatusCanvasSections struct {
+	Summary   StatusCanvasSection        `yaml:"summary"`
+	Nodes     StatusCanvasSection        `yaml:"nodes"`
+	Workloads StatusCanvasSection        `yaml:"workloads"`
+	Catalog   StatusCanvasCatalogSection `yaml:"catalog"`
+	Warnings  StatusCanvasSection        `yaml:"warnings"`
+}
+
+// StatusCanvasSection configures a single canvas section.
+type StatusCanvasSection struct {
+	Disabled bool `yaml:"disabled"`
+	Limit    int  `yaml:"limit"`
+}
+
+// StatusCanvasCatalogSection configures the opt-in service catalog section.
+type StatusCanvasCatalogSection struct {
+	StatusCanvasSection `yaml:",inline"`
+	LabelSelector       string `yaml:"labelSelector"`
 }
 
 // Formatter log formatter

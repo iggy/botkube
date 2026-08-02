@@ -711,6 +711,52 @@ settings:
         annotations: {}
       fileName: "_runtime_state.yaml"
 
+  ## Slack channel canvas that mirrors the current cluster status. Requires a Socket Mode Slack bot
+  ## with the `canvases:write` scope. The canvas is rewritten in full on every update, so manual
+  ## edits made in Slack are overwritten.
+  statusCanvas:
+    # -- If true, keeps a Slack channel canvas up to date with the cluster status.
+    enabled: false
+    # -- Slack channels to maintain a status canvas in. Each channel gets its own canvas tab.
+    channels: []
+    # -- Canvas title. Supports the `{{ .ClusterName }}` template variable.
+    title: "{{ .ClusterName }} cluster status"
+    # -- How often to check for changes and republish the canvas if needed.
+    updateInterval: "10s"
+    # -- How often to fully re-list the cluster, independent of events.
+    snapshotInterval: "5m"
+    # -- Namespaces to include or exclude from the canvas. Uses the same regex matching as source namespace filters.
+    namespaces:
+      include:
+        - ".*"
+      exclude: []
+    sections:
+      # -- Cluster-wide summary counts.
+      summary:
+        disabled: false
+      # -- Node health table.
+      nodes:
+        disabled: false
+        # -- Maximum number of nodes to show. 0 means unlimited.
+        limit: 25
+      # -- Unhealthy workloads table.
+      workloads:
+        disabled: false
+        # -- Maximum number of workloads to show. 0 means unlimited.
+        limit: 25
+      # -- Opt-in service catalog showing workload versions and rollout status.
+      catalog:
+        disabled: false
+        # -- Maximum number of catalog entries to show. 0 means unlimited.
+        limit: 50
+        # -- Label selector for workloads to include in the catalog.
+        labelSelector: "botkube.io/canvas=true"
+      # -- Recent Kubernetes warning events.
+      warnings:
+        disabled: false
+        # -- Maximum number of warnings to show. 0 means unlimited.
+        limit: 15
+
 ## For using custom SSL certificates.
 ssl:
   # -- If true, specify cert path in `config.ssl.cert` property or K8s Secret in `config.ssl.existingSecretName`.

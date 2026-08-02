@@ -52,25 +52,25 @@ A virtual SRE, powered by AI.
 | [sources.k8s-recommendation-events.botkube/kubernetes](./values.yaml#L138) | object | See the `values.yaml` file for full object. | Describes Kubernetes source configuration. |
 | [sources.k8s-recommendation-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
 | [executors.k8s-default-tools.botkubeExtra/helm.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
-| [sources.k8s-err-with-logs-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
 | [executors.k8s-default-tools.botkube/kubectl.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
+| [sources.k8s-err-with-logs-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
+| [sources.k8s-err-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
 | [sources.k8s-all-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
 | [sources.k8s-create-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
-| [sources.k8s-err-events.botkube/kubernetes.context.rbac.group.type](./values.yaml#L143) | string | `"Static"` | Static impersonation for a given username and groups. |
-| [sources.k8s-all-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
-| [sources.k8s-err-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
-| [sources.k8s-create-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
-| [sources.k8s-recommendation-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
 | [executors.k8s-default-tools.botkubeExtra/helm.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
 | [sources.k8s-err-with-logs-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
+| [sources.k8s-create-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
 | [executors.k8s-default-tools.botkube/kubectl.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
+| [sources.k8s-recommendation-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
+| [sources.k8s-all-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
+| [sources.k8s-err-events.botkube/kubernetes.context.rbac.group.prefix](./values.yaml#L145) | string | `""` | Prefix that will be applied to .static.value[*]. |
 | [sources.k8s-create-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
-| [sources.k8s-all-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
-| [executors.k8s-default-tools.botkube/kubectl.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
-| [sources.k8s-err-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
 | [sources.k8s-err-with-logs-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
 | [sources.k8s-recommendation-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
 | [executors.k8s-default-tools.botkubeExtra/helm.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
+| [sources.k8s-all-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
+| [sources.k8s-err-events.botkube/kubernetes.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
+| [executors.k8s-default-tools.botkube/kubectl.context.rbac.group.static.values](./values.yaml#L148) | list | `["botkube-plugins-default"]` | Name of group.rbac.authorization.k8s.io the plugin will be bound to. |
 | [sources.k8s-recommendation-events.botkube/kubernetes.config.recommendations](./values.yaml#L162) | object | `{"ingress":{"backendServiceValid":true,"tlsSecretValid":true},"pod":{"labelsSet":true,"noLatestImageTag":true}}` | Describes configuration for various recommendation insights. |
 | [sources.k8s-recommendation-events.botkube/kubernetes.config.recommendations.pod](./values.yaml#L164) | object | `{"labelsSet":true,"noLatestImageTag":true}` | Recommendations for Pod Kubernetes resource. |
 | [sources.k8s-recommendation-events.botkube/kubernetes.config.recommendations.pod.noLatestImageTag](./values.yaml#L166) | bool | `true` | If true, notifies about Pod containers that use `latest` tag for images. |
@@ -84,9 +84,9 @@ A virtual SRE, powered by AI.
 | [sources.k8s-all-events.botkube/kubernetes.config.filters.nodeEventsChecker](./values.yaml#L190) | bool | `true` | If true, filters out Node-related events that are not important. |
 | [sources.k8s-all-events.botkube/kubernetes.config.namespaces](./values.yaml#L194) | object | `{"include":[".*"]}` | Describes namespaces for every Kubernetes resources you want to watch or exclude. These namespaces are applied to every resource specified in the resources list. However, every specified resource can override this by using its own namespaces object. |
 | [sources.k8s-err-with-logs-events.botkube/kubernetes.config.namespaces.include](./values.yaml#L198) | list | `[".*"]` | Include contains a list of allowed Namespaces. It can also contain regex expressions:  `- ".*"` - to specify all Namespaces. |
-| [sources.k8s-create-events.botkube/kubernetes.config.namespaces.include](./values.yaml#L198) | list | `[".*"]` | Include contains a list of allowed Namespaces. It can also contain regex expressions:  `- ".*"` - to specify all Namespaces. |
-| [sources.k8s-err-events.botkube/kubernetes.config.namespaces.include](./values.yaml#L198) | list | `[".*"]` | Include contains a list of allowed Namespaces. It can also contain regex expressions:  `- ".*"` - to specify all Namespaces. |
 | [sources.k8s-all-events.botkube/kubernetes.config.namespaces.include](./values.yaml#L198) | list | `[".*"]` | Include contains a list of allowed Namespaces. It can also contain regex expressions:  `- ".*"` - to specify all Namespaces. |
+| [sources.k8s-err-events.botkube/kubernetes.config.namespaces.include](./values.yaml#L198) | list | `[".*"]` | Include contains a list of allowed Namespaces. It can also contain regex expressions:  `- ".*"` - to specify all Namespaces. |
+| [sources.k8s-create-events.botkube/kubernetes.config.namespaces.include](./values.yaml#L198) | list | `[".*"]` | Include contains a list of allowed Namespaces. It can also contain regex expressions:  `- ".*"` - to specify all Namespaces. |
 | [sources.k8s-all-events.botkube/kubernetes.config.event](./values.yaml#L208) | object | `{"message":{"exclude":[],"include":[]},"reason":{"exclude":[],"include":[]},"types":["create","delete","error"]}` | Describes event constraints for Kubernetes resources. These constraints are applied for every resource specified in the `resources` list, unless they are overridden by the resource's own `events` object. |
 | [sources.k8s-all-events.botkube/kubernetes.config.event.types](./values.yaml#L210) | list | `["create","delete","error"]` | Lists all event types to be watched. |
 | [sources.k8s-all-events.botkube/kubernetes.config.event.reason](./values.yaml#L216) | object | `{"exclude":[],"include":[]}` | Optional list of exact values or regex patterns to filter events by event reason. Skipped, if both include/exclude lists are empty. |
@@ -166,58 +166,74 @@ A virtual SRE, powered by AI.
 | [settings.log.formatter](./values.yaml#L694) | string | `"json"` | Configures log format. Allowed values: `text`, `json`. |
 | [settings.systemConfigMap](./values.yaml#L697) | object | `{"name":"botkube-system"}` | Botkube's system ConfigMap where internal data is stored. |
 | [settings.persistentConfig](./values.yaml#L702) | object | `{"runtime":{"configMap":{"annotations":{},"name":"botkube-runtime-config"},"fileName":"_runtime_state.yaml"},"startup":{"configMap":{"annotations":{},"name":"botkube-startup-config"},"fileName":"_startup_state.yaml"}}` | Persistent config contains ConfigMap where persisted configuration is stored. The persistent configuration is evaluated from both chart upgrade and Botkube commands used in runtime. |
-| [ssl.enabled](./values.yaml#L717) | bool | `false` | If true, specify cert path in `config.ssl.cert` property or K8s Secret in `config.ssl.existingSecretName`. |
-| [ssl.existingSecretName](./values.yaml#L723) | string | `""` | Using existing SSL Secret. It MUST be in `botkube` Namespace.  |
-| [ssl.cert](./values.yaml#L726) | string | `""` | SSL Certificate file e.g certs/my-cert.crt. |
-| [service](./values.yaml#L729) | object | `{"name":"metrics","port":2112,"targetPort":2112}` | Configures Service settings for ServiceMonitor CR. |
-| [serviceMonitor](./values.yaml#L736) | object | `{"enabled":false,"interval":"10s","labels":{},"path":"/metrics","port":"metrics"}` | Configures ServiceMonitor settings. [Ref doc](https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#servicemonitor). |
-| [deployment.annotations](./values.yaml#L746) | object | `{}` | Extra annotations to pass to the Botkube Deployment. |
-| [deployment.livenessProbe](./values.yaml#L748) | object | `{"failureThreshold":35,"initialDelaySeconds":1,"periodSeconds":2,"successThreshold":1,"timeoutSeconds":1}` | Liveness probe. |
-| [deployment.livenessProbe.initialDelaySeconds](./values.yaml#L750) | int | `1` | The liveness probe initial delay seconds. |
-| [deployment.livenessProbe.periodSeconds](./values.yaml#L752) | int | `2` | The liveness probe period seconds. |
-| [deployment.livenessProbe.timeoutSeconds](./values.yaml#L754) | int | `1` | The liveness probe timeout seconds. |
-| [deployment.livenessProbe.failureThreshold](./values.yaml#L756) | int | `35` | The liveness probe failure threshold. |
-| [deployment.livenessProbe.successThreshold](./values.yaml#L758) | int | `1` | The liveness probe success threshold. |
-| [deployment.readinessProbe](./values.yaml#L761) | object | `{"failureThreshold":35,"initialDelaySeconds":1,"periodSeconds":2,"successThreshold":1,"timeoutSeconds":1}` | Readiness probe. |
-| [deployment.readinessProbe.initialDelaySeconds](./values.yaml#L763) | int | `1` | The readiness probe initial delay seconds. |
-| [deployment.readinessProbe.periodSeconds](./values.yaml#L765) | int | `2` | The readiness probe period seconds. |
-| [deployment.readinessProbe.timeoutSeconds](./values.yaml#L767) | int | `1` | The readiness probe timeout seconds. |
-| [deployment.readinessProbe.failureThreshold](./values.yaml#L769) | int | `35` | The readiness probe failure threshold. |
-| [deployment.readinessProbe.successThreshold](./values.yaml#L771) | int | `1` | The readiness probe success threshold. |
-| [extraAnnotations](./values.yaml#L778) | object | `{}` | Extra annotations to pass to the Botkube Pod. |
-| [extraLabels](./values.yaml#L780) | object | `{}` | Extra labels to pass to the Botkube Pod. |
-| [priorityClassName](./values.yaml#L782) | string | `""` | Priority class name for the Botkube Pod. |
-| [nameOverride](./values.yaml#L785) | string | `""` | Fully override "botkube.name" template. |
-| [fullnameOverride](./values.yaml#L787) | string | `""` | Fully override "botkube.fullname" template. |
-| [resources](./values.yaml#L793) | object | `{}` | The Botkube Pod resource request and limits. We usually recommend not to specify default resources and to leave this as a conscious choice for the user. This also increases chances charts run on environments with little resources, such as Minikube. [Ref docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) |
-| [extraEnv](./values.yaml#L805) | list | `[{"name":"LOG_LEVEL_SOURCE_BOTKUBE_KUBERNETES","value":"debug"}]` | Extra environment variables to pass to the Botkube container. [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables). |
-| [extraVolumes](./values.yaml#L818) | list | `[]` | Extra volumes to pass to the Botkube container. Mount it later with extraVolumeMounts. [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/volume/#Volume). |
-| [extraVolumeMounts](./values.yaml#L833) | list | `[]` | Extra volume mounts to pass to the Botkube container. [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#volumes-1). |
-| [nodeSelector](./values.yaml#L851) | object | `{}` | Node labels for Botkube Pod assignment. [Ref doc](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/). |
-| [tolerations](./values.yaml#L855) | list | `[]` | Tolerations for Botkube Pod assignment. [Ref doc](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
-| [affinity](./values.yaml#L859) | object | `{}` | Affinity for Botkube Pod assignment. [Ref doc](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity). |
-| [serviceAccount.create](./values.yaml#L863) | bool | `true` | If true, a ServiceAccount is automatically created. |
-| [serviceAccount.name](./values.yaml#L866) | string | `""` | The name of the service account to use. If not set, a name is generated using the fullname template. |
-| [serviceAccount.annotations](./values.yaml#L868) | object | `{}` | Extra annotations for the ServiceAccount. |
-| [extraObjects](./values.yaml#L871) | list | `[]` | Extra Kubernetes resources to create. Helm templating is allowed as it is evaluated before creating the resources. |
-| [analytics.disable](./values.yaml#L898) | bool | `false` | If true, sending anonymous analytics is disabled. To learn what date we collect, see the [Privacy Policy](https://botkube.io/privacy-policy). |
-| [configWatcher](./values.yaml#L902) | object | `{"enabled":true,"inCluster":{"informerResyncPeriod":"10m"}}` | Parameters for the Config Watcher component which reloads Botkube on ConfigMap changes. It restarts Botkube when configuration data change is detected. It watches ConfigMaps and/or Secrets with the `botkube.io/config-watch: "true"` label from the namespace where Botkube is installed. |
-| [configWatcher.enabled](./values.yaml#L904) | bool | `true` | If true, restarts the Botkube Pod on config changes. |
-| [configWatcher.inCluster](./values.yaml#L906) | object | `{"informerResyncPeriod":"10m"}` | In-cluster Config Watcher configuration. It is used when remote configuration is not provided. |
-| [configWatcher.inCluster.informerResyncPeriod](./values.yaml#L908) | string | `"10m"` | Resync period for the Config Watcher informers. |
-| [plugins](./values.yaml#L911) | object | `{"cacheDir":"/tmp","healthCheckInterval":"10s","incomingWebhook":{"enabled":true,"port":2115,"targetPort":2115},"repositories":{"botkube":{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/kubeshop/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}},"restartPolicy":{"threshold":10,"type":"DeactivatePlugin"}}` | Configuration for Botkube executors and sources plugins. |
-| [plugins.cacheDir](./values.yaml#L913) | string | `"/tmp"` | Directory, where downloaded plugins are cached. |
-| [plugins.repositories](./values.yaml#L915) | object | `{"botkube":{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/kubeshop/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}}` | List of plugins repositories. Each repository defines the URL and optional `headers` |
-| [plugins.repositories.botkube](./values.yaml#L917) | object | `{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"}` | This repository serves officially supported Botkube plugins. |
-| [plugins.incomingWebhook](./values.yaml#L924) | object | `{"enabled":true,"port":2115,"targetPort":2115}` | Configure Incoming webhook for source plugins. |
-| [plugins.restartPolicy](./values.yaml#L929) | object | `{"threshold":10,"type":"DeactivatePlugin"}` | Botkube Restart Policy on plugin failure. |
-| [plugins.restartPolicy.type](./values.yaml#L931) | string | `"DeactivatePlugin"` | Restart policy type. Allowed values: "RestartAgent", "DeactivatePlugin". |
-| [plugins.restartPolicy.threshold](./values.yaml#L933) | int | `10` | Number of restarts before policy takes into effect. |
-| [config](./values.yaml#L937) | object | `{"provider":{"apiKey":"","endpoint":"https://api.botkube.io/graphql","identifier":""}}` | Configuration for synchronizing Botkube configuration. |
-| [config.provider](./values.yaml#L939) | object | `{"apiKey":"","endpoint":"https://api.botkube.io/graphql","identifier":""}` | Base provider definition. |
-| [config.provider.identifier](./values.yaml#L942) | string | `""` | Unique identifier for remote Botkube settings. If set to an empty string, Botkube won't fetch remote configuration. |
-| [config.provider.endpoint](./values.yaml#L944) | string | `"https://api.botkube.io/graphql"` | Endpoint to fetch Botkube settings from. |
-| [config.provider.apiKey](./values.yaml#L946) | string | `""` | Key passed as a `X-API-Key` header to the provider's endpoint. |
+| [settings.statusCanvas.enabled](./values.yaml#L719) | bool | `false` | If true, keeps a Slack channel canvas up to date with the cluster status. |
+| [settings.statusCanvas.channels](./values.yaml#L721) | list | `[]` | Slack channels to maintain a status canvas in. Each channel gets its own canvas tab. |
+| [settings.statusCanvas.title](./values.yaml#L723) | string | `"{{ .ClusterName }} cluster status"` | Canvas title. Supports the `{{ .ClusterName }}` template variable. |
+| [settings.statusCanvas.updateInterval](./values.yaml#L725) | string | `"10s"` | How often to check for changes and republish the canvas if needed. |
+| [settings.statusCanvas.snapshotInterval](./values.yaml#L727) | string | `"5m"` | How often to fully re-list the cluster, independent of events. |
+| [settings.statusCanvas.namespaces](./values.yaml#L729) | object | `{"exclude":[],"include":[".*"]}` | Namespaces to include or exclude from the canvas. Uses the same regex matching as source namespace filters. |
+| [settings.statusCanvas.sections.summary](./values.yaml#L735) | object | `{"disabled":false}` | Cluster-wide summary counts. |
+| [settings.statusCanvas.sections.nodes](./values.yaml#L738) | object | `{"disabled":false,"limit":25}` | Node health table. |
+| [settings.statusCanvas.sections.nodes.limit](./values.yaml#L741) | int | `25` | Maximum number of nodes to show. 0 means unlimited. |
+| [settings.statusCanvas.sections.workloads](./values.yaml#L743) | object | `{"disabled":false,"limit":25}` | Unhealthy workloads table. |
+| [settings.statusCanvas.sections.workloads.limit](./values.yaml#L746) | int | `25` | Maximum number of workloads to show. 0 means unlimited. |
+| [settings.statusCanvas.sections.catalog](./values.yaml#L748) | object | `{"disabled":false,"labelSelector":"botkube.io/canvas=true","limit":50}` | Opt-in service catalog showing workload versions and rollout status. |
+| [settings.statusCanvas.sections.catalog.limit](./values.yaml#L751) | int | `50` | Maximum number of catalog entries to show. 0 means unlimited. |
+| [settings.statusCanvas.sections.catalog.labelSelector](./values.yaml#L753) | string | `"botkube.io/canvas=true"` | Label selector for workloads to include in the catalog. |
+| [settings.statusCanvas.sections.warnings](./values.yaml#L755) | object | `{"disabled":false,"limit":15}` | Recent Kubernetes warning events. |
+| [settings.statusCanvas.sections.warnings.limit](./values.yaml#L758) | int | `15` | Maximum number of warnings to show. 0 means unlimited. |
+| [ssl.enabled](./values.yaml#L763) | bool | `false` | If true, specify cert path in `config.ssl.cert` property or K8s Secret in `config.ssl.existingSecretName`. |
+| [ssl.existingSecretName](./values.yaml#L769) | string | `""` | Using existing SSL Secret. It MUST be in `botkube` Namespace.  |
+| [ssl.cert](./values.yaml#L772) | string | `""` | SSL Certificate file e.g certs/my-cert.crt. |
+| [service](./values.yaml#L775) | object | `{"name":"metrics","port":2112,"targetPort":2112}` | Configures Service settings for ServiceMonitor CR. |
+| [serviceMonitor](./values.yaml#L782) | object | `{"enabled":false,"interval":"10s","labels":{},"path":"/metrics","port":"metrics"}` | Configures ServiceMonitor settings. [Ref doc](https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#servicemonitor). |
+| [deployment.annotations](./values.yaml#L792) | object | `{}` | Extra annotations to pass to the Botkube Deployment. |
+| [deployment.livenessProbe](./values.yaml#L794) | object | `{"failureThreshold":35,"initialDelaySeconds":1,"periodSeconds":2,"successThreshold":1,"timeoutSeconds":1}` | Liveness probe. |
+| [deployment.livenessProbe.initialDelaySeconds](./values.yaml#L796) | int | `1` | The liveness probe initial delay seconds. |
+| [deployment.livenessProbe.periodSeconds](./values.yaml#L798) | int | `2` | The liveness probe period seconds. |
+| [deployment.livenessProbe.timeoutSeconds](./values.yaml#L800) | int | `1` | The liveness probe timeout seconds. |
+| [deployment.livenessProbe.failureThreshold](./values.yaml#L802) | int | `35` | The liveness probe failure threshold. |
+| [deployment.livenessProbe.successThreshold](./values.yaml#L804) | int | `1` | The liveness probe success threshold. |
+| [deployment.readinessProbe](./values.yaml#L807) | object | `{"failureThreshold":35,"initialDelaySeconds":1,"periodSeconds":2,"successThreshold":1,"timeoutSeconds":1}` | Readiness probe. |
+| [deployment.readinessProbe.initialDelaySeconds](./values.yaml#L809) | int | `1` | The readiness probe initial delay seconds. |
+| [deployment.readinessProbe.periodSeconds](./values.yaml#L811) | int | `2` | The readiness probe period seconds. |
+| [deployment.readinessProbe.timeoutSeconds](./values.yaml#L813) | int | `1` | The readiness probe timeout seconds. |
+| [deployment.readinessProbe.failureThreshold](./values.yaml#L815) | int | `35` | The readiness probe failure threshold. |
+| [deployment.readinessProbe.successThreshold](./values.yaml#L817) | int | `1` | The readiness probe success threshold. |
+| [extraAnnotations](./values.yaml#L824) | object | `{}` | Extra annotations to pass to the Botkube Pod. |
+| [extraLabels](./values.yaml#L826) | object | `{}` | Extra labels to pass to the Botkube Pod. |
+| [priorityClassName](./values.yaml#L828) | string | `""` | Priority class name for the Botkube Pod. |
+| [nameOverride](./values.yaml#L831) | string | `""` | Fully override "botkube.name" template. |
+| [fullnameOverride](./values.yaml#L833) | string | `""` | Fully override "botkube.fullname" template. |
+| [resources](./values.yaml#L839) | object | `{}` | The Botkube Pod resource request and limits. We usually recommend not to specify default resources and to leave this as a conscious choice for the user. This also increases chances charts run on environments with little resources, such as Minikube. [Ref docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) |
+| [extraEnv](./values.yaml#L851) | list | `[{"name":"LOG_LEVEL_SOURCE_BOTKUBE_KUBERNETES","value":"debug"}]` | Extra environment variables to pass to the Botkube container. [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables). |
+| [extraVolumes](./values.yaml#L864) | list | `[]` | Extra volumes to pass to the Botkube container. Mount it later with extraVolumeMounts. [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/volume/#Volume). |
+| [extraVolumeMounts](./values.yaml#L879) | list | `[]` | Extra volume mounts to pass to the Botkube container. [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#volumes-1). |
+| [nodeSelector](./values.yaml#L897) | object | `{}` | Node labels for Botkube Pod assignment. [Ref doc](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/). |
+| [tolerations](./values.yaml#L901) | list | `[]` | Tolerations for Botkube Pod assignment. [Ref doc](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
+| [affinity](./values.yaml#L905) | object | `{}` | Affinity for Botkube Pod assignment. [Ref doc](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity). |
+| [serviceAccount.create](./values.yaml#L909) | bool | `true` | If true, a ServiceAccount is automatically created. |
+| [serviceAccount.name](./values.yaml#L912) | string | `""` | The name of the service account to use. If not set, a name is generated using the fullname template. |
+| [serviceAccount.annotations](./values.yaml#L914) | object | `{}` | Extra annotations for the ServiceAccount. |
+| [extraObjects](./values.yaml#L917) | list | `[]` | Extra Kubernetes resources to create. Helm templating is allowed as it is evaluated before creating the resources. |
+| [analytics.disable](./values.yaml#L944) | bool | `false` | If true, sending anonymous analytics is disabled. To learn what date we collect, see the [Privacy Policy](https://botkube.io/privacy-policy). |
+| [configWatcher](./values.yaml#L948) | object | `{"enabled":true,"inCluster":{"informerResyncPeriod":"10m"}}` | Parameters for the Config Watcher component which reloads Botkube on ConfigMap changes. It restarts Botkube when configuration data change is detected. It watches ConfigMaps and/or Secrets with the `botkube.io/config-watch: "true"` label from the namespace where Botkube is installed. |
+| [configWatcher.enabled](./values.yaml#L950) | bool | `true` | If true, restarts the Botkube Pod on config changes. |
+| [configWatcher.inCluster](./values.yaml#L952) | object | `{"informerResyncPeriod":"10m"}` | In-cluster Config Watcher configuration. It is used when remote configuration is not provided. |
+| [configWatcher.inCluster.informerResyncPeriod](./values.yaml#L954) | string | `"10m"` | Resync period for the Config Watcher informers. |
+| [plugins](./values.yaml#L957) | object | `{"cacheDir":"/tmp","healthCheckInterval":"10s","incomingWebhook":{"enabled":true,"port":2115,"targetPort":2115},"repositories":{"botkube":{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/kubeshop/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}},"restartPolicy":{"threshold":10,"type":"DeactivatePlugin"}}` | Configuration for Botkube executors and sources plugins. |
+| [plugins.cacheDir](./values.yaml#L959) | string | `"/tmp"` | Directory, where downloaded plugins are cached. |
+| [plugins.repositories](./values.yaml#L961) | object | `{"botkube":{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/kubeshop/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}}` | List of plugins repositories. Each repository defines the URL and optional `headers` |
+| [plugins.repositories.botkube](./values.yaml#L963) | object | `{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"}` | This repository serves officially supported Botkube plugins. |
+| [plugins.incomingWebhook](./values.yaml#L970) | object | `{"enabled":true,"port":2115,"targetPort":2115}` | Configure Incoming webhook for source plugins. |
+| [plugins.restartPolicy](./values.yaml#L975) | object | `{"threshold":10,"type":"DeactivatePlugin"}` | Botkube Restart Policy on plugin failure. |
+| [plugins.restartPolicy.type](./values.yaml#L977) | string | `"DeactivatePlugin"` | Restart policy type. Allowed values: "RestartAgent", "DeactivatePlugin". |
+| [plugins.restartPolicy.threshold](./values.yaml#L979) | int | `10` | Number of restarts before policy takes into effect. |
+| [config](./values.yaml#L983) | object | `{"provider":{"apiKey":"","endpoint":"https://api.botkube.io/graphql","identifier":""}}` | Configuration for synchronizing Botkube configuration. |
+| [config.provider](./values.yaml#L985) | object | `{"apiKey":"","endpoint":"https://api.botkube.io/graphql","identifier":""}` | Base provider definition. |
+| [config.provider.identifier](./values.yaml#L988) | string | `""` | Unique identifier for remote Botkube settings. If set to an empty string, Botkube won't fetch remote configuration. |
+| [config.provider.endpoint](./values.yaml#L990) | string | `"https://api.botkube.io/graphql"` | Endpoint to fetch Botkube settings from. |
+| [config.provider.apiKey](./values.yaml#L992) | string | `""` | Key passed as a `X-API-Key` header to the provider's endpoint. |
 
 ### AWS IRSA on EKS support
 

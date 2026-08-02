@@ -27,4 +27,17 @@ rules:
   - apiGroups: [ "" ]
     resources: [ "users", "groups", "serviceaccounts" ]
     verbs: [ "impersonate" ]
+{{- if .Values.settings.statusCanvas.enabled }}
+  {{- /*
+    The cluster status canvas snapshots cluster state directly, so it needs read access to the
+    resources it renders. These are granted only when the canvas is enabled, to avoid widening
+    Botkube's permissions for deployments that do not use it.
+  */}}
+  - apiGroups: [ "" ]
+    resources: [ "namespaces", "pods", "events" ]
+    verbs: [ "get", "list" ]
+  - apiGroups: [ "apps" ]
+    resources: [ "deployments", "statefulsets", "daemonsets" ]
+    verbs: [ "get", "list" ]
+{{- end }}
   {{- end }}

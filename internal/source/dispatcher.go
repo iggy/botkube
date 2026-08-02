@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"runtime/debug"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -35,6 +36,15 @@ type Dispatcher struct {
 	sinkNotifiers        []notifier.Sink
 	restCfg              *rest.Config
 	clusterName          string
+	stateObserver        StateObserver
+}
+
+// StateObserver observes dispatched events to maintain a derived view of the cluster state.
+// It is optional: when nil, events are dispatched exactly as before.
+type StateObserver interface {
+	// ObserveEvent is called for every dispatched event. Implementations must not block, as this
+	// runs on the event delivery path.
+	ObserveEvent(pluginName string, rawObject any)
 }
 
 // ActionProvider defines a provider that is responsible for automated actions.
@@ -85,6 +95,31 @@ func NewDispatcher(log logrus.FieldLogger, clusterName string, notifiers map[str
 		restCfg:              restCfg,
 		clusterName:          clusterName,
 	}
+}
+
+// WithStateObserver sets the observer notified about every dispatched event.
+func (d *Dispatcher) WithStateObserver(observer StateObserver) *Dispatcher {
+	d.stateObserver = observer
+	return d
+}
+
+// observeEvent hands the event to the state observer, if one is configured.
+//
+// The observer maintains an accessory view of the cluster, so a bug in it must not stop event
+// delivery. Unlike the notifier goroutines, which report a panic as a fatal app error, a panic here
+// is logged and swallowed: losing the status canvas is preferable to losing notifications.
+func (d *Dispatcher) observeEvent(pluginName string, rawObject any) {
+	if d.stateObserver == nil {
+		return
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			d.log.Errorf("recovered from panic while observing event for %q: %v\n%s", pluginName, r, string(debug.Stack()))
+		}
+	}()
+
+	d.stateObserver.ObserveEvent(pluginName, rawObject)
 }
 
 // Dispatch starts a given plugin, watches for incoming events and calling all notifiers to dispatch received event.
@@ -187,6 +222,8 @@ func (d *Dispatcher) dispatchMsg(ctx context.Context, event source.Event, dispat
 		pluginName = dispatch.pluginName
 		sources    = []string{dispatch.sourceName}
 	)
+
+	d.observeEvent(pluginName, event.RawObject)
 
 	for _, n := range d.getBotNotifiers(dispatch) {
 		go func(n notifier.Bot) {

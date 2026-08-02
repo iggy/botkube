@@ -139,6 +139,31 @@ settings:
   informersResyncPeriod: 30m0s
   kubeconfig: kubeconfig-from-env
   saCredentialsPathPrefix: ""
+  statusCanvas:
+    enabled: false
+    channels: []
+    title: '{{ .ClusterName }} cluster status'
+    updateInterval: 10s
+    snapshotInterval: 5m0s
+    namespaces:
+      include: []
+    sections:
+      summary:
+        disabled: false
+        limit: 0
+      nodes:
+        disabled: false
+        limit: 25
+      workloads:
+        disabled: false
+        limit: 25
+      catalog:
+        disabled: false
+        limit: 50
+        labelSelector: botkube.io/canvas=true
+      warnings:
+        disabled: false
+        limit: 15
 configWatcher:
   enabled: false
   remote:

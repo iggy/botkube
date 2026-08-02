@@ -65,6 +65,31 @@ func TestConfigExecutorShowConfig(t *testing.T) {
 						    informersResyncPeriod: 0s
 						    kubeconfig: ""
 						    saCredentialsPathPrefix: ""
+						    statusCanvas:
+						        enabled: false
+						        channels: []
+						        title: ""
+						        updateInterval: 0s
+						        snapshotInterval: 0s
+						        namespaces:
+						            include: []
+						        sections:
+						            summary:
+						                disabled: false
+						                limit: 0
+						            nodes:
+						                disabled: false
+						                limit: 0
+						            workloads:
+						                disabled: false
+						                limit: 0
+						            catalog:
+						                disabled: false
+						                limit: 0
+						                labelSelector: ""
+						            warnings:
+						                disabled: false
+						                limit: 0
 						configWatcher:
 						    enabled: false
 						    remote:

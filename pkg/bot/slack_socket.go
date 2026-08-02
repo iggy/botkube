@@ -111,6 +111,9 @@ func NewSocketSlack(log logrus.FieldLogger, commGroupMetadata CommGroupMetadata,
 	}, nil
 }
 
+// Client returns the underlying Slack API client.
+func (b *SocketSlack) Client() *slack.Client { return b.client }
+
 // Start starts the Slack WebSocket connection and listens for messages
 func (b *SocketSlack) Start(ctx context.Context) error {
 	b.log.Info("Starting bot")
