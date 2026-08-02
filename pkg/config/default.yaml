@@ -10,6 +10,24 @@ settings:
     name: botkube-system
     namespace: botkube
 
+  statusCanvas:
+    enabled: false
+    title: "{{ .ClusterName }} cluster status"
+    updateInterval: "10s"
+    snapshotInterval: "5m"
+    sections:
+      summary:
+        limit: 0
+      nodes:
+        limit: 25
+      workloads:
+        limit: 25
+      catalog:
+        limit: 50
+        labelSelector: "botkube.io/canvas=true"
+      warnings:
+        limit: 15
+
 plugins:
   cacheDir: "/tmp"
 
