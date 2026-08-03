@@ -61,7 +61,7 @@ func (o *ExporterOptions) RegisterFlags(flags *pflag.FlagSet) {
 	flags.StringVarP(&o.BotkubePodNamespace, "namespace", "n", "botkube", "Namespace of Botkube pod")
 	flags.StringVarP(&o.BotkubePodLabel, "label", "l", "app=botkube", "Label used for identifying the Botkube pod")
 	flags.StringVar(&o.Registry, "cfg-exporter-image-registry", "ghcr.io", "Registry for the Config Exporter job image")
-	flags.StringVar(&o.Repository, "cfg-exporter-image-repo", "kubeshop/botkube-config-exporter", "Repository for the Config Exporter job image")
+	flags.StringVar(&o.Repository, "cfg-exporter-image-repo", "iggy/botkube-config-exporter", "Repository for the Config Exporter job image")
 	flags.StringVar(&o.Tag, "cfg-exporter-image-tag", getDefaultImageTag(), "Tag of the Config Exporter job image")
 	flags.DurationVar(&o.PollPeriod, "cfg-exporter-poll-period", 1*time.Second, "Interval used to check if Config Exporter job was finished")
 	flags.DurationVar(&o.Timeout, "cfg-exporter-timeout", 1*time.Minute, "Maximum execution time for the Config Exporter job")

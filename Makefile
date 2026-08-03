@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := build
-.PHONY: container-image test test-integration-slack test-integration-discord build pre-build publish lint lint-fix go-import-fmt system-check save-images load-and-push-images gen-grpc-resources gen-plugins-index build-plugins build-plugins-single gen-docs-cli gen-plugins-goreleaser serve-local-plugins
+.PHONY: container-image test test-integration-slack test-integration-discord build pre-build publish lint lint-fix system-check save-images load-and-push-images gen-grpc-resources gen-plugins-index build-plugins build-plugins-single gen-docs-cli gen-plugins-goreleaser serve-local-plugins
 
 # Show this help.
 help:
@@ -8,13 +8,10 @@ help:
 serve-local-plugins: ## Serve local plugins
 	go run hack/target/serve-plugins/main.go
 
-lint-fix: go-import-fmt
+lint-fix:
 	@go mod tidy
 	@go mod verify
 	@golangci-lint run --timeout=10m --fix "./..."
-
-go-import-fmt:
-	@./hack/fmt-imports.sh
 
 # test
 test: system-check

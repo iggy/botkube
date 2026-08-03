@@ -131,8 +131,8 @@ func (r *TeamsRenderer) bulletList(msgs []string) string {
 		// We need to change the new line encoding, otherwise it will be printed in a single line. Example use-case:
 		//
 		// spec.template.spec.containers[*].image:
-		//  -: ghcr.io/kubeshop/botkube:v9.99.9-dev
-		//  +: ghcr.io/kubeshop/botkube:v1.0.0
+		//  -: ghcr.io/iggy/botkube:v9.99.9-dev
+		//  +: ghcr.io/iggy/botkube:v1.0.0
 		msgs[idx] = strings.ReplaceAll(item, "\n", "\n\n\t\t")
 	}
 	return replaceEmojiTagsWithActualOne(fmt.Sprintf("- %s", strings.Join(msgs, "\r- ")))

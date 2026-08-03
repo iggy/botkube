@@ -29,7 +29,9 @@ jobs:
         run: go mod verify
         if: always()
       - name: Run Go import formatting
-        run: make go-import-fmt
+        run: |
+          go install golang.org/x/tools/cmd/goimports@v0.48.0
+          goimports -local github.com/iggy/botkube -w ./cmd ./internal ./pkg
         if: always()
       - name: Detect git changes
         if: always()

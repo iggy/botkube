@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	orgName  = "kubeshop"
+	orgName  = "iggy"
 	repoName = "botkube"
 )
 

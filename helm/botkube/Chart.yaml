@@ -6,7 +6,7 @@ appVersion: v9.99.9-dev
 icon: https://docs.botkube.io/images/botkube-black.svg
 description: A virtual SRE, powered by AI.
 sources:
-  - https://github.com/kubeshop/botkube
+  - https://github.com/iggy/botkube
 keywords:
   - botkube
   - kubernetes
