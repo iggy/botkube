@@ -16,7 +16,7 @@ const (
 	// ReleaseName defines Botkube Helm chart release name.
 	ReleaseName = "botkube"
 	// HelmRepoStable URL of the stable Botkube Helm charts repository.
-	HelmRepoStable = "https://charts.botkube.io/"
+	HelmRepoStable = "https://iggy.github.io/botkube/"
 	// HelmChartName represents Botkube Helm chart name in a given Helm repository.
 	HelmChartName = "botkube"
 	// LocalChartsPath path to Helm charts in botkube repository.

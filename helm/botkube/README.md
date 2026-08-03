@@ -13,14 +13,14 @@ A virtual SRE, powered by AI.
 | Botkube Dev Team | [dev-team@botkube.io](mailto:dev-team@botkube.io) |
 
 ## Source Code
-[https://github.com/kubeshop/botkube](https://github.com/kubeshop/botkube)
+[https://github.com/iggy/botkube](https://github.com/iggy/botkube)
 
 ## Parameters
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | [image.registry](./values.yaml#L14) | string | `"ghcr.io"` | Botkube container image registry. |
-| [image.repository](./values.yaml#L16) | string | `"kubeshop/botkube"` | Botkube container image repository. |
+| [image.repository](./values.yaml#L16) | string | `"iggy/botkube"` | Botkube container image repository. |
 | [image.pullPolicy](./values.yaml#L18) | string | `"IfNotPresent"` | Botkube container image pull policy. |
 | [image.tag](./values.yaml#L20) | string | `"v9.99.9-dev"` | Botkube container image tag. Default tag is `appVersion` from Chart.yaml. |
 | [podSecurityPolicy](./values.yaml#L24) | object | `{"enabled":false}` | Configures Pod Security Policy to allow Botkube to run in restricted clusters. [Ref doc](https://kubernetes.io/docs/concepts/policy/pod-security-policy/). |
@@ -221,10 +221,10 @@ A virtual SRE, powered by AI.
 | [configWatcher.enabled](./values.yaml#L950) | bool | `true` | If true, restarts the Botkube Pod on config changes. |
 | [configWatcher.inCluster](./values.yaml#L952) | object | `{"informerResyncPeriod":"10m"}` | In-cluster Config Watcher configuration. It is used when remote configuration is not provided. |
 | [configWatcher.inCluster.informerResyncPeriod](./values.yaml#L954) | string | `"10m"` | Resync period for the Config Watcher informers. |
-| [plugins](./values.yaml#L957) | object | `{"cacheDir":"/tmp","healthCheckInterval":"10s","incomingWebhook":{"enabled":true,"port":2115,"targetPort":2115},"repositories":{"botkube":{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/kubeshop/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}},"restartPolicy":{"threshold":10,"type":"DeactivatePlugin"}}` | Configuration for Botkube executors and sources plugins. |
+| [plugins](./values.yaml#L957) | object | `{"cacheDir":"/tmp","healthCheckInterval":"10s","incomingWebhook":{"enabled":true,"port":2115,"targetPort":2115},"repositories":{"botkube":{"url":"https://github.com/iggy/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/iggy/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}},"restartPolicy":{"threshold":10,"type":"DeactivatePlugin"}}` | Configuration for Botkube executors and sources plugins. |
 | [plugins.cacheDir](./values.yaml#L959) | string | `"/tmp"` | Directory, where downloaded plugins are cached. |
-| [plugins.repositories](./values.yaml#L961) | object | `{"botkube":{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/kubeshop/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}}` | List of plugins repositories. Each repository defines the URL and optional `headers` |
-| [plugins.repositories.botkube](./values.yaml#L963) | object | `{"url":"https://github.com/kubeshop/botkube/releases/download/v1.14.0/plugins-index.yaml"}` | This repository serves officially supported Botkube plugins. |
+| [plugins.repositories](./values.yaml#L961) | object | `{"botkube":{"url":"https://github.com/iggy/botkube/releases/download/v1.14.0/plugins-index.yaml"},"botkubeExtra":{"url":"https://github.com/iggy/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml"}}` | List of plugins repositories. Each repository defines the URL and optional `headers` |
+| [plugins.repositories.botkube](./values.yaml#L963) | object | `{"url":"https://github.com/iggy/botkube/releases/download/v1.14.0/plugins-index.yaml"}` | This repository serves officially supported Botkube plugins. |
 | [plugins.incomingWebhook](./values.yaml#L970) | object | `{"enabled":true,"port":2115,"targetPort":2115}` | Configure Incoming webhook for source plugins. |
 | [plugins.restartPolicy](./values.yaml#L975) | object | `{"threshold":10,"type":"DeactivatePlugin"}` | Botkube Restart Policy on plugin failure. |
 | [plugins.restartPolicy.type](./values.yaml#L977) | string | `"DeactivatePlugin"` | Restart policy type. Allowed values: "RestartAgent", "DeactivatePlugin". |

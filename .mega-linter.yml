@@ -18,6 +18,9 @@ DISABLE_ERRORS_LINTERS:
   - REPOSITORY_DEVSKIM
   - ACTION_ZIZMOR
   - REPOSITORY_OSV_SCANNER # way more trouble than it's worth
+  # these are complaining about stuff that doesn't have upstream fixes, make them warnings temporarily
+  - REPOSITORY_GRYPE
+  - REPOSITORY_TRIVY
 
 # zizmor needs to call the GitHub API to perform the ref-confusion audit;
 # without GITHUB_TOKEN it gets 401-rate-limited and fails the whole job.

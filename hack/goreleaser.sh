@@ -4,8 +4,8 @@ set -o errexit
 set -o pipefail
 
 IMAGE_REGISTRY="${IMAGE_REGISTRY:-ghcr.io}"
-IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-kubeshop/botkube}"
-CFG_EXPORTER_IMAGE_REPOSITORY="${CFG_EXPORTER_IMAGE_REPOSITORY:-kubeshop/botkube-config-exporter}"
+IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-iggy/botkube}"
+CFG_EXPORTER_IMAGE_REPOSITORY="${CFG_EXPORTER_IMAGE_REPOSITORY:-iggy/botkube-config-exporter}"
 IMAGE_SAVE_LOAD_DIR="${IMAGE_SAVE_LOAD_DIR:-/tmp/botkube-images}"
 IMAGE_PLATFORM="${IMAGE_PLATFORM:-linux/amd64}"
 GORELEASER_CURRENT_TAG="${GORELEASER_CURRENT_TAG:-v9.99.9-dev}"
@@ -138,9 +138,9 @@ load_and_push_images() {
 build() {
 	prepare
 	docker run --rm --privileged \
-		-v "$PWD":/go/src/github.com/kubeshop/botkube \
+		-v "$PWD":/go/src/github.com/iggy/botkube \
 		-v /var/run/docker.sock:/var/run/docker.sock \
-		-w /go/src/github.com/kubeshop/botkube \
+		-w /go/src/github.com/iggy/botkube \
 		-e GORELEASER_CURRENT_TAG=v9.99.9-dev \
 		-e ANALYTICS_API_KEY="${ANALYTICS_API_KEY}" \
 		-e CLI_ANALYTICS_API_KEY="${CLI_ANALYTICS_API_KEY}" \
@@ -233,9 +233,9 @@ prepare_goreleaser() {
 build_single() {
 	export IMAGE_TAG=v9.99.9-dev
 	docker run --rm --privileged \
-		-v "$PWD":/go/src/github.com/kubeshop/botkube \
+		-v "$PWD":/go/src/github.com/iggy/botkube \
 		-v /var/run/docker.sock:/var/run/docker.sock \
-		-w /go/src/github.com/kubeshop/botkube \
+		-w /go/src/github.com/iggy/botkube \
 		-e IMAGE_TAG="${IMAGE_TAG}" \
 		-e ANALYTICS_API_KEY="${ANALYTICS_API_KEY}" \
 		-e CLI_ANALYTICS_API_KEY="${CLI_ANALYTICS_API_KEY}" \
