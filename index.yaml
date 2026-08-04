@@ -1,3 +1,29 @@
 apiVersion: v1
-entries: {}
-generated: "2026-08-02T00:00:00Z"
+entries:
+  botkube:
+  - apiVersion: v1
+    appVersion: v1.16.0-rc.1
+    created: "2026-08-04T05:17:58.042822749Z"
+    description: A virtual SRE, powered by AI.
+    digest: 14fda9b7e5aca461ae282d7db783412cb47acee2d691d8850ebcad5c042a5fad
+    home: https://botkube.io
+    icon: https://docs.botkube.io/images/botkube-black.svg
+    keywords:
+    - botkube
+    - kubernetes
+    - kubernetes-monitoring
+    - kubernetes-controller
+    - kubernetes-bot
+    - chatops
+    - bot
+    - botops
+    maintainers:
+    - email: dev-team@botkube.io
+      name: Botkube Dev Team
+    name: botkube
+    sources:
+    - https://github.com/iggy/botkube
+    urls:
+    - https://iggy.github.io/botkube/botkube-v1.16.0-rc.1.tgz
+    version: v1.16.0-rc.1
+generated: "2026-08-04T05:17:58.035346269Z"
