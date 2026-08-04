@@ -9,20 +9,20 @@
         test: annotation-2-level
       namespaces:
         include:
-          - namespace-include-2-level
+            - namespace-include-2-level
         exclude:
-          - namespace-exclude-2-level
+            - namespace-exclude-2-level
       updatesetting: null
       event:
         reason:
-          include:
-            - reason-include-2-level
-          exclude:
-            - reason-exclude-2-level
+            include:
+                - reason-include-2-level
+            exclude:
+                - reason-exclude-2-level
         message:
-          include:
-            - message-include-2-level
-          exclude:
-            - message-exclude-2-level
+            include:
+                - message-include-2-level
+            exclude:
+                - message-exclude-2-level
         types:
-          - create
+            - create

@@ -25,7 +25,6 @@ require (
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/google/go-github/v89 v89.0.0
-	github.com/google/go-github/v89 v89.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.1
 	github.com/gorilla/mux v1.8.1

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/go-github/v88/github"
+	"github.com/google/go-github/v89/github"
 	"github.com/sirupsen/logrus"
 
 	"github.com/iggy/botkube/pkg/bot"
@@ -84,23 +84,23 @@ func (c *UpgradeChecker) notifyAboutUpgradeIfShould(ctx context.Context) (bool, 
 		return false, fmt.Errorf("while getting latest release from GitHub: %w", err)
 	}
 
-	if release == nil || release.TagName == nil {
+	if release == nil || release.TagName == "" {
 		return false, errors.New("release tag is empty")
 	}
 
-	c.log.Debugf("latest release tag: %s", *release.TagName)
+	c.log.Debugf("latest release tag: %s", release.TagName)
 
 	// Send notification if newer version available
-	if version.Short() == *release.TagName {
+	if version.Short() == release.TagName {
 		// no new version, finish
 		return false, nil
 	}
 
-	err = notifier.SendPlaintextMessage(ctx, bot.AsNotifiers(c.bots), fmt.Sprintf(upgradeMsgFmt, *release.TagName))
+	err = notifier.SendPlaintextMessage(ctx, bot.AsNotifiers(c.bots), fmt.Sprintf(upgradeMsgFmt, release.TagName))
 	if err != nil {
 		return false, fmt.Errorf("while sending message about new release: %w", err)
 	}
 
-	c.log.Infof("Notified about new release %q. Finishing...", *release.TagName)
+	c.log.Infof("Notified about new release %q. Finishing...", release.TagName)
 	return true, nil
 }

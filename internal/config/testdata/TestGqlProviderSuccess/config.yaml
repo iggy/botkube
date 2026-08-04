@@ -7,9 +7,9 @@ communications:
         botkube-demo:
           bindings:
             executors:
-              - kubectl-read-only
+            - kubectl-read-only
             sources:
-              - kubernetes-info
+            - kubernetes-info
           name: botkube-demo
           notification:
             disabled: false
@@ -19,29 +19,29 @@ executors:
     kubectl:
       commands:
         resources:
-          - deployments
-          - pods
-          - namespaces
-          - daemonsets
-          - statefulsets
-          - storageclasses
-          - nodes
+        - deployments
+        - pods
+        - namespaces
+        - daemonsets
+        - statefulsets
+        - storageclasses
+        - nodes
         verbs:
-          - api-resources
-          - api-versions
-          - cluster-info
-          - describe
-          - diff
-          - explain
-          - get
-          - logs
-          - top
-          - auth
+        - api-resources
+        - api-versions
+        - cluster-info
+        - describe
+        - diff
+        - explain
+        - get
+        - logs
+        - top
+        - auth
       defaultNamespace: default
       enabled: true
       namespaces:
         include:
-          - .*
+        - .*
       restrictAccess: false
 settings:
   clusterName: qa

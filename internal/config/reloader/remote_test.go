@@ -153,6 +153,20 @@ func fixConfig(actionEnabled bool) config.Config {
 				Name:      "botkube-system",
 				Namespace: "botkube",
 			},
+			StatusCanvas: config.StatusCanvas{
+				Title:            "{{ .ClusterName }} cluster status",
+				UpdateInterval:   10 * time.Second,
+				SnapshotInterval: 5 * time.Minute,
+				Sections: config.StatusCanvasSections{
+					Nodes:     config.StatusCanvasSection{Limit: 25},
+					Workloads: config.StatusCanvasSection{Limit: 25},
+					Catalog: config.StatusCanvasCatalogSection{
+						StatusCanvasSection: config.StatusCanvasSection{Limit: 50},
+						LabelSelector:       "botkube.io/canvas=true",
+					},
+					Warnings: config.StatusCanvasSection{Limit: 15},
+				},
+			},
 		},
 		Plugins: config.PluginManagement{
 			CacheDir: "/tmp",

@@ -31,3 +31,4 @@ ignore: |
   helm/botkube/templates/
   .goreleaser.plugin.tpl.yaml
   docs/investigation/configuration/assets/communicationsecret.yaml
+  **/testdata/
