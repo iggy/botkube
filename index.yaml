@@ -3,9 +3,9 @@ entries:
   botkube:
   - apiVersion: v1
     appVersion: v1.16.0-rc.1
-    created: "2026-08-04T05:17:58.042822749Z"
+    created: "2026-08-04T06:03:04.365307637Z"
     description: A virtual SRE, powered by AI.
-    digest: 14fda9b7e5aca461ae282d7db783412cb47acee2d691d8850ebcad5c042a5fad
+    digest: 5d05bd9222b5dc37805eac2d892c88e63bc987f46fdcdef53a918c21c01fab58
     home: https://botkube.io
     icon: https://docs.botkube.io/images/botkube-black.svg
     keywords:
@@ -26,4 +26,4 @@ entries:
     urls:
     - https://iggy.github.io/botkube/botkube-v1.16.0-rc.1.tgz
     version: v1.16.0-rc.1
-generated: "2026-08-04T05:17:58.035346269Z"
+generated: "2026-08-04T06:03:04.356927836Z"
