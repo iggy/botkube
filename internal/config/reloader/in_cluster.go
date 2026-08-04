@@ -168,10 +168,23 @@ func (g *genericEventHandler) OnUpdate(oldObj, newObj interface{}) {
 }
 
 func (g *genericEventHandler) OnDelete(obj interface{}) {
-	g.log.WithFields(logrus.Fields{
-		"obj":  formatx.StructDumper().Sdump(obj),
-		"type": "OnDelete",
+	log := g.log.WithField("type", "OnDelete")
+	log.WithFields(logrus.Fields{
+		"obj": formatx.StructDumper().Sdump(obj),
 	}).Debug("Handling event...")
+
+	unstrObj, ok := obj.(*unstructured.Unstructured)
+	if !ok {
+		log.Errorf("unexpected type of object: %T", obj)
+		return
+	}
+
+	// See the comment in OnAdd about the fake K8s client not supporting labelSelector in tweakListOptions.
+	if unstrObj.GetLabels()[labelKey] != labelValue {
+		log.Debug("label is not set. Skipping...")
+		return
+	}
+
 	g.reloadIfCan(g.ctx)
 }
 
