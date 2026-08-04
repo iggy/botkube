@@ -1,6 +1,6 @@
 # Botkube
 
-![Version: v9.99.9-dev](https://img.shields.io/badge/Version-v9.99.9--dev-informational?style=flat-square) ![AppVersion: v9.99.9-dev](https://img.shields.io/badge/AppVersion-v9.99.9--dev-informational?style=flat-square)
+![Version: v1.16.0-rc.1](https://img.shields.io/badge/Version-v1.16.0--rc.1-informational?style=flat-square) ![AppVersion: v1.16.0-rc.1](https://img.shields.io/badge/AppVersion-v1.16.0--rc.1-informational?style=flat-square)
 
 A virtual SRE, powered by AI.
 
@@ -22,7 +22,7 @@ A virtual SRE, powered by AI.
 | [image.registry](./values.yaml#L14) | string | `"ghcr.io"` | Botkube container image registry. |
 | [image.repository](./values.yaml#L16) | string | `"iggy/botkube"` | Botkube container image repository. |
 | [image.pullPolicy](./values.yaml#L18) | string | `"IfNotPresent"` | Botkube container image pull policy. |
-| [image.tag](./values.yaml#L20) | string | `"v9.99.9-dev"` | Botkube container image tag. Default tag is `appVersion` from Chart.yaml. |
+| [image.tag](./values.yaml#L20) | string | `"v1.16.0-rc.1"` | Botkube container image tag. Default tag is `appVersion` from Chart.yaml. |
 | [podSecurityPolicy](./values.yaml#L24) | object | `{"enabled":false}` | Configures Pod Security Policy to allow Botkube to run in restricted clusters. [Ref doc](https://kubernetes.io/docs/concepts/policy/pod-security-policy/). |
 | [securityContext](./values.yaml#L30) | object | Runs as a Non-Privileged user. | Configures security context to manage user Privileges in Pod. [Ref doc](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | [containerSecurityContext](./values.yaml#L36) | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":true,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | Configures container security context. [Ref doc](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). |
