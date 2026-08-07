@@ -130,8 +130,6 @@ jobs:
 
   check-generated-resources:
     runs-on: ubuntu-latest
-    # We want to check all generated resources and notify about all possible problems.
-    continue-on-error: true
 
     steps:
       - name: Checkout
