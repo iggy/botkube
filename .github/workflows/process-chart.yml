@@ -52,7 +52,22 @@ jobs:
           CHART_DEV_VERSION="v9.99.9-dev"
           find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s/${CHART_CURRENT_VERSION}/${{ inputs.next-version }}/g" {} +
           find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s/${CHART_DEV_VERSION}/${{ inputs.next-version }}/g" {} +
-          find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s~${LATEST_PLUGIN_INDEX_URL}~https://github.com/iggy/botkube/releases/download/${{ inputs.next-version }}/plugins-index.yaml~g" {} +
+          # Point this repository's plugin index at the version being released.
+          # Matching any version (rather than a fixed sentinel URL) keeps this
+          # working when the committed URL changes; the previous sentinel-based
+          # substitution silently stopped matching and shipped a stale URL.
+          # Note: only the 'botkube' repository is rewritten. 'botkubeExtra'
+          # lives in a separately versioned repository and is updated by hand.
+          PLUGIN_INDEX_BASE="https://github.com/iggy/botkube/releases/download"
+          find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i -E "s~(${PLUGIN_INDEX_BASE})/[^/]+/plugins-index.yaml~\1/${{ inputs.next-version }}/plugins-index.yaml~g" {} +
+          find "${HELM_FOLDER}" -name "*.yaml" -exec sed -i "s~${LATEST_PLUGIN_INDEX_URL}~${PLUGIN_INDEX_BASE}/${{ inputs.next-version }}/plugins-index.yaml~g" {} +
+
+          # Fail loudly rather than shipping a chart that points at a plugin
+          # index which will never exist.
+          if grep -rn --include="*.yaml" "${PLUGIN_INDEX_BASE}" "${HELM_FOLDER}" | grep -v "${{ inputs.next-version }}/plugins-index.yaml"; then
+            echo "::error::Found a botkube plugin index URL not pinned to ${{ inputs.next-version }}"
+            exit 1
+          fi
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.8.0
