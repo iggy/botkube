@@ -963,8 +963,11 @@ plugins:
     botkube:
       url: https://github.com/iggy/botkube/releases/download/v1.14.0/plugins-index.yaml
       # headers: {} # optional headers for plugins repository.
+    # -- This repository serves additional Botkube plugins. It is versioned
+    # independently of this repository, so its version is not bumped
+    # automatically at release time and must be updated by hand.
     botkubeExtra:
-      url: https://github.com/iggy/botkube-plugins/releases/download/v1.14.0/plugins-index.yaml
+      url: https://github.com/iggy/botkube-plugins/releases/download/v1.14.1/plugins-index.yaml
 
   # -- Configure Incoming webhook for source plugins.
   incomingWebhook:
