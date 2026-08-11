@@ -77,6 +77,19 @@ jobs:
             PATCH_VERSION=$(echo "${{ inputs.version }}" | awk -F'.' '{ print $3 }')
             PREV_VERSION="v${{ needs.workflow-metadata.outputs.base-version }}.$((PATCH_VERSION - 1))"
           fi
+          # The computed previous version may not exist as a tag: cutting a
+          # '.0' release from an existing release branch yields '.-1', and a
+          # repo without full release history may simply be missing the tag.
+          # An invalid value makes the release job's changelog step fail with
+          # 'Invalid previous_tag parameter (HTTP 400)', so fall back to the
+          # newest tag that actually exists.
+          if ! git rev-parse -q --verify "refs/tags/${PREV_VERSION}" >/dev/null; then
+            # Only consider final releases, so a release-candidate tag never
+            # becomes the changelog base.
+            FALLBACK_VERSION=$(git for-each-ref --sort=-v:refname --format '%(refname:strip=2)' refs/tags | grep -vE -- '-rc\.' | head -1)
+            echo "Previous version '${PREV_VERSION}' is not an existing tag, falling back to '${FALLBACK_VERSION}'"
+            PREV_VERSION="${FALLBACK_VERSION}"
+          fi
           git fetch origin "refs/notes/*:refs/notes/*"
           NOTE_COMMIT=$(git notes --ref release-${{ needs.workflow-metadata.outputs.base-version }} list | awk '{print $2}')
           if [[ ! -z "$NOTE_COMMIT" ]]; then

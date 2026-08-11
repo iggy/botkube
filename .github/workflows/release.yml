@@ -53,6 +53,13 @@ jobs:
           git fetch origin "refs/notes/*:refs/notes/*"
           BASE_VERSION=$(echo "${BASE_TAG}" | cut -c2- |  awk 'BEGIN{FS=OFS="."}NF--')
           PREV_VERSION=$(git log --pretty=format:"%N" --show-notes="release-${BASE_VERSION}"| awk -F',' '{ print $1 }' | awk NF | awk '{ print $2 }')
+          # Guard against a missing or malformed note. Passing a non-existent
+          # tag to the generate-notes API fails with HTTP 400, so leave the
+          # value empty and let GitHub pick the previous tag itself.
+          if [ -n "$PREV_VERSION" ] && ! git rev-parse -q --verify "refs/tags/${PREV_VERSION}" >/dev/null; then
+            echo "Previous version '${PREV_VERSION}' is not an existing tag, letting GitHub select it"
+            PREV_VERSION=""
+          fi
           echo "previous-version=$PREV_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install GoReleaser
@@ -74,9 +81,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          PREV_VERSION="${{ steps.prev-version.outputs.previous-version }}"
+          ARGS=()
+          if [ -n "$PREV_VERSION" ]; then
+            ARGS+=(-f "previous_tag_name=${PREV_VERSION}")
+          fi
           gh api "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
             -f tag_name="${GITHUB_REF#refs/tags/}" \
-            -f previous_tag_name="${{ steps.prev-version.outputs.previous-version }}" \
+            "${ARGS[@]}" \
             -q .body > CHANGELOG.md
 
       - name: Publish draft release
