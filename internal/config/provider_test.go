@@ -18,8 +18,8 @@ func TestGetProvider(t *testing.T) {
 		t.Setenv("BOTKUBE_CONFIG_PATHS", "testdata/TestGetProvider/first.yaml,testdata/TestGetProvider/second.yaml,testdata/TestGetProvider/third.yaml")
 
 		// when
-		provider := config.GetProvider(false, nil)
-		gotConfigs, _, err := provider.Configs(context.Background())
+		provider := config.GetProvider()
+		gotConfigs, err := provider.Configs(context.Background())
 		assert.NoError(t, err)
 
 		// then
@@ -36,8 +36,8 @@ func TestGetProvider(t *testing.T) {
 		require.NoError(t, err)
 
 		// when
-		provider := config.GetProvider(false, nil)
-		gotConfigs, _, err := provider.Configs(context.Background())
+		provider := config.GetProvider()
+		gotConfigs, err := provider.Configs(context.Background())
 		assert.NoError(t, err)
 
 		// then
@@ -57,8 +57,8 @@ func TestGetProvider(t *testing.T) {
 		t.Setenv("BOTKUBE_CONFIG_PATHS", "testdata/TestGetProvider/first.yaml,testdata/TestGetProvider/second.yaml,testdata/TestGetProvider/third.yaml")
 
 		// when
-		provider := config.GetProvider(false, nil)
-		gotConfigs, _, err := provider.Configs(context.Background())
+		provider := config.GetProvider()
+		gotConfigs, err := provider.Configs(context.Background())
 		assert.NoError(t, err)
 
 		// then

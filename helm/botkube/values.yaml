@@ -943,7 +943,7 @@ extraObjects: []
 configWatcher:
   # -- If true, restarts the Botkube Pod on config changes.
   enabled: true
-  # -- In-cluster Config Watcher configuration. It is used when remote configuration is not provided.
+  # -- In-cluster Config Watcher configuration.
   inCluster:
     # -- Resync period for the Config Watcher informers.
     informerResyncPeriod: 10m
@@ -976,15 +976,3 @@ plugins:
     # -- Number of restarts before policy takes into effect.
     threshold: 10
   healthCheckInterval: 10s
-
-# -- Configuration for synchronizing Botkube configuration.
-config:
-  # -- Base provider definition.
-  provider:
-    # -- Unique identifier for remote Botkube settings.
-    # If set to an empty string, Botkube won't fetch remote configuration.
-    identifier: ""
-    # -- Endpoint to fetch Botkube settings from.
-    endpoint: "https://api.botkube.io/graphql"
-    # -- Key passed as a `X-API-Key` header to the provider's endpoint.
-    apiKey: ""

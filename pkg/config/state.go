@@ -49,7 +49,6 @@ type BotRuntimeState struct {
 	Channels map[string]ChannelRuntimeState `yaml:"channels,omitempty"`
 
 	// Teams integration only, ignored for other communication platforms.
-	MSTeamsOnlyRuntimeState *ChannelRuntimeState `yaml:",inline,omitempty"`
 }
 
 // ChannelRuntimeState represents the runtime state for a channel.

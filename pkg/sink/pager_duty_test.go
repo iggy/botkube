@@ -10,15 +10,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/pkg/config"
 	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 func TestPagerDuty_SendEvent(t *testing.T) {
 	const integrationKey = "integration-key"
-
-	t.Setenv(remote.ProviderIdentifierEnvKey, "test-key")
 
 	tests := []struct {
 		name       string

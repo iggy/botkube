@@ -85,7 +85,6 @@ func ValidateStruct(in any) (ValidateResult, error) {
 
 	validate.RegisterStructValidation(socketSlackValidator, SocketSlack{})
 	validate.RegisterStructValidation(discordValidator, Discord{})
-	validate.RegisterStructValidation(cloudSlackValidator, CloudSlack{})
 	validate.RegisterStructValidation(mattermostValidator, Mattermost{})
 
 	validate.RegisterStructValidation(sourceStructValidator, Sources{})
@@ -181,16 +180,6 @@ func socketSlackValidator(sl validator.StructLevel) {
 	if !strings.HasPrefix(slack.AppToken, appTokenPrefix) {
 		msg := fmt.Sprintf("must have the %s prefix. Learn more at https://docs.botkube.io/installation/socketslack/#generate-and-obtain-app-level-token", appTokenPrefix)
 		sl.ReportError(slack.AppToken, "AppToken", "AppToken", "invalid_slack_token", msg)
-	}
-
-	validateChannels(sl, slackChannelNameRegex, true, slack.Channels, "Name", slackDocsURL)
-}
-
-func cloudSlackValidator(sl validator.StructLevel) {
-	slack, ok := sl.Current().Interface().(CloudSlack)
-
-	if !ok || !slack.Enabled {
-		return
 	}
 
 	validateChannels(sl, slackChannelNameRegex, true, slack.Channels, "Name", slackDocsURL)

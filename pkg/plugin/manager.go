@@ -18,7 +18,6 @@ import (
 	"github.com/sirupsen/logrus"
 	stringutil "k8s.io/utils/strings"
 
-	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/pkg/api"
 	"github.com/iggy/botkube/pkg/api/executor"
 	"github.com/iggy/botkube/pkg/api/source"
@@ -26,7 +25,6 @@ import (
 	"github.com/iggy/botkube/pkg/formatx"
 	"github.com/iggy/botkube/pkg/httpx"
 	"github.com/iggy/botkube/pkg/multierror"
-	"github.com/iggy/botkube/pkg/templatex"
 )
 
 const (
@@ -49,19 +47,13 @@ var pluginMap = map[string]plugin.Plugin{
 	TypeExecutor.String(): &executor.Plugin{},
 }
 
-// IndexRenderData returns plugin index render data.
-type IndexRenderData struct {
-	Remote remote.Config `yaml:"remote"`
-}
-
 // Manager provides functionality for managing executor and source plugins.
 type Manager struct {
-	isStarted       atomic.Bool
-	log             logrus.FieldLogger
-	logConfig       config.Logger
-	cfg             config.PluginManagement
-	httpClient      *http.Client
-	indexRenderData IndexRenderData
+	isStarted  atomic.Bool
+	log        logrus.FieldLogger
+	logConfig  config.Logger
+	cfg        config.PluginManagement
+	httpClient *http.Client
 
 	sourceSupervisorChan   chan pluginMetadata
 	executorSupervisorChan chan pluginMetadata
@@ -89,15 +81,9 @@ func NewManager(logger logrus.FieldLogger, logCfg config.Logger, cfg config.Plug
 	executorsStore := newStore[executor.Executor]()
 	sourcesStore := newStore[source.Source]()
 
-	remoteCfg, _ := remote.GetConfig()
-	indexRenderData := IndexRenderData{
-		Remote: remoteCfg,
-	}
-
 	return &Manager{
 		cfg:                    cfg,
 		httpClient:             httpx.NewHTTPClient(),
-		indexRenderData:        indexRenderData,
 		sourceSupervisorChan:   sourceSupervisorChan,
 		executorSupervisorChan: executorSupervisorChan,
 		schedulerChan:          schedulerChan,
@@ -356,13 +342,8 @@ func (m *Manager) fetchIndex(ctx context.Context, path string, repo config.Plugi
 		return fmt.Errorf("while creating request: %w", err)
 	}
 
-	headers, err := m.renderPluginIndexHeaders(repo.Headers)
-	if err != nil {
-		return fmt.Errorf("while rendering plugin index header: %w", err)
-	}
-
 	var strBuilder strings.Builder
-	for key, value := range headers {
+	for key, value := range repo.Headers {
 		strBuilder.WriteString(fmt.Sprintf("%s=%s\n", key, stringutil.ShortenString(value, printHeaderValueCharCount)))
 		req.Header.Set(key, value)
 	}
@@ -397,23 +378,6 @@ func (m *Manager) fetchIndex(ctx context.Context, path string, repo config.Plugi
 		return fmt.Errorf("while saving index body: %w", err)
 	}
 	return nil
-}
-
-func (m *Manager) renderPluginIndexHeaders(headers map[string]string) (map[string]string, error) {
-	out := make(map[string]string)
-
-	errs := multierror.New()
-	for key, value := range headers {
-		renderedValue, err := templatex.RenderStringIfTemplate(value, m.indexRenderData)
-		if err != nil {
-			errs = multierror.Append(errs, fmt.Errorf("while rendering header %q: %w", key, err))
-			continue
-		}
-
-		out[key] = renderedValue
-	}
-
-	return out, errs.ErrorOrNil()
 }
 
 func createGRPCClients[C any](ctx context.Context, logger logrus.FieldLogger, logConfig config.Logger, pluginMeta map[string]pluginMetadata, pluginType Type, supervisorChan chan pluginMetadata, healthCheckInterval time.Duration) (*storePlugins[C], error) {

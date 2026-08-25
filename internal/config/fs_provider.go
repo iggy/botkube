@@ -23,19 +23,19 @@ func NewFileSystemProvider(configs []string) *FileSystemProvider {
 }
 
 // Configs returns list of config file locations.
-func (e *FileSystemProvider) Configs(_ context.Context) (config.YAMLFiles, int, error) {
+func (e *FileSystemProvider) Configs(_ context.Context) (config.YAMLFiles, error) {
 	configPaths := sortCfgFiles(e.Files)
 
 	var out config.YAMLFiles
 	for _, path := range configPaths {
 		raw, err := os.ReadFile(filepath.Clean(path))
 		if err != nil {
-			return nil, 0, fmt.Errorf("while reading a file: %w", err)
+			return nil, fmt.Errorf("while reading a file: %w", err)
 		}
 		out = append(out, raw)
 	}
 
-	return out, 0, nil
+	return out, nil
 }
 
 // sortCfgFiles sorts the config files so that the files that has specialConfigFileNamePrefix are moved to the end of the slice.

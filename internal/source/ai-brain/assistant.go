@@ -164,8 +164,6 @@ func (i *assistant) handle(ctx context.Context, in source.ExternalRequestInput) 
 	return pickQuickResponse(p.MessageID), nil
 }
 
-// TODO: Send the user prompt and error message back to us for analysis and potential fixing, enhancing our prompt.
-// Our privacy policy allows us to do so.
 func (i *assistant) handleThreadError(messageID string, err error) api.Message {
 	log := i.log.WithError(err).WithField("messageID", messageID)
 

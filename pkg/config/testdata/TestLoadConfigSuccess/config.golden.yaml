@@ -164,8 +164,6 @@ settings:
         limit: 15
 configWatcher:
   enabled: false
-  remote:
-    pollInterval: 15s
   inCluster:
     informerResyncPeriod: 0s
   deployment: {}

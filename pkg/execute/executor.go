@@ -11,7 +11,6 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/iggy/botkube/internal/audit"
-	remoteapi "github.com/iggy/botkube/internal/remote"
 	"github.com/iggy/botkube/pkg/api"
 	"github.com/iggy/botkube/pkg/bot/interactive"
 	"github.com/iggy/botkube/pkg/config"
@@ -265,8 +264,6 @@ func (e *DefaultExecutor) reportCommand(ctx context.Context, pluginName, cmd str
 }
 
 func (e *DefaultExecutor) reportAuditEvent(ctx context.Context, pluginName string, cmdCtx CommandContext) error {
-	platform := remoteapi.NewBotPlatform(cmdCtx.Platform.String())
-
 	channelName := cmdCtx.Conversation.ID
 	if cmdCtx.Conversation.DisplayName != "" {
 		channelName = cmdCtx.Conversation.DisplayName
@@ -278,7 +275,7 @@ func (e *DefaultExecutor) reportAuditEvent(ctx context.Context, pluginName strin
 		PluginName:              pluginName,
 		Channel:                 channelName,
 		Command:                 cmdCtx.ExpandedRawCmd,
-		BotPlatform:             platform,
+		BotPlatform:             cmdCtx.Platform.String(),
 		AdditionalCreateContext: cmdCtx.AuditContext,
 	}
 	return e.auditReporter.ReportExecutorAuditEvent(ctx, event)

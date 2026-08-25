@@ -224,9 +224,8 @@ func TestLoadedConfigValidationErrors(t *testing.T) {
 		{
 			name: "Invalid channel names",
 			expErrMsg: heredoc.Doc(`
-				4 errors occurred:
+				3 errors occurred:
 					* Key: 'Config.Communications[default-workspace].SocketSlack.alias2.Name' The channel name 'INCORRECT' seems to be invalid. See the documentation to learn more: https://api.slack.com/methods/conversations.rename#naming.
-					* Key: 'Config.Communications[default-workspace].CloudSlack.alias2.Name' The channel name 'INCORRECT' seems to be invalid. See the documentation to learn more: https://api.slack.com/methods/conversations.rename#naming.
 					* Key: 'Config.Communications[default-workspace].Mattermost.alias.Name' The channel name 'too-long name really really really really really really really really really really really really long' seems to be invalid. See the documentation to learn more: https://docs.mattermost.com/channels/channel-naming-conventions.html.
 					* Key: 'Config.Communications[default-workspace].Discord.alias2.ID' The channel name 'incorrect' seems to be invalid. See the documentation to learn more: https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-.`),
 			configs: [][]byte{

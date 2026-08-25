@@ -4,8 +4,6 @@ import (
 	"context"
 
 	"github.com/sirupsen/logrus"
-
-	"github.com/iggy/botkube/internal/remote/graphql"
 )
 
 // AuditReporter defines interface for reporting audit events
@@ -19,7 +17,7 @@ type ExecutorAuditEvent struct {
 	CreatedAt               string
 	PluginName              string
 	PlatformUser            string
-	BotPlatform             *graphql.BotPlatform
+	BotPlatform             string
 	Command                 string
 	Channel                 string
 	AdditionalCreateContext map[string]interface{}
@@ -38,10 +36,10 @@ type SourceDetails struct {
 	DisplayName string
 }
 
-// GetReporter creates new AuditReporter
-func GetReporter(remoteCfgSyncEnabled bool, logger logrus.FieldLogger, gql GraphQLClient) AuditReporter {
-	if remoteCfgSyncEnabled {
-		return newGraphQLAuditReporter(logger.WithField("component", "GraphQLAuditReporter"), gql)
-	}
-	return newNoopAuditReporter(nil)
+// GetReporter creates new AuditReporter.
+//
+// Audit events used to be shipped to Botkube Cloud over GraphQL. That service is gone, so there is
+// nowhere left to report to and the noop implementation is the only one.
+func GetReporter(logger logrus.FieldLogger) AuditReporter {
+	return newNoopAuditReporter(logger)
 }

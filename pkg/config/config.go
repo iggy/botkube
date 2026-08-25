@@ -83,17 +83,8 @@ const (
 	// SocketSlackCommPlatformIntegration defines Slack integration.
 	SocketSlackCommPlatformIntegration CommPlatformIntegration = "socketSlack"
 
-	// CloudSlackCommPlatformIntegration defines Slack integration.
-	CloudSlackCommPlatformIntegration CommPlatformIntegration = "cloudSlack"
-
 	// MattermostCommPlatformIntegration defines Mattermost integration.
 	MattermostCommPlatformIntegration CommPlatformIntegration = "mattermost"
-
-	// TeamsCommPlatformIntegration defines Teams integration.
-	TeamsCommPlatformIntegration CommPlatformIntegration = "teams"
-
-	// CloudTeamsCommPlatformIntegration defines Teams integration.
-	CloudTeamsCommPlatformIntegration CommPlatformIntegration = "cloudTeams"
 
 	// DiscordCommPlatformIntegration defines Discord integration.
 	DiscordCommPlatformIntegration CommPlatformIntegration = "discord"
@@ -109,7 +100,7 @@ const (
 )
 
 func (c CommPlatformIntegration) IsInteractive() bool {
-	return c == SocketSlackCommPlatformIntegration || c == CloudSlackCommPlatformIntegration || c == CloudTeamsCommPlatformIntegration
+	return c == SocketSlackCommPlatformIntegration
 }
 
 // String returns string platform name.
@@ -119,10 +110,8 @@ func (c CommPlatformIntegration) String() string {
 
 func (c CommPlatformIntegration) DisplayName() string {
 	switch c {
-	case SocketSlackCommPlatformIntegration, CloudSlackCommPlatformIntegration:
+	case SocketSlackCommPlatformIntegration:
 		return "Slack"
-	case TeamsCommPlatformIntegration, CloudTeamsCommPlatformIntegration:
-		return "Teams"
 	case MattermostCommPlatformIntegration:
 		return "Mattermost"
 	case DiscordCommPlatformIntegration:
@@ -193,18 +182,6 @@ type IncomingWebhook struct {
 
 	// InClusterBaseURL is the in-cluster URL of the incoming webhook. Passed for plugins in context.
 	InClusterBaseURL string `yaml:"inClusterBaseURL"`
-}
-
-// CloudSlackChannel contains configuration bindings per channel.
-type CloudSlackChannel struct {
-	ChannelBindingsByName `yaml:",inline" mapstructure:",squash"`
-
-	// ChannelID is the Slack ID of the channel.
-	// Currently, it is used for AI plugin as it has ability to fetch the Botkube Agent configuration.
-	// Later it can be used for deep linking to a given channel, see: https://api.slack.com/reference/deep-linking#app_channel
-	ChannelID string `yaml:"channelID"`
-	// Alias is an optional public alias for a private channel.
-	Alias *string `yaml:"alias,omitempty"`
 }
 
 // ChannelBindingsByName contains configuration bindings per channel.
@@ -486,10 +463,8 @@ type ChannelNotification struct {
 // Communications contains communication platforms that are supported.
 type Communications struct {
 	SocketSlack   SocketSlack   `yaml:"socketSlack,omitempty"`
-	CloudSlack    CloudSlack    `yaml:"cloudSlack,omitempty"`
 	Mattermost    Mattermost    `yaml:"mattermost,omitempty"`
 	Discord       Discord       `yaml:"discord,omitempty"`
-	CloudTeams    CloudTeams    `yaml:"cloudTeams,omitempty"`
 	Webhook       Webhook       `yaml:"webhook,omitempty"`
 	Elasticsearch Elasticsearch `yaml:"elasticsearch,omitempty"`
 	PagerDuty     PagerDuty     `yaml:"pagerDuty,omitempty"`
@@ -501,30 +476,6 @@ type SocketSlack struct {
 	Channels IdentifiableMap[ChannelBindingsByName] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
 	BotToken string                                 `yaml:"botToken,omitempty"`
 	AppToken string                                 `yaml:"appToken,omitempty"`
-}
-
-// CloudSlack configuration for multi-slack support
-type CloudSlack struct {
-	Enabled                         bool                               `yaml:"enabled"`
-	Channels                        IdentifiableMap[CloudSlackChannel] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
-	Token                           string                             `yaml:"token"`
-	BotID                           string                             `yaml:"botID,omitempty"`
-	Server                          GRPCServer                         `yaml:"server"`
-	ExecutionEventStreamingDisabled bool                               `yaml:"executionEventStreamingDisabled"`
-}
-
-// GRPCServer config for gRPC server
-type GRPCServer struct {
-	URL                      string              `yaml:"url"`
-	DisableTransportSecurity bool                `yaml:"disableTransportSecurity"`
-	TLS                      GRPCServerTLSConfig `yaml:"tls"`
-}
-
-// GRPCServerTLSConfig describes gRPC server TLS configuration.m
-type GRPCServerTLSConfig struct {
-	CACertificate      []byte `yaml:"caCertificate,omitempty"`
-	UseSystemCertPool  bool   `yaml:"useSystemCertPool"`
-	InsecureSkipVerify bool   `yaml:"insecureSkipVerify"`
 }
 
 // Elasticsearch config auth settings
@@ -566,30 +517,6 @@ type Mattermost struct {
 	Channels IdentifiableMap[ChannelBindingsByName] `yaml:"channels"  validate:"required_if=Enabled true,dive"`
 }
 
-// Teams creds for authentication with MS Teams
-type Teams struct {
-	Enabled     bool        `yaml:"enabled"`
-	BotName     string      `yaml:"botName,omitempty"`
-	AppID       string      `yaml:"appID,omitempty"`
-	AppPassword string      `yaml:"appPassword,omitempty"`
-	Port        string      `yaml:"port"`
-	MessagePath string      `yaml:"messagePath,omitempty"`
-	Bindings    BotBindings `yaml:"bindings" validate:"required_if=Enabled true"`
-}
-
-// CloudTeams configuration for cloud MS Teams.
-type CloudTeams struct {
-	Enabled bool            `yaml:"enabled"`
-	BotName string          `yaml:"botName"`
-	Server  GRPCServer      `yaml:"server"`
-	Teams   []TeamsBindings `yaml:"teams" validate:"required_if=Enabled true,dive"`
-}
-
-type TeamsBindings struct {
-	ID       string                               `yaml:"id"`
-	Channels IdentifiableMap[ChannelBindingsByID] `yaml:"channels" validate:"dive"`
-}
-
 // Discord configuration for authentication and send notifications
 type Discord struct {
 	Enabled  bool                                 `yaml:"enabled"`
@@ -620,15 +547,9 @@ type PagerDuty struct {
 // CfgWatcher describes configuration for watching the configuration.
 type CfgWatcher struct {
 	Enabled   bool                `yaml:"enabled"`
-	Remote    RemoteCfgWatcher    `yaml:"remote"`
 	InCluster InClusterCfgWatcher `yaml:"inCluster"`
 
 	Deployment K8sResourceRef `yaml:"deployment"`
-}
-
-// RemoteCfgWatcher describes configuration for watching the configuration using remote config provider.
-type RemoteCfgWatcher struct {
-	PollInterval time.Duration `yaml:"pollInterval"`
 }
 
 // InClusterCfgWatcher describes configuration for watching the configuration using in-cluster config provider.

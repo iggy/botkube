@@ -45,22 +45,6 @@ func (m *K8sConfigPersistenceManager) PersistSourceBindings(ctx context.Context,
 		state.Communications[commGroupName][platform] = platformCfg
 	}
 
-	if platform == TeamsCommPlatformIntegration {
-		if platformCfg.MSTeamsOnlyRuntimeState == nil {
-			platformCfg.MSTeamsOnlyRuntimeState = &ChannelRuntimeState{}
-		}
-
-		platformCfg.MSTeamsOnlyRuntimeState.Bindings.Sources = sourceBindings
-		state.Communications[commGroupName][platform] = platformCfg
-
-		err = configMapStorage.Update(ctx, cm, state)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
 	if platformCfg.Channels == nil {
 		platformCfg.Channels = make(map[string]ChannelRuntimeState)
 		state.Communications[commGroupName][platform] = platformCfg
@@ -147,5 +131,3 @@ func (m *K8sConfigPersistenceManager) PersistActionEnabled(ctx context.Context, 
 	}
 	return cmStorage.Update(ctx, cm, state)
 }
-
-func (m *K8sConfigPersistenceManager) SetResourceVersion(resourceVersion int) {}

@@ -30,7 +30,3 @@ settings:
 
 plugins:
   cacheDir: "/tmp"
-
-configWatcher:
-  remote:
-    pollInterval: "15s"

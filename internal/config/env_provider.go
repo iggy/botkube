@@ -23,7 +23,7 @@ func NewEnvProvider() *EnvProvider {
 }
 
 // Configs returns list of config file locations
-func (e *EnvProvider) Configs(ctx context.Context) (config.YAMLFiles, int, error) {
+func (e *EnvProvider) Configs(ctx context.Context) (config.YAMLFiles, error) {
 	envCfgs := os.Getenv(EnvProviderConfigPathsEnvKey)
 	configPaths := strings.Split(envCfgs, ",")
 

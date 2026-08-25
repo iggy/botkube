@@ -78,12 +78,10 @@ spec:
             - name: default-sa
               mountPath: {{.Values.rbac.serviceAccountMountPath}}
               readOnly: true
-          {{- if not (include "botkube.remoteConfigEnabled" $) }}
             - name: config-volume
               mountPath: "/config"
             - name: startup-config
               mountPath: "/startup-config"
-          {{- end }}
           {{- with .Values.extraVolumeMounts }}
             {{ toYaml . | nindent 12 }}
           {{- end }}
@@ -99,10 +97,8 @@ spec:
             - name: cache
               mountPath: "/.kube/cache"
           env:
-            {{- if not (include "botkube.remoteConfigEnabled" $) }}
             - name: BOTKUBE_CONFIG_PATHS
               value: "/config/global_config.yaml,/config/comm_config.yaml,/config/{{ .Values.settings.persistentConfig.runtime.fileName}},/startup-config/{{ .Values.settings.persistentConfig.startup.fileName}}"
-            {{- end }}
             - name: BOTKUBE_SETTINGS_METRICS__PORT
               value: {{ .Values.service.targetPort | quote }}
             {{- if .Values.kubeconfig.enabled }}
@@ -119,16 +115,6 @@ spec:
               value: "{{.Release.Namespace}}"
             - name: BOTKUBE_CONFIG__WATCHER_DEPLOYMENT_NAME
               value: "{{ include "botkube.fullname" . }}"
-            - name: CONFIG_PROVIDER_ENDPOINT
-              value: {{ .Values.config.provider.endpoint }}
-            {{- if .Values.config.provider.identifier }}
-            - name: CONFIG_PROVIDER_IDENTIFIER
-              value: "{{ .Values.config.provider.identifier }}"
-            {{- end }}
-            {{- if .Values.config.provider.apiKey }}
-            - name: CONFIG_PROVIDER_API_KEY
-              value: "{{ .Values.config.provider.apiKey }}"
-            {{- end }}
             - name: BOTKUBE_SETTINGS_SA__CREDENTIALS__PATH__PREFIX
               value: {{.Values.rbac.serviceAccountMountPath}}/default-sa
             - name: BOTKUBE_PLUGINS_INCOMING__WEBHOOK_PORT
@@ -156,7 +142,6 @@ spec:
                   - key: ca.crt
                     path: default-sa-ca.crt
                   name: kube-root-ca.crt
-        {{- if not (include "botkube.remoteConfigEnabled" $) }}
         - name: config-volume
           projected:
             sources:
@@ -171,7 +156,6 @@ spec:
         - name: startup-config
           configMap:
             name: {{ .Values.settings.persistentConfig.startup.configMap.name }}
-        {{ end }}
       {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
       {{- end }}
