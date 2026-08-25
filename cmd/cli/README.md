@@ -1,53 +1,76 @@
-# Migration tool for Botkube Cloud
+# Botkube CLI
 
-Command line tool that helps you migrate your Botkube installation to Botkube Cloud.
+Command line tool that simplifies working with a Botkube installation in a Kubernetes cluster.
 
 ## Installation
 
 ```bash
-go build -o bctl main.go
+go build -o botkube main.go
 ```
 
 ## Usage
 
-We assume you have a working Botkube instance and a Botkube Cloud account.
-This tool gathers all the information needed to migrate your Botkube instance from your Kubernetes
-cluster - a working kube config is also needed.
+A working kube config is required for all commands.
 
-1. Find the namespace where the Botkube instance is installed (`botkube` is the default):
+### Install or upgrade Botkube
 
 ```bash
-kubectl get ns
-kubectl get pod -n botkube --show-labels
+# Install the latest stable version
+botkube install
+
+# Install a specific version
+botkube install --version 1.14.0
+
+# Install from the Helm chart in this repository (run from the repo root)
+botkube install --repo @local
 ```
 
-2. Login to Botkube Cloud:
+The command wraps Helm, so most `helm install`/`helm upgrade` flags are available
+(`--set`, `--values`, `--namespace`, `--dry-run`, ...). It streams the agent logs
+until the installation settles, unless `--watch=false` is passed.
+
+### Uninstall Botkube
 
 ```bash
-bctl login
+# Uninstall the default Helm release
+botkube uninstall
+
+# Uninstall a specific Helm release
+botkube uninstall --release-name botkube-dev
 ```
 
-3. Run the migration tool and follow instructions:
+### Export the running configuration
 
 ```bash
-bctl migrate --namespace botkube --labels app=botkube
+# Print the configuration of the currently installed Botkube
+botkube config get
+
+# Print it as JSON
+botkube config get -ojson
+
+# Save it to a file
+botkube config get > config.yaml
 ```
 
 ## Implementation details
 
-### Login
+### Configuration export
 
-We tried to make the migration process as simple and automated as possible.
-The login workflow involves a locally served http server that listens for a callback from the browser
-after the user login. The callback contains the access token that is used to authenticate the user
-and is stored locally in `~/.botkube/config.json`.
-The server is stopped after the callback is received.
+`config get` cannot read the configuration directly, because it is assembled from
+Secrets, ConfigMaps and defaults at agent startup. Instead, the CLI creates a
+`botkube-config-exporter` Job in the namespace where Botkube resides, mounting the
+same Secrets and ConfigMaps as the Botkube Pod. The Job writes the merged
+configuration to a `botkube-config-exporter` ConfigMap, which the CLI reads and then
+deletes along with the Job.
 
-### Migration
+The exporter image is derived from the CLI version and can be overridden with the
+`--cfg-exporter-image-*` flags.
 
-Once user is logged in, Botkube CLI creates a Pod in the same namespace where Botkube resides. Then, it mounts the same
-Secrets and ConfigMaps as the Botkube Pod, and pulls entire configuration to a
-ConfigMap `botkube-config-exporter`.
+## Generating documentation
 
-Once we have the configuration, we can turn it into a API call and create identical
-resources in Botkube Cloud.
+Reference documentation for every command lives in [`docs/`](./docs) and is generated
+from the command definitions:
+
+```bash
+make gen-docs-cli
+```

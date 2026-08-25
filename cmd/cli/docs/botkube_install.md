@@ -45,7 +45,7 @@ botkube install --repo @local
       --no-hooks                     Disable pre/post install/upgrade hooks
       --release-name string          Botkube Helm chart release name. (default "botkube")
       --render-subchart-notes        If set, render subchart notes along with the parent
-      --repo string                  Botkube Helm chart repository location. It can be relative path to current working directory or URL. Use @stable tag to select repository which holds the stable Helm chart versions. (default "https://charts.botkube.io/")
+      --repo string                  Botkube Helm chart repository location. It can be relative path to current working directory or URL. Use @stable tag to select repository which holds the stable Helm chart versions. (default "https://iggy.github.io/botkube/")
       --reset-values                 When upgrading, reset the values to the ones built into the chart
       --reuse-values                 When upgrading, reuse the last release's values and merge in any overrides from the command line via --set and -f. If '--reset-values' is specified, this is ignored
       --set stringArray              Set values on the command line (can specify multiple or separate values with commas: key1=val1,key2=val2)
@@ -68,5 +68,5 @@ botkube install --repo @local
 
 ### SEE ALSO
 
-* [botkube](botkube.md)  - Botkube CLI
+* [botkube](botkube.md)	 - Botkube CLI
 

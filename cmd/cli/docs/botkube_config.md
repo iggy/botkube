@@ -20,6 +20,6 @@ This command consists of multiple subcommands for working with Botkube configura
 
 ### SEE ALSO
 
-* [botkube](botkube.md)  - Botkube CLI
-* [botkube config get](botkube_config_get.md)  - Displays Botkube configuration
+* [botkube](botkube.md)	 - Botkube CLI
+* [botkube config get](botkube_config_get.md)	 - Displays Botkube configuration
 
