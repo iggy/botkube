@@ -15,5 +15,5 @@ func (y YAMLFiles) Merge() []byte {
 
 // Provider for configuration sources
 type Provider interface {
-	Configs(ctx context.Context) (YAMLFiles, int, error)
+	Configs(ctx context.Context) (YAMLFiles, error)
 }

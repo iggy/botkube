@@ -15,20 +15,19 @@ func TestEnvProviderSuccess(t *testing.T) {
 
 	// when
 	p := NewEnvProvider()
-	configs, cfgVer, err := p.Configs(context.Background())
+	configs, err := p.Configs(context.Background())
 
 	// then
 	require.NoError(t, err)
 	content, err := os.ReadFile("testdata/TestEnvProviderSuccess/config.yaml")
 	assert.NoError(t, err)
 	assert.Equal(t, content, configs[0])
-	assert.Equal(t, cfgVer, 0)
 }
 
 func TestEnvProviderErr(t *testing.T) {
 	// when
 	p := NewEnvProvider()
-	_, _, err := p.Configs(context.Background())
+	_, err := p.Configs(context.Background())
 
 	// then
 	assert.Equal(t, "while reading a file: read .: is a directory", err.Error())

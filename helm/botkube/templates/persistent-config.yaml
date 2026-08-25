@@ -1,4 +1,3 @@
-{{- if not (include "botkube.remoteConfigEnabled" $) }}
 {{- $runtimeStateCfgMap := .Values.settings.persistentConfig.runtime.configMap.name -}}
 {{- $communications := .Values.communications | default dict }}
 {{- if .Values.existingCommunicationsSecretName }}
@@ -95,4 +94,3 @@ data:
         {{- end -}}
       {{- end }}
     {{- end }}
-{{- end }}

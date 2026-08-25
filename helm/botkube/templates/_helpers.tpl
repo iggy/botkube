@@ -49,9 +49,3 @@ Create the name of the service account to use
 {{- define "botkube.SSLCertSecretName" -}}
 {{- .Values.ssl.existingSecretName | default (printf "%s-certificate-secret" (include "botkube.fullname" .)) -}}
 {{- end -}}
-
-{{- define "botkube.remoteConfigEnabled" -}}
-{{ if .Values.config.provider.identifier }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}

@@ -1,4 +1,3 @@
-{{- if not (include "botkube.remoteConfigEnabled" $) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -40,4 +39,3 @@ data:
         type: {{ .Values.plugins.restartPolicy.type }}
         threshold: {{ .Values.plugins.restartPolicy.threshold }}
       healthCheckInterval: {{ .Values.plugins.healthCheckInterval }}
-{{- end }}

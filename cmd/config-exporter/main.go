@@ -21,7 +21,7 @@ const (
 )
 
 func main() {
-	files, _, err := cfginternal.NewEnvProvider().Configs(context.Background())
+	files, err := cfginternal.NewEnvProvider().Configs(context.Background())
 	if err != nil {
 		panic(err)
 	}

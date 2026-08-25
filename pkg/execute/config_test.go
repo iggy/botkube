@@ -90,8 +90,6 @@ func TestConfigExecutorShowConfig(t *testing.T) {
 						                limit: 0
 						configWatcher:
 						    enabled: false
-						    remote:
-						        pollInterval: 0s
 						    inCluster:
 						        informerResyncPeriod: 0s
 						    deployment: {}

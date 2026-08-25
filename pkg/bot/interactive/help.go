@@ -2,11 +2,9 @@ package interactive
 
 import (
 	"fmt"
-	"os"
 
 	"golang.org/x/exp/slices"
 
-	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/pkg/api"
 	"github.com/iggy/botkube/pkg/config"
 )
@@ -44,7 +42,6 @@ func (h *HelpMessage) Build(init bool) CoreMessage {
 
 	type getter func() []api.Section
 	sections := []getter{
-		h.aiPlugin,
 		h.basicCommands,
 		h.notificationSections,
 		h.pluginHelpSections,
@@ -70,16 +67,6 @@ func (h *HelpMessage) cluster() []api.Section {
 					Body: api.Body{
 						CodeBlock: fmt.Sprintf("--cluster-name=%s\n", h.clusterName),
 					},
-				},
-			},
-		}
-	case config.CloudSlackCommPlatformIntegration, config.CloudTeamsCommPlatformIntegration:
-		return []api.Section{
-			{
-				Base: api.Base{
-					Header: "🏁 Multi-Cluster flags",
-					Description: fmt.Sprintf("`--cluster-name=%q` flag to run a command on this cluster\n", h.clusterName) +
-						"`--all-clusters` flag to run commands on all clusters",
 				},
 			},
 		}
@@ -111,32 +98,12 @@ func (h *HelpMessage) footer() []api.Section {
 		h.btnBuilder.ForURL("Read our docs", "https://docs.botkube.io"),
 	}
 
-	if h.platform == config.CloudSlackCommPlatformIntegration || h.platform == config.CloudTeamsCommPlatformIntegration {
-		btns = append(btns, h.btnBuilder.ForURL("Get support", "https://botkube.io/support"))
-	} else {
-		btns = append(btns, h.btnBuilder.ForURL("Join our Slack", "https://join.botkube.io"))
-	}
+	btns = append(btns, h.btnBuilder.ForURL("Join our Slack", "https://join.botkube.io"))
 
 	btns = append(btns, h.btnBuilder.ForURL("Follow us on Twitter/X", "https://twitter.com/botkube_io"))
 
-	if !remote.IsEnabled() {
-		return []api.Section{
-			{
-				Buttons: btns,
-			},
-		}
-	}
-
 	return []api.Section{
 		{
-			Context: api.ContextItems{
-				{Text: fmt.Sprintf("👀 _All %s mentions and events are visible to your Botkube Cloud organisation’s administrators._", api.MessageBotNamePlaceholder)},
-			},
-		},
-		{
-			Style: api.SectionStyle{
-				Divider: api.DividerStyleTopNone,
-			},
 			Buttons: btns,
 		},
 	}
@@ -147,11 +114,6 @@ func (h *HelpMessage) notificationSections() []api.Section {
 		h.btnBuilder.ForCommandWithoutDesc("Enable", "enable notifications"),
 		h.btnBuilder.ForCommandWithoutDesc("Disable", "disable notifications"),
 		h.btnBuilder.ForCommandWithoutDesc("Get status", "status notifications"),
-	}
-	instanceID := os.Getenv(remote.ProviderIdentifierEnvKey)
-	if instanceID != "" {
-		instanceViewURL := fmt.Sprintf("https://app.botkube.io/instances/%s", instanceID)
-		btns = append(btns, h.btnBuilder.ForURL("Change notification on Cloud", instanceViewURL, api.ButtonStylePrimary))
 	}
 	return []api.Section{
 		{
@@ -180,23 +142,6 @@ func (h *HelpMessage) pluginHelpSections() []api.Section {
 		out = append(out, helpSection)
 	}
 	return out
-}
-
-func (h *HelpMessage) aiPlugin() []api.Section {
-	if !remote.IsEnabled() {
-		return nil
-	}
-	return []api.Section{
-		{
-			Base: api.Base{
-				Header:      "🤖 AI powered Kubernetes assistant",
-				Description: fmt.Sprintf("`%s ai` use natural language to ask any questions\n`%s ai scan` perform a cluster-wide scan for issues", api.MessageBotNamePlaceholder, api.MessageBotNamePlaceholder),
-			},
-			Buttons: []api.Button{
-				h.btnBuilder.ForCommandWithoutDesc("Cluster Scan", "ai scan", api.ButtonStylePrimary),
-			},
-		},
-	}
 }
 
 func (h *HelpMessage) advancedFeatures() []api.Section {

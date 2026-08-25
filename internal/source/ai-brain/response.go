@@ -76,17 +76,12 @@ func msgUnableToHelp(messageID string) api.Message {
 }
 
 func msgQuotaExceeded(messageID string) api.Message {
-	btnBuilder := api.NewMessageButtonBuilder()
-
 	return api.Message{
 		ParentActivityID: messageID,
 		Sections: []api.Section{
 			{
 				Base: api.Base{
-					Body: api.Body{Plaintext: "⚠️ Quota exceeded for current calendar month. Upgrade the Botkube Cloud plan to continue."},
-				},
-				Buttons: []api.Button{
-					btnBuilder.ForURL("Open Botkube Cloud", "https://app.botkube.io"),
+					Body: api.Body{Plaintext: "⚠️ The configured AI provider reported that its quota is exhausted. Check the billing and rate limits for the API key this plugin uses."},
 				},
 			},
 		},

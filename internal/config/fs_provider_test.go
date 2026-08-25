@@ -12,14 +12,13 @@ import (
 func TestStaticProviderSuccess(t *testing.T) {
 	// when
 	p := NewFileSystemProvider([]string{"testdata/TestStaticProviderSuccess/config.yaml"})
-	configs, cfgVer, err := p.Configs(context.Background())
+	configs, err := p.Configs(context.Background())
 
 	// then
 	require.NoError(t, err)
 	content, err := os.ReadFile("testdata/TestStaticProviderSuccess/config.yaml")
 	assert.NoError(t, err)
 	assert.Equal(t, content, configs[0])
-	assert.Equal(t, cfgVer, 0)
 }
 
 func TestSortCfgFiles(t *testing.T) {

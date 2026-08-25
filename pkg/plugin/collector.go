@@ -46,18 +46,8 @@ func (c *Collector) GetAllEnabledAndUsedPlugins(cfg *config.Config) ([]string, [
 			collect(boundExecutors, boundSources, commGroupCfg.SocketSlack.Channels)
 		}
 
-		if commGroupCfg.CloudSlack.Enabled {
-			collect(boundExecutors, boundSources, commGroupCfg.CloudSlack.Channels)
-		}
-
 		if commGroupCfg.Mattermost.Enabled {
 			collect(boundExecutors, boundSources, commGroupCfg.Mattermost.Channels)
-		}
-
-		if commGroupCfg.CloudTeams.Enabled {
-			for _, team := range commGroupCfg.CloudTeams.Teams {
-				collect(boundExecutors, boundSources, team.Channels)
-			}
 		}
 
 		if commGroupCfg.Discord.Enabled {

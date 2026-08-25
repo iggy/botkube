@@ -26,9 +26,6 @@ func (n NoopStatusReporter) ReportDeploymentFailure(context.Context, string) err
 	return nil
 }
 
-func (n NoopStatusReporter) SetResourceVersion(int) {
-}
-
 func (n NoopStatusReporter) SetLogger(logrus.FieldLogger) {}
 
 func newNoopStatusReporter() *NoopStatusReporter {

@@ -109,7 +109,7 @@ func (r *BotkubeRunner) initStartupConfig() error {
 	return nil
 }
 func (r *BotkubeRunner) fetchConfig(ctx context.Context) (string, *ConfigWithDetails, error) {
-	files, _, err := cfginternal.NewEnvProvider().Configs(ctx)
+	files, err := cfginternal.NewEnvProvider().Configs(ctx)
 	if err != nil {
 		return "", nil, fmt.Errorf("while loading app configuration: %w", err)
 	}

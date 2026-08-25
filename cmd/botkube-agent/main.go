@@ -24,10 +24,7 @@ import (
 	"github.com/iggy/botkube/internal/command"
 	intconfig "github.com/iggy/botkube/internal/config"
 	"github.com/iggy/botkube/internal/config/reloader"
-	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/internal/health"
-	"github.com/iggy/botkube/internal/heartbeat"
-	"github.com/iggy/botkube/internal/insights"
 	"github.com/iggy/botkube/internal/kubex"
 	"github.com/iggy/botkube/internal/source"
 	"github.com/iggy/botkube/internal/status"
@@ -49,12 +46,10 @@ import (
 )
 
 const (
-	componentLogFieldKey      = "component"
-	botLogFieldKey            = "bot"
-	sinkLogFieldKey           = "sink"
-	commGroupFieldKey         = "commGroup"
-	reportHeartbeatInterval   = 10
-	reportHeartbeatMaxRetries = 30
+	componentLogFieldKey = "component"
+	botLogFieldKey       = "bot"
+	sinkLogFieldKey      = "sink"
+	commGroupFieldKey    = "commGroup"
 )
 
 func main() {
@@ -76,23 +71,13 @@ func run(ctx context.Context) (err error) {
 	// Load configuration
 	intconfig.RegisterFlags(pflag.CommandLine)
 
-	remoteCfg, remoteCfgEnabled := remote.GetConfig()
-	var (
-		gqlClient    *remote.Gql
-		deployClient *remote.DeploymentClient
-	)
-	if remoteCfgEnabled {
-		gqlClient = remote.NewDefaultGqlClient(remoteCfg)
-		deployClient = remote.NewDeploymentClient(gqlClient)
-	}
-
-	statusReporter := status.GetReporter(remoteCfgEnabled, gqlClient, deployClient, nil)
+	statusReporter := status.GetReporter(nil)
 	if err = statusReporter.ReportDeploymentConnectionInit(ctx, ""); err != nil {
 		return fmt.Errorf("while reporting botkube connection initialization %w", err)
 	}
 
-	cfgProvider := intconfig.GetProvider(remoteCfgEnabled, deployClient)
-	configs, cfgVersion, err := cfgProvider.Configs(ctx)
+	cfgProvider := intconfig.GetProvider()
+	configs, err := cfgProvider.Configs(ctx)
 	if err != nil {
 		return fmt.Errorf("while loading configuration files: %w", err)
 	}
@@ -131,8 +116,7 @@ func run(ctx context.Context) (err error) {
 	}
 
 	statusReporter.SetLogger(logger)
-	statusReporter.SetResourceVersion(cfgVersion)
-	auditReporter := audit.GetReporter(remoteCfgEnabled, logger, gqlClient)
+	auditReporter := audit.GetReporter(logger)
 
 	ctx, cancel := context.WithCancel(ctx)
 	errGroup, ctx := errgroup.WithContext(ctx)
@@ -187,7 +171,7 @@ func run(ctx context.Context) (err error) {
 
 	cmdGuard := command.NewCommandGuard(logger.WithField(componentLogFieldKey, "Command Guard"), discoveryCli)
 	// Create executor factory
-	cfgManager := config.NewManager(remoteCfgEnabled, logger.WithField(componentLogFieldKey, "Config manager"), conf.Settings.PersistentConfig, cfgVersion, k8sCli, gqlClient, deployClient)
+	cfgManager := config.NewManager(logger.WithField(componentLogFieldKey, "Config manager"), conf.Settings.PersistentConfig, k8sCli)
 	executorFactory, err := execute.NewExecutorFactory(
 		execute.DefaultExecutorFactoryParams{
 			Log:               logger.WithField(componentLogFieldKey, "Executor"),
@@ -253,21 +237,9 @@ func run(ctx context.Context) (err error) {
 			})
 		}
 
-		if commGroupCfg.CloudSlack.Enabled {
-			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewCloudSlack(commGroupLogger.WithField(botLogFieldKey, "CloudSlack"), commGroupMeta, commGroupCfg.CloudSlack, conf.Settings.ClusterName, executorFactory)
-			})
-		}
-
 		if commGroupCfg.Mattermost.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
 				return bot.NewMattermost(ctx, commGroupLogger.WithField(botLogFieldKey, "Mattermost"), commGroupMeta, commGroupCfg.Mattermost, executorFactory)
-			})
-		}
-
-		if commGroupCfg.CloudTeams.Enabled {
-			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewCloudTeams(commGroupLogger.WithField(botLogFieldKey, "CloudTeams"), commGroupMeta, commGroupCfg.CloudTeams, conf.Settings.ClusterName, executorFactory)
 			})
 		}
 
@@ -307,15 +279,11 @@ func run(ctx context.Context) (err error) {
 			},
 		)
 
-		cfgReloader, err := reloader.Get(
-			remoteCfgEnabled,
+		cfgReloader, err := reloader.NewInClusterConfigReloader(
 			logger.WithField(componentLogFieldKey, "Config Reloader"),
-			deployClient,
 			dynamicCli,
+			conf.ConfigWatcher,
 			restarter,
-			*conf,
-			cfgVersion,
-			cfgManager,
 		)
 		if err != nil {
 			return reportFatalError("while creating config reloader", err)
@@ -410,26 +378,6 @@ func run(ctx context.Context) (err error) {
 	if err := statusReporter.ReportDeploymentStartup(ctx); err != nil {
 		return reportFatalError("while reporting botkube startup", err)
 	}
-
-	errGroup.Go(func() error {
-		if !remoteCfgEnabled {
-			logger.Debug("Remote config is not enabled, skipping k8s insights collection...")
-			return nil
-		}
-		defer func() {
-			if err == nil {
-				return
-			}
-
-			reportErr := reportFatalError("while starting k8s collector", err)
-			if reportErr != nil {
-				logger.Errorf("while reporting fatal error: %s", reportErr.Error())
-			}
-		}()
-		heartbeatReporter := heartbeat.GetReporter(logger, gqlClient, healthChecker)
-		k8sCollector := insights.NewK8sCollector(k8sCli, heartbeatReporter, logger, reportHeartbeatInterval, reportHeartbeatMaxRetries)
-		return k8sCollector.Start(ctx)
-	})
 
 	healthChecker.MarkAsReady()
 	err = ctrl.Start(ctx)

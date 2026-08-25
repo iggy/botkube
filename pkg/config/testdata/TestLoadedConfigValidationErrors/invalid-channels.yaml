@@ -1,25 +1,5 @@
 communications: # req 1 elm.
   "default-workspace":
-    cloudSlack:
-      enabled: true
-      channels:
-        "alias":
-          name: "#correct"
-          bindings:
-            executors:
-              - kubectl-read-only
-            sources:
-              - k8s-events
-        "alias2":
-          name: "INCORRECT"
-          bindings:
-            executors:
-              - kubectl-read-only
-            sources:
-              - k8s-events
-
-      token: "TOKEN"
-
     socketSlack:
       enabled: true
       channels:

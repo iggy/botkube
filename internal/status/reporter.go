@@ -4,9 +4,6 @@ import (
 	"context"
 
 	"github.com/sirupsen/logrus"
-
-	"github.com/iggy/botkube/pkg/config"
-	"github.com/iggy/botkube/pkg/loggerx"
 )
 
 type StatusReporter interface {
@@ -14,28 +11,13 @@ type StatusReporter interface {
 	ReportDeploymentStartup(ctx context.Context) error
 	ReportDeploymentShutdown(ctx context.Context) error
 	ReportDeploymentFailure(ctx context.Context, errMsg string) error
-	SetResourceVersion(resourceVersion int)
 	SetLogger(logger logrus.FieldLogger)
 }
 
-func GetReporter(remoteCfgEnabled bool, gql GraphQLClient, resVerClient ResVerClient, log logrus.FieldLogger) StatusReporter {
-	if remoteCfgEnabled {
-		log = withDefaultLogger(log)
-		return newGraphQLStatusReporter(
-			log.WithField("component", "GraphQLStatusReporter"),
-			gql,
-			resVerClient,
-		)
-	}
-
+// GetReporter returns a StatusReporter.
+//
+// Deployment status used to be reported to Botkube Cloud over GraphQL. That service is gone, so
+// there is nowhere left to report to and the noop implementation is the only one.
+func GetReporter(_ logrus.FieldLogger) StatusReporter {
 	return newNoopStatusReporter()
-}
-
-func withDefaultLogger(log logrus.FieldLogger) logrus.FieldLogger {
-	if log != nil {
-		return log
-	}
-	return loggerx.New(config.Logger{
-		Level: "info",
-	})
 }

@@ -41,6 +41,7 @@ import (
 // source: https://api.slack.com/reference/block-kit/blocks#section
 const (
 	slackMaxMessageSize = 3001
+	maxRetries          = 30
 )
 
 var _ Bot = &SocketSlack{}

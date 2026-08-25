@@ -10,8 +10,19 @@ import (
 type pluginHelpProviderFn func(platform config.CommPlatformIntegration, btnBuilder *api.ButtonBuilder) api.Section
 
 var pluginHelpProvider = map[string]pluginHelpProviderFn{
+	"botkube/ai": func(_ config.CommPlatformIntegration, btnBuilder *api.ButtonBuilder) api.Section {
+		return api.Section{
+			Base: api.Base{
+				Header:      "🤖 AI powered Kubernetes assistant",
+				Description: fmt.Sprintf("`%s ai` use natural language to ask any questions\n`%s ai scan` perform a cluster-wide scan for issues", api.MessageBotNamePlaceholder, api.MessageBotNamePlaceholder),
+			},
+			Buttons: []api.Button{
+				btnBuilder.ForCommandWithoutDesc("Cluster Scan", "ai scan", api.ButtonStylePrimary),
+			},
+		}
+	},
 	"botkube/kubectl": func(platform config.CommPlatformIntegration, btnBuilder *api.ButtonBuilder) api.Section {
-		if platform.IsInteractive() && platform != config.CloudTeamsCommPlatformIntegration {
+		if platform.IsInteractive() {
 			return api.Section{
 				Base: api.Base{
 					Header:      "🔮Run kubectl commands",
