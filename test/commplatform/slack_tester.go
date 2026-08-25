@@ -22,7 +22,6 @@ import (
 	"github.com/iggy/botkube/pkg/bot"
 	"github.com/iggy/botkube/pkg/bot/interactive"
 	"github.com/iggy/botkube/pkg/formatx"
-	"github.com/iggy/botkube/pkg/ptr"
 )
 
 var _ BotDriver = (*SlackTester)(nil)
@@ -35,14 +34,10 @@ var slackLinks = regexp.MustCompile(`<(?P<val>https://[^>]*)>`)
 
 type SlackConfig struct {
 	BotName                  string        `envconfig:"default=botkube"`
-	CloudBotName             string        `envconfig:"default=botkubedev"`
-	CloudBasedTestEnabled    bool          `envconfig:"default=true"`
 	TesterName               string        `envconfig:"default=tester"`
 	AdditionalContextMessage string        `envconfig:"optional"`
 	TesterAppToken           string        `envconfig:"optional"`
 	TesterBotToken           string        `envconfig:"optional"`
-	CloudTesterAppToken      string        `envconfig:"optional"`
-	CloudTesterName          string        `envconfig:"default=tester2"`
 	RecentMessagesLimit      int           `envconfig:"default=6"`
 	MessageWaitTimeout       time.Duration `envconfig:"default=50s"`
 }
@@ -72,7 +67,6 @@ type SlackTester struct {
 	secondChannel              Channel
 	thirdChannel               Channel
 	mdFormatter                interactive.MDFormatter
-	configProviderApiKey       string
 	recentlyPostedMsgTS        map[string]string
 	channelsByName             map[string]Channel
 	restoreRecentlyPostedMsgTS func()
@@ -82,9 +76,9 @@ func (s *SlackTester) ReplaceBotNamePlaceholder(msg *interactive.CoreMessage, cl
 	msg.ReplaceBotNamePlaceholder(s.BotName(), api.BotNameWithClusterName(clusterName))
 }
 
-func NewSlackTester(slackCfg SlackConfig, apiKey *string) (*SlackTester, error) {
+func NewSlackTester(slackCfg SlackConfig) (*SlackTester, error) {
 	var token string
-	if slackCfg.TesterAppToken == "" && slackCfg.TesterBotToken == "" && slackCfg.CloudTesterAppToken == "" {
+	if slackCfg.TesterAppToken == "" && slackCfg.TesterBotToken == "" {
 		return nil, errors.New("slack tester tokens are not set")
 	}
 
@@ -93,9 +87,6 @@ func NewSlackTester(slackCfg SlackConfig, apiKey *string) (*SlackTester, error) 
 	}
 	if slackCfg.TesterBotToken != "" {
 		token = slackCfg.TesterBotToken
-	}
-	if slackCfg.CloudBasedTestEnabled && slackCfg.CloudTesterAppToken != "" {
-		token = slackCfg.CloudTesterAppToken
 	}
 
 	slackCli := slack.New(token)
@@ -110,7 +101,6 @@ func NewSlackTester(slackCfg SlackConfig, apiKey *string) (*SlackTester, error) 
 		cli:                        slackCli,
 		cfg:                        slackCfg,
 		mdFormatter:                mdFormatter,
-		configProviderApiKey:       ptr.ToValue(apiKey),
 		recentlyPostedMsgTS:        make(map[string]string),
 		channelsByName:             make(map[string]Channel),
 		restoreRecentlyPostedMsgTS: func() {},
@@ -123,8 +113,8 @@ func (s *SlackTester) InitUsers(t *testing.T) {
 	s.botUserID = s.findUserID(t, botName)
 	assert.NotEmpty(t, s.botUserID, "could not find slack botUserID with name: %s", botName)
 
-	s.testerUserID = s.findUserID(t, s.cfg.CloudTesterName)
-	assert.NotEmpty(t, s.testerUserID, "could not find slack testerUserID with name: %s", s.cfg.CloudTesterName)
+	s.testerUserID = s.findUserID(t, s.cfg.TesterName)
+	assert.NotEmpty(t, s.testerUserID, "could not find slack testerUserID with name: %s", s.cfg.TesterName)
 }
 
 func (s *SlackTester) InitChannels(t *testing.T) []func() {
@@ -544,9 +534,6 @@ func (s *SlackTester) CreateChannel(t *testing.T, prefix string) (Channel, func(
 }
 
 func (s *SlackConfig) BotUsername() string {
-	if s.CloudBasedTestEnabled {
-		return s.CloudBotName
-	}
 	return s.BotName
 }
 

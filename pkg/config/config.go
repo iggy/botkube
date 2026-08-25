@@ -687,7 +687,7 @@ func LoadWithDefaults(configs [][]byte) (*Config, LoadWithDefaultsDetails, error
 	var cfg Config
 	err = k.UnmarshalWithConf("", &cfg, koanf.UnmarshalConf{
 		DecoderConfig: &mapstructure.DecoderConfig{
-			Squash: true, // needed to properly unmarshal CloudSlack channel's ChannelBindingsByName
+			Squash: true, // needed to properly unmarshal inlined structs, e.g. StatusCanvasCatalogSection's StatusCanvasSection
 
 			// also use defaults from koanf.UnmarshalWithConf
 			DecodeHook: mapstructure.ComposeDecodeHookFunc(

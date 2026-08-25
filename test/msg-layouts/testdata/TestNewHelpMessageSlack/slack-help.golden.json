@@ -1,0 +1,225 @@
+{
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🛠️ Basic commands*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "`@Botkube ping` - ping your cluster and check its status\n`@Botkube list [source|executor|action|alias]` - list available plugins and features"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Ping cluster",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube ping",
+          "value": "@Botkube ping"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "List source plugins",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube list sources",
+          "value": "@Botkube list sources"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "List executor plugins",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube list executors",
+          "value": "@Botkube list executors"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*📣 Notifications*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "`@Botkube [enable|disable|status] notifications` - set or query your notification status\n`@Botkube edit sourcebindings` - select notification sources for this channel"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Enable",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube enable notifications",
+          "value": "@Botkube enable notifications"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Disable",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube disable notifications",
+          "value": "@Botkube disable notifications"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Get status",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube status notifications",
+          "value": "@Botkube status notifications"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🔮Run kubectl commands*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "`@Botkube kubectl [command] [TYPE] [NAME] [flags]` - run any of the supported kubectl commands directly from Slack"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Open the kubectl composer",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube kubectl",
+          "value": "@Botkube kubectl",
+          "style": "primary"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "kubectl help",
+            "emoji": true
+          },
+          "action_id": "cmd:@Botkube View help",
+          "value": "@Botkube View help"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Other features*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Automate your workflows by executing custom commands based on specific events"
+      },
+      "accessory": {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "Automation",
+          "emoji": true
+        },
+        "action_id": "url:https://docs.botkube.io/usage/automated-actions",
+        "url": "https://docs.botkube.io/usage/automated-actions",
+        "style": "primary"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Give feedback",
+            "emoji": true
+          },
+          "action_id": "url:https://feedback.botkube.io",
+          "url": "https://feedback.botkube.io",
+          "style": "primary"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Read our docs",
+            "emoji": true
+          },
+          "action_id": "url:https://docs.botkube.io",
+          "url": "https://docs.botkube.io"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Join our Slack",
+            "emoji": true
+          },
+          "action_id": "url:https://join.botkube.io",
+          "url": "https://join.botkube.io"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Follow us on Twitter/X",
+            "emoji": true
+          },
+          "action_id": "url:https://twitter.com/botkube_io",
+          "url": "https://twitter.com/botkube_io"
+        }
+      ]
+    }
+  ]
+}
