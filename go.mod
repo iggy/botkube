@@ -8,6 +8,7 @@ require (
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
 	github.com/Masterminds/semver/v3 v3.5.0
+	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/PagerDuty/go-pagerduty v1.8.0
 	github.com/alexflint/go-arg v1.6.1
 	github.com/allegro/bigcache/v3 v3.2.0
@@ -17,6 +18,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.35
 	github.com/aws/aws-sdk-go-v2/service/sts v1.45.5
 	github.com/bombsimon/logrusr/v4 v4.1.0
+	github.com/bradleyfalzon/ghinstallation/v2 v2.19.0
 	github.com/briandowns/spinner v1.23.2
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/dustin/go-humanize v1.0.1
@@ -29,10 +31,13 @@ require (
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/gocarina/gocsv v0.0.0-20260824135904-1713ebc4797a
+	github.com/google/go-github/v53 v53.2.0
 	github.com/google/go-github/v90 v90.0.0
+	github.com/google/go-querystring v1.2.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.1
 	github.com/gorilla/mux v1.8.1
+	github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
 	github.com/hashicorp/go-getter v1.8.8
 	github.com/hashicorp/go-getter/v2 v2.2.3
 	github.com/hashicorp/go-hclog v1.6.3
@@ -110,7 +115,6 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.57.0 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
-	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/Masterminds/squirrel v1.5.4 // indirect
 	github.com/ProtonMail/go-crypto v1.4.1 // indirect
 	github.com/alexflint/go-scalar v1.2.0 // indirect
@@ -191,7 +195,7 @@ require (
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/go-querystring v1.2.0 // indirect
+	github.com/google/go-github/v88 v88.0.0 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.19 // indirect
 	github.com/googleapis/gax-go/v2 v2.23.0 // indirect
