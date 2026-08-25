@@ -74,7 +74,6 @@ type CloudTeams struct {
 	log                  logrus.FieldLogger
 	cfg                  config.CloudTeams
 	executorFactory      ExecutorFactory
-	reporter             AnalyticsCommandReporter
 	commGroupMetadata    CommGroupMetadata
 	notifyMutex          sync.Mutex
 	clusterName          string
@@ -82,7 +81,6 @@ type CloudTeams struct {
 	failuresNo           int
 	failureReason        health.FailureReasonMsg
 	errorMsg             string
-	reportOnce           sync.Once
 	botMentionRegex      *regexp.Regexp
 	botName              string
 	agentActivityMessage chan *pb.AgentActivity
@@ -96,8 +94,7 @@ func NewCloudTeams(
 	commGroupMetadata CommGroupMetadata,
 	cfg config.CloudTeams,
 	clusterName string,
-	executorFactory ExecutorFactory,
-	reporter AnalyticsCommandReporter) (*CloudTeams, error) {
+	executorFactory ExecutorFactory) (*CloudTeams, error) {
 	botMentionRegex, err := teamsBotMentionRegex(cfg.BotName)
 	if err != nil {
 		return nil, err
@@ -105,7 +102,6 @@ func NewCloudTeams(
 	return &CloudTeams{
 		log:                  log,
 		executorFactory:      executorFactory,
-		reporter:             reporter,
 		cfg:                  cfg,
 		botName:              cfg.BotName,
 		channels:             teamsCloudChannelsConfig(cfg.Teams),
@@ -200,11 +196,6 @@ func (b *CloudTeams) start(ctx context.Context) error {
 		return err
 	}
 
-	b.reportOnce.Do(func() {
-		if err := b.reporter.ReportBotEnabled(b.IntegrationName(), b.commGroupMetadata.Index); err != nil {
-			b.log.Errorf("report analytics error: %s", err.Error())
-		}
-	})
 	b.failuresNo = 0 // Reset the failures to start exponential back-off from the beginning
 	b.setFailureReason("", "")
 	b.log.Info("Botkube connected to Cloud Teams!")

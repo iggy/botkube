@@ -113,8 +113,6 @@ communications:
             sources:
               - k8s-events
       logLevel: ""
-analytics:
-  disable: true
 settings:
   clusterName: cluster-name-from-env
   upgradeNotifier: true

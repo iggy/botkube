@@ -19,7 +19,6 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	clienttesting "k8s.io/client-go/testing"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/pkg/config"
 	"github.com/iggy/botkube/pkg/loggerx"
 )
@@ -230,7 +229,6 @@ func TestInClusterConfigReloader_Do(t *testing.T) {
 				dynamicCli,
 				cfg,
 				restarter,
-				analytics.NewNoopReporter(),
 			)
 			require.NoError(t, err)
 

@@ -7,7 +7,6 @@ import (
 	"github.com/slack-go/slack"
 	"k8s.io/client-go/rest"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/audit"
 	guard "github.com/iggy/botkube/internal/command"
 	"github.com/iggy/botkube/pkg/bot/interactive"
@@ -20,7 +19,6 @@ import (
 type DefaultExecutorFactory struct {
 	log                   logrus.FieldLogger
 	cfg                   config.Config
-	analyticsReporter     AnalyticsReporter
 	notifierExecutor      *NotifierExecutor
 	pluginExecutor        *PluginExecutor
 	sourceBindingExecutor *SourceBindingExecutor
@@ -42,7 +40,6 @@ type DefaultExecutorFactoryParams struct {
 	Log               logrus.FieldLogger
 	Cfg               config.Config
 	CfgManager        config.PersistenceManager
-	AnalyticsReporter AnalyticsReporter
 	CommandGuard      CommandGuard
 	PluginManager     *plugin.Manager
 	RestCfg           *rest.Config
@@ -54,12 +51,6 @@ type DefaultExecutorFactoryParams struct {
 // Executor is an interface for processes to execute commands
 type Executor interface {
 	Execute(context.Context) interactive.CoreMessage
-}
-
-// AnalyticsReporter defines a reporter that collects analytics data.
-type AnalyticsReporter interface {
-	// ReportCommand reports a new executed command. The command should be anonymized before using this method.
-	ReportCommand(in analytics.ReportCommandInput) error
 }
 
 // CommandGuard is an interface that allows to check if a given command is allowed to be executed.
@@ -137,7 +128,6 @@ func NewExecutorFactory(params DefaultExecutorFactoryParams) (*DefaultExecutorFa
 	return &DefaultExecutorFactory{
 		log:               params.Log,
 		cfg:               params.Cfg,
-		analyticsReporter: params.AnalyticsReporter,
 		notifierExecutor:  notifierExecutor,
 		pluginExecutor: NewPluginExecutor(
 			params.Log.WithField("component", "Botkube Plugin Executor"),
@@ -197,7 +187,6 @@ func (f *DefaultExecutorFactory) NewDefault(cfg NewDefaultInput) Executor {
 	return &DefaultExecutor{
 		log:                   f.log,
 		cfg:                   f.cfg,
-		analyticsReporter:     f.analyticsReporter,
 		pluginExecutor:        f.pluginExecutor,
 		notifierExecutor:      f.notifierExecutor,
 		sourceBindingExecutor: f.sourceBindingExecutor,

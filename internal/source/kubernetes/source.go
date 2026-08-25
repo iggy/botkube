@@ -325,9 +325,8 @@ func (s *Source) handleEventFn(log logrus.FieldLogger) func(ctx context.Context,
 			}
 
 			message := source.Event{
-				Message:         msg,
-				RawObject:       eventCopy,
-				AnalyticsLabels: event.AnonymizedEventDetailsFrom(eventCopy),
+				Message:   msg,
+				RawObject: eventCopy,
 			}
 
 			srcCfg.eventCh <- message

@@ -22,8 +22,7 @@ const missingCloudAccountMessage = "PagerDuty integration requires an account on
 
 // PagerDuty provides functionality to notify PagerDuty service about new events.
 type PagerDuty struct {
-	log      logrus.FieldLogger
-	reporter AnalyticsReporter
+	log logrus.FieldLogger
 
 	bindings config.SinkBindings
 
@@ -51,7 +50,7 @@ type incomingEvent struct {
 }
 
 // NewPagerDuty creates a new PagerDuty instance.
-func NewPagerDuty(log logrus.FieldLogger, commGroupIdx int, c config.PagerDuty, clusterName string, reporter AnalyticsReporter) (*PagerDuty, error) {
+func NewPagerDuty(log logrus.FieldLogger, commGroupIdx int, c config.PagerDuty, clusterName string) (*PagerDuty, error) {
 	if !remote.IsEnabled() {
 		return nil, errors.New(missingCloudAccountMessage)
 	}
@@ -61,8 +60,7 @@ func NewPagerDuty(log logrus.FieldLogger, commGroupIdx int, c config.PagerDuty, 
 		opts = append(opts, pagerduty.WithV2EventsAPIEndpoint(c.V2EventsAPIBasePath))
 	}
 	notifier := &PagerDuty{
-		log:      log,
-		reporter: reporter,
+		log: log,
 
 		bindings:       c.Bindings,
 		clusterName:    clusterName,
@@ -73,11 +71,6 @@ func NewPagerDuty(log logrus.FieldLogger, commGroupIdx int, c config.PagerDuty, 
 
 		// We only dispatch events using integration key, we don't need a token.
 		pagerDutyCli: pagerduty.NewClient("", opts...),
-	}
-
-	err := reporter.ReportSinkEnabled(notifier.IntegrationName(), commGroupIdx)
-	if err != nil {
-		log.WithError(err).Error("Failed to report analytics")
 	}
 
 	return notifier, nil

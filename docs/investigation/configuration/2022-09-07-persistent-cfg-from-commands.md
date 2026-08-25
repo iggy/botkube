@@ -134,8 +134,6 @@ executors:
   'kubectl-read-only':
     kubectl:
       enabled: true
-analytics:
-  disable: true
 ENDOFFILE
 helm install botkube ./helm/botkube --namespace botkube --create-namespace  -f /tmp/values.yaml
 ```
@@ -235,8 +233,6 @@ executors:
   'kubectl-read-only':
     kubectl:
       enabled: true
-analytics:
-  disable: true
 ENDOFFILE
 helm upgrade botkube ./helm/botkube --namespace botkube -f /tmp/values2.yaml
 ```

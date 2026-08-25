@@ -33,7 +33,6 @@ func TestLoadConfigSuccess(t *testing.T) {
 		readTestdataFile(t, "config-all.yaml"),
 		readTestdataFile(t, "config-global.yaml"),
 		readTestdataFile(t, "config-slack-override.yaml"),
-		readTestdataFile(t, "analytics.yaml"),
 		readTestdataFile(t, "executors.yaml"),
 		readTestdataFile(t, "actions.yaml"),
 		readTestdataFile(t, "_aaa-special-file.yaml"),

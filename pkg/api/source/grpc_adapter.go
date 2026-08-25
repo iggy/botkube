@@ -41,7 +41,7 @@ type (
 
 	// StreamOutput holds the output of the Stream function.
 	StreamOutput struct {
-		// Event represents the streamed events with message, raw object, and analytics data. It is from the start of plugin consumption.
+		// Event represents the streamed events with message and raw object. It is from the start of plugin consumption.
 		// You can construct a complex message.data or just use one of our helper functions:
 		//   - api.NewCodeBlockMessage("body", true)
 		//   - api.NewPlaintextMessage("body", true)
@@ -87,7 +87,7 @@ type (
 
 	// ExternalRequestOutput holds the output of the Stream function.
 	ExternalRequestOutput struct {
-		// Event represents the streamed events with message, raw object, and analytics data. It is from the start of plugin consumption.
+		// Event represents the streamed events with message and raw object. It is from the start of plugin consumption.
 		// You can construct a complex message.data or just use one of our helper functions:
 		//   - api.NewCodeBlockMessage("body", true)
 		//   - api.NewPlaintextMessage("body", true)
@@ -95,9 +95,8 @@ type (
 	}
 
 	Event struct {
-		Message         api.Message
-		RawObject       any
-		AnalyticsLabels map[string]interface{}
+		Message   api.Message
+		RawObject any
 	}
 )
 

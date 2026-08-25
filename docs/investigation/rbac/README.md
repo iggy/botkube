@@ -48,9 +48,6 @@ This PoC is a part of the [RBAC proposal](../../proposal/2022-12-23-rbac.md). It
          enabled: true
    settings:
      clusterName: dev
-
-   analytics:
-     disable: true
    ```
 
    ```bash

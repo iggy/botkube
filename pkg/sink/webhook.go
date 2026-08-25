@@ -20,8 +20,7 @@ const defaultHTTPCliTimeout = 30 * time.Second
 
 // Webhook provides functionality to notify external service about new events.
 type Webhook struct {
-	log      logrus.FieldLogger
-	reporter AnalyticsReporter
+	log logrus.FieldLogger
 
 	URL           string
 	Bindings      config.SinkBindings
@@ -38,19 +37,13 @@ type WebhookPayload struct {
 }
 
 // NewWebhook creates a new Webhook instance.
-func NewWebhook(log logrus.FieldLogger, commGroupIdx int, c config.Webhook, reporter AnalyticsReporter) (*Webhook, error) {
+func NewWebhook(log logrus.FieldLogger, commGroupIdx int, c config.Webhook) (*Webhook, error) {
 	whNotifier := &Webhook{
 		log:           log,
-		reporter:      reporter,
 		URL:           c.URL,
 		Bindings:      c.Bindings,
 		status:        health.StatusUnknown,
 		failureReason: "",
-	}
-
-	err := reporter.ReportSinkEnabled(whNotifier.IntegrationName(), commGroupIdx)
-	if err != nil {
-		log.Errorf("report analytics error: %s", err.Error())
 	}
 
 	return whNotifier, nil

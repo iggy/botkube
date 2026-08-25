@@ -52,7 +52,6 @@ const (
 type Mattermost struct {
 	log               logrus.FieldLogger
 	executorFactory   ExecutorFactory
-	reporter          AnalyticsReporter
 	serverURL         string
 	botName           string
 	botUserID         string
@@ -81,7 +80,7 @@ type mattermostMessage struct {
 }
 
 // NewMattermost creates a new Mattermost instance.
-func NewMattermost(ctx context.Context, log logrus.FieldLogger, commGroupMetadata CommGroupMetadata, cfg config.Mattermost, executorFactory ExecutorFactory, reporter AnalyticsReporter) (*Mattermost, error) {
+func NewMattermost(ctx context.Context, log logrus.FieldLogger, commGroupMetadata CommGroupMetadata, cfg config.Mattermost, executorFactory ExecutorFactory) (*Mattermost, error) {
 	botMentionRegex, err := mattermostBotMentionRegex(cfg.BotName)
 	if err != nil {
 		return nil, err
@@ -127,7 +126,6 @@ func NewMattermost(ctx context.Context, log logrus.FieldLogger, commGroupMetadat
 	return &Mattermost{
 		log:               log,
 		executorFactory:   executorFactory,
-		reporter:          reporter,
 		serverURL:         cfg.URL,
 		botName:           cfg.BotName,
 		botUserID:         botUserID,
@@ -167,11 +165,6 @@ func (b *Mattermost) Start(ctx context.Context) error {
 	if err != nil {
 		b.setStatusReason(health.FailureReasonConnectionError, fmt.Sprintf("while pinging Mattermost server %q: %s", b.serverURL, err.Error()))
 		return fmt.Errorf("while pinging Mattermost server %q: %w", b.serverURL, err)
-	}
-
-	err = b.reporter.ReportBotEnabled(b.IntegrationName(), b.commGroupMetadata.Index)
-	if err != nil {
-		b.log.Errorf("report analytics error: %s", err.Error())
 	}
 
 	// It is observed that Mattermost server closes connections unexpectedly after some time.

@@ -94,7 +94,6 @@ const (
 // Elasticsearch provides integration with the Elasticsearch solution.
 type Elasticsearch struct {
 	log            logrus.FieldLogger
-	reporter       AnalyticsReporter
 	client         *elastic.Client
 	indices        map[string]botkubeconfig.ELSIndex
 	clusterVersion string
@@ -104,7 +103,7 @@ type Elasticsearch struct {
 }
 
 // NewElasticsearch creates a new Elasticsearch instance.
-func NewElasticsearch(log logrus.FieldLogger, commGroupIdx int, c botkubeconfig.Elasticsearch, reporter AnalyticsReporter) (*Elasticsearch, error) {
+func NewElasticsearch(log logrus.FieldLogger, commGroupIdx int, c botkubeconfig.Elasticsearch) (*Elasticsearch, error) {
 	var elsClient *elastic.Client
 	var err error
 
@@ -191,17 +190,11 @@ func NewElasticsearch(log logrus.FieldLogger, commGroupIdx int, c botkubeconfig.
 
 	esNotifier := &Elasticsearch{
 		log:            log,
-		reporter:       reporter,
 		client:         elsClient,
 		indices:        c.Indices,
 		clusterVersion: pong.Version.Number,
 		status:         health.StatusUnknown,
 		failureReason:  "",
-	}
-
-	err = reporter.ReportSinkEnabled(esNotifier.IntegrationName(), commGroupIdx)
-	if err != nil {
-		log.Errorf("report analytics error: %s", err.Error())
 	}
 
 	return esNotifier, nil

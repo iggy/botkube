@@ -21,7 +21,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/internal/health"
 	"github.com/iggy/botkube/pkg/api"
@@ -53,7 +52,6 @@ type CloudSlack struct {
 	cfg               config.CloudSlack
 	client            *slack.Client
 	executorFactory   ExecutorFactory
-	reporter          AnalyticsCommandReporter
 	commGroupMetadata CommGroupMetadata
 	realNamesForID    map[string]string
 	botMentionRegex   *regexp.Regexp
@@ -75,8 +73,7 @@ func NewCloudSlack(log logrus.FieldLogger,
 	commGroupMetadata CommGroupMetadata,
 	cfg config.CloudSlack,
 	clusterName string,
-	executorFactory ExecutorFactory,
-	reporter AnalyticsCommandReporter) (*CloudSlack, error) {
+	executorFactory ExecutorFactory) (*CloudSlack, error) {
 	client := slack.New(cfg.Token)
 
 	_, err := client.AuthTest()
@@ -95,7 +92,6 @@ func NewCloudSlack(log logrus.FieldLogger,
 		log:               log,
 		cfg:               cfg,
 		executorFactory:   executorFactory,
-		reporter:          reporter,
 		commGroupMetadata: commGroupMetadata,
 		botMentionRegex:   botMentionRegex,
 		renderer:          NewSlackRenderer(),
@@ -216,11 +212,6 @@ func (b *CloudSlack) start(ctx context.Context) error {
 	b.setFailureReason("", "")
 	go b.startMessageProcessor(ctx, messageWorkers, messages)
 
-	b.reportOnce.Do(func() {
-		if err := b.reporter.ReportBotEnabled(b.IntegrationName(), b.commGroupMetadata.Index); err != nil {
-			b.log.Errorf("report analytics error: %s", err.Error())
-		}
-	})
 	b.failuresNo = 0 // Reset the failures to start exponential back-off from the beginning
 	b.setFailureReason("", "")
 	b.log.Info("Botkube connected to Slack!")
@@ -332,15 +323,6 @@ func (b *CloudSlack) handleStreamMessage(ctx context.Context, data *pb.ConnectRe
 
 			act := callback.ActionCallback.BlockActions[0]
 			if act == nil || strings.HasPrefix(act.ActionID, urlButtonActionIDPrefix) {
-				reportErr := b.reporter.ReportCommand(
-					analytics.ReportCommandInput{
-						Platform: b.IntegrationName(),
-						Command:  act.ActionID,
-						Origin:   command.ButtonClickOrigin,
-					})
-				if reportErr != nil {
-					b.log.Errorf("while reporting URL command, error: %s", reportErr.Error())
-				}
 				return nil, false // skip the url actions
 			}
 

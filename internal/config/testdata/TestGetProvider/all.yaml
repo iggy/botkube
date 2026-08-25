@@ -1,5 +1,13 @@
-analytics:
-  disable: true
+actions:
+  show-created-resource:
+    enabled: true
+    displayName: Display created resource
+    command: kubectl describe {{.Event.ResourceType}} -n {{.Event.Namespace}} {{.Event.Name}}
+    bindings:
+      sources:
+        - k8s-events
+      executors:
+        - kubectl-read-only
 actions:
   show-created-resource:
     enabled: true

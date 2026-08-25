@@ -150,7 +150,6 @@ type Config struct {
 	Aliases        Aliases                   `yaml:"aliases" validate:"dive"`
 	Communications map[string]Communications `yaml:"communications"  validate:"required,min=1,dive"`
 
-	Analytics     Analytics        `yaml:"analytics"`
 	Settings      Settings         `yaml:"settings"`
 	ConfigWatcher CfgWatcher       `yaml:"configWatcher"`
 	Plugins       PluginManagement `yaml:"plugins"`
@@ -407,11 +406,6 @@ type Aliases map[string]Alias
 type Alias struct {
 	Command     string `yaml:"command" validate:"required"`
 	DisplayName string `yaml:"displayName"`
-}
-
-// Analytics contains configuration parameters for analytics collection.
-type Analytics struct {
-	Disable bool `yaml:"disable"`
 }
 
 // RegexConstraints contains a list of allowed and excluded values.

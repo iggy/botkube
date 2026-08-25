@@ -9,7 +9,6 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/iggy/botkube/internal/cli"
-	"github.com/iggy/botkube/internal/cli/analytics"
 	"github.com/iggy/botkube/internal/cli/config"
 	"github.com/iggy/botkube/internal/cli/heredoc"
 	"github.com/iggy/botkube/internal/cli/printer"
@@ -83,8 +82,6 @@ func NewGet() *cobra.Command {
 			return resourcePrinter.Print(raw)
 		},
 	}
-
-	cmd = analytics.InjectAnalyticsReporting(*cmd, "config get")
 
 	flags := cmd.Flags()
 

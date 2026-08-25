@@ -216,7 +216,6 @@ A virtual SRE, powered by AI.
 | [serviceAccount.name](./values.yaml#L912) | string | `""` | The name of the service account to use. If not set, a name is generated using the fullname template. |
 | [serviceAccount.annotations](./values.yaml#L914) | object | `{}` | Extra annotations for the ServiceAccount. |
 | [extraObjects](./values.yaml#L917) | list | `[]` | Extra Kubernetes resources to create. Helm templating is allowed as it is evaluated before creating the resources. |
-| [analytics.disable](./values.yaml#L944) | bool | `false` | If true, sending anonymous analytics is disabled. To learn what date we collect, see the [Privacy Policy](https://botkube.io/privacy-policy). |
 | [configWatcher](./values.yaml#L948) | object | `{"enabled":true,"inCluster":{"informerResyncPeriod":"10m"}}` | Parameters for the Config Watcher component which reloads Botkube on ConfigMap changes. It restarts Botkube when configuration data change is detected. It watches ConfigMaps and/or Secrets with the `botkube.io/config-watch: "true"` label from the namespace where Botkube is installed. |
 | [configWatcher.enabled](./values.yaml#L950) | bool | `true` | If true, restarts the Botkube Pod on config changes. |
 | [configWatcher.inCluster](./values.yaml#L952) | object | `{"informerResyncPeriod":"10m"}` | In-cluster Config Watcher configuration. It is used when remote configuration is not provided. |

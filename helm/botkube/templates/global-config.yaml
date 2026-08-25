@@ -40,7 +40,4 @@ data:
         type: {{ .Values.plugins.restartPolicy.type }}
         threshold: {{ .Values.plugins.restartPolicy.threshold }}
       healthCheckInterval: {{ .Values.plugins.healthCheckInterval }}
-
-    analytics:
-      disable: {{ .Values.analytics.disable }}
 {{- end }}

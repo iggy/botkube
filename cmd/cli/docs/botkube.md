@@ -33,7 +33,6 @@ botkube [flags]
 
 * [botkube config](botkube_config.md)  - This command consists of multiple subcommands for working with Botkube configuration
 * [botkube install](botkube_install.md)  - install or upgrade Botkube in k8s cluster
-* [botkube telemetry](botkube_telemetry.md)  - Configure collection of anonymous analytics
 * [botkube uninstall](botkube_uninstall.md)  - uninstall Botkube from cluster
 * [botkube version](botkube_version.md)  - Print the CLI version
 

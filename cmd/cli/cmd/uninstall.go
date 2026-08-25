@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/iggy/botkube/internal/cli"
-	"github.com/iggy/botkube/internal/cli/analytics"
 	"github.com/iggy/botkube/internal/cli/heredoc"
 	"github.com/iggy/botkube/internal/cli/install/helm"
 	"github.com/iggy/botkube/internal/cli/uninstall"
@@ -42,8 +41,6 @@ func NewUninstall() *cobra.Command {
 			return uninstall.Uninstall(cmd.Context(), os.Stdout, config, opts)
 		},
 	}
-
-	uninstallCmd = analytics.InjectAnalyticsReporting(*uninstallCmd, "uninstall")
 
 	flags := uninstallCmd.Flags()
 

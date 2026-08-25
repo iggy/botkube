@@ -12,14 +12,12 @@ import (
 	"google.golang.org/grpc/status"
 	"k8s.io/client-go/rest"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/audit"
 	"github.com/iggy/botkube/pkg/action"
 	"github.com/iggy/botkube/pkg/api/source"
 	"github.com/iggy/botkube/pkg/bot"
 	"github.com/iggy/botkube/pkg/bot/interactive"
 	"github.com/iggy/botkube/pkg/config"
-	"github.com/iggy/botkube/pkg/multierror"
 	"github.com/iggy/botkube/pkg/notifier"
 	"github.com/iggy/botkube/pkg/plugin"
 )
@@ -29,7 +27,6 @@ type Dispatcher struct {
 	log                  logrus.FieldLogger
 	manager              *plugin.Manager
 	actionProvider       ActionProvider
-	reporter             AnalyticsReporter
 	auditReporter        audit.AuditReporter
 	markdownNotifiers    []notifier.Bot
 	interactiveNotifiers []notifier.Bot
@@ -53,23 +50,8 @@ type ActionProvider interface {
 	ExecuteAction(ctx context.Context, action action.Action) interactive.CoreMessage
 }
 
-// AnalyticsReporter defines a reporter that collects analytics data.
-type AnalyticsReporter interface {
-	// ReportHandledEventSuccess reports a successfully handled event using a given integration type, communication platform, and plugin.
-	ReportHandledEventSuccess(event analytics.ReportEventInput) error
-
-	// ReportHandledEventError reports a failure while handling event using a given integration type, communication platform, and plugin.
-	ReportHandledEventError(event analytics.ReportEventInput, err error) error
-
-	// ReportFatalError reports a fatal app error.
-	ReportFatalError(err error) error
-
-	// Close cleans up the reporter resources.
-	Close() error
-}
-
 // NewDispatcher create a new Dispatcher instance.
-func NewDispatcher(log logrus.FieldLogger, clusterName string, notifiers map[string]bot.Bot, sinkNotifiers []notifier.Sink, manager *plugin.Manager, actionProvider ActionProvider, reporter AnalyticsReporter, auditReporter audit.AuditReporter, restCfg *rest.Config) *Dispatcher {
+func NewDispatcher(log logrus.FieldLogger, clusterName string, notifiers map[string]bot.Bot, sinkNotifiers []notifier.Sink, manager *plugin.Manager, actionProvider ActionProvider, auditReporter audit.AuditReporter, restCfg *rest.Config) *Dispatcher {
 	var (
 		interactiveNotifiers []notifier.Bot
 		markdownNotifiers    []notifier.Bot
@@ -87,7 +69,6 @@ func NewDispatcher(log logrus.FieldLogger, clusterName string, notifiers map[str
 		log:                  log,
 		manager:              manager,
 		actionProvider:       actionProvider,
-		reporter:             reporter,
 		auditReporter:        auditReporter,
 		interactiveNotifiers: interactiveNotifiers,
 		markdownNotifiers:    markdownNotifiers,
@@ -227,45 +208,22 @@ func (d *Dispatcher) dispatchMsg(ctx context.Context, event source.Event, dispat
 
 	for _, n := range d.getBotNotifiers(dispatch) {
 		go func(n notifier.Bot) {
-			defer analytics.ReportPanicIfOccurs(d.log, d.reporter)
 			msg := interactive.CoreMessage{
 				Message: event.Message,
 			}
 			err := n.SendMessage(ctx, msg, sources)
 			if err != nil {
-				reportErr := d.reportError(err, n, pluginName, event)
-				if reportErr != nil {
-					err = multierror.Append(err, fmt.Errorf("while reporting error: %w", reportErr))
-				}
-
 				d.log.Errorf("while sending bot message: %s", err.Error())
 				return
-			}
-
-			reportErr := d.reportSuccess(n, pluginName, event)
-			if reportErr != nil {
-				d.log.Error(err)
 			}
 		}(n)
 	}
 
 	for _, n := range d.getSinkNotifiers(dispatch) {
 		go func(n notifier.Sink) {
-			defer analytics.ReportPanicIfOccurs(d.log, d.reporter)
 			err := n.SendEvent(ctx, event.RawObject, sources)
 			if err != nil {
-				reportErr := d.reportError(err, n, pluginName, event)
-				if reportErr != nil {
-					err = multierror.Append(err, fmt.Errorf("while reporting error: %w", reportErr))
-				}
-
 				d.log.Errorf("while sending sink message: %s", err.Error())
-				return
-			}
-
-			reportErr := d.reportSuccess(n, pluginName, event)
-			if reportErr != nil {
-				d.log.Error(err)
 			}
 		}(n)
 	}
@@ -291,7 +249,6 @@ func (d *Dispatcher) dispatchMsg(ctx context.Context, event source.Event, dispat
 
 		for _, n := range d.getBotNotifiers(dispatch) {
 			go func(n notifier.Bot) {
-				defer analytics.ReportPanicIfOccurs(d.log, d.reporter)
 				err := n.SendMessage(ctx, genericMsg, sources)
 				if err != nil {
 					d.log.Errorf("while sending action result to %q bot: %s", n.IntegrationName(), err.Error())
@@ -331,35 +288,6 @@ func (d *Dispatcher) reportAuditEvent(ctx context.Context, pluginName string, ev
 type genericNotifier interface {
 	IntegrationName() config.CommPlatformIntegration
 	Type() config.IntegrationType
-}
-
-func (d *Dispatcher) reportSuccess(n genericNotifier, pluginName string, event source.Event) error {
-	errs := multierror.New()
-	reportErr := d.reporter.ReportHandledEventSuccess(analytics.ReportEventInput{
-		IntegrationType:       n.Type(),
-		Platform:              n.IntegrationName(),
-		PluginName:            pluginName,
-		AnonymizedEventFields: event.AnalyticsLabels,
-	})
-	if reportErr != nil {
-		errs = multierror.Append(errs, fmt.Errorf("while reporting %s analytics: %w", n.Type(), reportErr))
-	}
-	return errs.ErrorOrNil()
-}
-
-func (d *Dispatcher) reportError(err error, n genericNotifier, pluginName string, event source.Event) error {
-	errs := multierror.New()
-	reportErr := d.reporter.ReportHandledEventError(analytics.ReportEventInput{
-		IntegrationType:       n.Type(),
-		Platform:              n.IntegrationName(),
-		PluginName:            pluginName,
-		AnonymizedEventFields: event.AnalyticsLabels,
-	}, err)
-	if reportErr != nil {
-		errs = multierror.Append(errs, fmt.Errorf("while reporting %s analytics: %w", n.Type(), reportErr))
-	}
-
-	return errs.ErrorOrNil()
 }
 
 func (d *Dispatcher) commonSourceCtxForDispatch(in PluginDispatch) source.CommonSourceContext {

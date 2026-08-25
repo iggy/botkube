@@ -43,7 +43,6 @@ const (
 type Discord struct {
 	log                   logrus.FieldLogger
 	executorFactory       ExecutorFactory
-	reporter              AnalyticsReporter
 	api                   *discordgo.Session
 	botID                 string
 	channelsMutex         sync.RWMutex
@@ -66,7 +65,7 @@ type discordMessage struct {
 }
 
 // NewDiscord creates a new Discord instance.
-func NewDiscord(log logrus.FieldLogger, commGroupMetadata CommGroupMetadata, cfg config.Discord, executorFactory ExecutorFactory, reporter AnalyticsReporter) (*Discord, error) {
+func NewDiscord(log logrus.FieldLogger, commGroupMetadata CommGroupMetadata, cfg config.Discord, executorFactory ExecutorFactory) (*Discord, error) {
 	botMentionRegex, err := discordBotMentionRegex(cfg.BotID)
 	if err != nil {
 		return nil, err
@@ -84,7 +83,6 @@ func NewDiscord(log logrus.FieldLogger, commGroupMetadata CommGroupMetadata, cfg
 
 	return &Discord{
 		log:                   log,
-		reporter:              reporter,
 		executorFactory:       executorFactory,
 		api:                   api,
 		botID:                 cfg.BotID,
@@ -123,15 +121,9 @@ func (b *Discord) Start(ctx context.Context) error {
 	})
 
 	// Open a websocket connection to Discord and begin listening.
-	err := b.api.Open()
-	if err != nil {
+	if err := b.api.Open(); err != nil {
 		b.setFailureReason(health.FailureReasonConnectionError, fmt.Sprintf("while opening connection: %s", err.Error()))
 		return fmt.Errorf("while opening connection: %w", err)
-	}
-
-	err = b.reporter.ReportBotEnabled(b.IntegrationName(), b.commGroupMetadata.Index)
-	if err != nil {
-		b.log.Errorf("report analytics error: %s", err.Error())
 	}
 
 	b.log.Info("Botkube connected to Discord!")

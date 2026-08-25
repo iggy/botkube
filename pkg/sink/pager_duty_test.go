@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/pkg/config"
 	"github.com/iggy/botkube/pkg/loggerx"
@@ -64,7 +63,7 @@ func TestPagerDuty_SendEvent(t *testing.T) {
 				Bindings: config.SinkBindings{
 					Sources: []string{"kubernetes-err"},
 				},
-			}, "labs", analytics.NewNoopReporter())
+			}, "labs")
 			require.NoError(t, err)
 
 			err = pd.SendEvent(context.Background(), tc.givenEvent, []string{"kubernetes-err"})

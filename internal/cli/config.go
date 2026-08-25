@@ -18,23 +18,7 @@ var (
 
 // Config is botkube cli config
 type Config struct {
-	Token     string          `json:"token"`
-	Telemetry TelemetrySwitch `json:"telemetry"`
-}
-
-// TelemetrySwitch controls telemetry
-type TelemetrySwitch string
-
-const (
-	// TelemetryEnabled is a value for enabled telemetry
-	TelemetryEnabled TelemetrySwitch = "enabled"
-	// TelemetryDisabled is a value for disabled telemetry
-	TelemetryDisabled TelemetrySwitch = "disabled"
-)
-
-// IsTelemetryDisabled checks if telemetry is disabled
-func (c Config) IsTelemetryDisabled() bool {
-	return c.Telemetry == TelemetryDisabled
+	Token string `json:"token"`
 }
 
 // IsUserLoggedIn checks if user is logged in

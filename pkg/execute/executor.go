@@ -10,7 +10,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/audit"
 	remoteapi "github.com/iggy/botkube/internal/remote"
 	"github.com/iggy/botkube/pkg/api"
@@ -40,7 +39,6 @@ var newLinePattern = regexp.MustCompile(`\r?\n`)
 type DefaultExecutor struct {
 	cfg                   config.Config
 	log                   logrus.FieldLogger
-	analyticsReporter     AnalyticsReporter
 	pluginExecutor        *PluginExecutor
 	sourceBindingExecutor *SourceBindingExecutor
 	actionExecutor        *ActionExecutor
@@ -134,7 +132,7 @@ func (e *DefaultExecutor) Execute(ctx context.Context) interactive.CoreMessage {
 	isPluginCmd := e.pluginExecutor.CanHandle(e.conversation.ExecutorBindings, cmdCtx.Args)
 	if isPluginCmd {
 		_, fullPluginName := e.pluginExecutor.getEnabledPlugins(e.conversation.ExecutorBindings, cmdCtx.Args[0])
-		e.reportCommand(ctx, fullPluginName, e.pluginExecutor.GetCommandPrefix(cmdCtx.Args), cmdCtx.ExecutorFilter.IsActive(), cmdCtx)
+		e.reportCommand(ctx, fullPluginName, e.pluginExecutor.GetCommandPrefix(cmdCtx.Args), cmdCtx)
 
 		if isHelpCmd(cmdCtx.Args) {
 			return e.ExecuteHelp(ctx, cmdCtx)
@@ -166,7 +164,7 @@ func (e *DefaultExecutor) Execute(ctx context.Context) interactive.CoreMessage {
 
 	fn, foundRes, foundFn := e.cmdsMapping.FindFn(cmdVerb, cmdRes)
 	if !foundRes {
-		e.reportCommand(ctx, "", anonymizedInvalidVerb, false, cmdCtx)
+		e.reportCommand(ctx, "", anonymizedInvalidVerb, cmdCtx)
 		e.log.Infof("received unsupported command: %q", cmdCtx.CleanCmd)
 		return respond(unsupportedCmdMsg, cmdCtx)
 	}
@@ -177,7 +175,7 @@ func (e *DefaultExecutor) Execute(ctx context.Context) interactive.CoreMessage {
 			e.log.Infof("received unsupported resource: %q", cmdCtx.CleanCmd)
 			reportedCmd = fmt.Sprintf("%s {invalid feature}", reportedCmd)
 		}
-		e.reportCommand(ctx, "", reportedCmd, false, cmdCtx)
+		e.reportCommand(ctx, "", reportedCmd, cmdCtx)
 		helpMsg := e.cmdsMapping.HelpMessageForVerb(cmdVerb)
 		responseMsg := fmt.Sprintf(invalidCmdWithUsage, cmdRes, helpMsg)
 		return respond(responseMsg, cmdCtx)
@@ -186,7 +184,7 @@ func (e *DefaultExecutor) Execute(ctx context.Context) interactive.CoreMessage {
 	if cmdRes != "" {
 		cmdToReport = fmt.Sprintf("%s %s", cmdVerb, cmdRes)
 	}
-	e.reportCommand(ctx, "", cmdToReport, false, cmdCtx)
+	e.reportCommand(ctx, "", cmdToReport, cmdCtx)
 
 	msg, err := fn(ctx, cmdCtx)
 	switch {
@@ -260,16 +258,7 @@ func removeMultipleSpaces(s string) string {
 	return strings.Join(strings.Fields(s), " ")
 }
 
-func (e *DefaultExecutor) reportCommand(ctx context.Context, pluginName, cmd string, withFilter bool, cmdCtx CommandContext) {
-	if err := e.analyticsReporter.ReportCommand(analytics.ReportCommandInput{
-		Platform:   e.platform,
-		PluginName: pluginName,
-		Command:    cmd,
-		Origin:     e.conversation.CommandOrigin,
-		WithFilter: withFilter,
-	}); err != nil {
-		e.log.Errorf("while reporting %s command: %s", cmd, err.Error())
-	}
+func (e *DefaultExecutor) reportCommand(ctx context.Context, pluginName, cmd string, cmdCtx CommandContext) {
 	if err := e.reportAuditEvent(ctx, pluginName, cmdCtx); err != nil {
 		e.log.Errorf("while reporting executor audit event for %s: %s", cmd, err.Error())
 	}

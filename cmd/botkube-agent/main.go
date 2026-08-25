@@ -10,7 +10,6 @@ import (
 	"github.com/google/go-github/v90/github"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	segment "github.com/segmentio/analytics-go"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	"golang.org/x/sync/errgroup"
@@ -19,10 +18,8 @@ import (
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"k8s.io/utils/strings"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/audit"
 	"github.com/iggy/botkube/internal/command"
 	intconfig "github.com/iggy/botkube/internal/config"
@@ -56,7 +53,6 @@ const (
 	botLogFieldKey            = "bot"
 	sinkLogFieldKey           = "sink"
 	commGroupFieldKey         = "commGroup"
-	printAPIKeyCharCount      = 3
 	reportHeartbeatInterval   = 10
 	reportHeartbeatMaxRetries = 30
 )
@@ -113,22 +109,8 @@ func run(ctx context.Context) (err error) {
 	if confDetails.ValidateWarnings != nil {
 		logger.Warnf("Configuration validation warnings: %v", confDetails.ValidateWarnings.Error())
 	}
-	// Set up analytics reporter
-	analyticsReporter, err := getAnalyticsReporter(conf.Analytics.Disable, logger)
-	if err != nil {
-		return fmt.Errorf("while creating analytics reporter: %w", err)
-	}
-	defer func() {
-		err := analyticsReporter.Close()
-		if err != nil {
-			logger.Errorf("while closing reporter: %s", err.Error())
-		}
-	}()
-	// from now on recover from any panic, report it and close reader and app.
-	// The reader must be not closed to report the panic properly.
-	defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 
-	reportFatalError := reportFatalErrFn(logger, analyticsReporter, statusReporter)
+	reportFatalError := reportFatalErrFn(logger, statusReporter)
 	// Prepare K8s clients and mapper
 	kubeConfig, err := kubex.BuildConfigFromFlags("", conf.Settings.Kubeconfig, conf.Settings.SACredentialsPathPrefix)
 	if err != nil {
@@ -139,7 +121,6 @@ func run(ctx context.Context) (err error) {
 		return reportFatalError("while getting K8s clients", err)
 	}
 
-	// Register current anonymous identity
 	k8sCli, err := kubernetes.NewForConfig(kubeConfig)
 	if err != nil {
 		return reportFatalError("while creating K8s clientset", err)
@@ -147,14 +128,6 @@ func run(ctx context.Context) (err error) {
 	botkubeVersion, k8sVer, err := findVersions(k8sCli)
 	if err = statusReporter.ReportDeploymentConnectionInit(ctx, k8sVer); err != nil {
 		return reportFatalError("while reporting botkube connection initialization", err)
-	}
-	err = analyticsReporter.RegisterCurrentIdentity(ctx, k8sCli, remoteCfg.Identifier)
-	if err != nil {
-		return reportFatalError("while registering current identity", err)
-	}
-	err = analyticsReporter.ReportPluginsEnabled(conf.Executors, conf.Sources)
-	if err != nil {
-		logger.Errorf("while reporting plugins configuration: %v", err.Error())
 	}
 
 	statusReporter.SetLogger(logger)
@@ -187,14 +160,6 @@ func run(ctx context.Context) (err error) {
 		err = reportFatalError("while waiting for goroutines to finish gracefully", multiErr.ErrorOrNil())
 	}()
 
-	errGroup.Go(func() error {
-		err := analyticsReporter.Run(ctx)
-		if err != nil {
-			logger.Errorf("while closing reporter: %s", err.Error())
-		}
-		return err
-	})
-
 	schedulerChan := make(chan string)
 	pluginHealthStats := plugin.NewHealthStats(conf.Plugins.RestartPolicy.Threshold)
 	collector := plugin.NewCollector(logger)
@@ -205,7 +170,6 @@ func run(ctx context.Context) (err error) {
 	healthChecker := health.NewChecker(ctx, conf, pluginHealthStats)
 	healthSrv := healthChecker.NewServer(logger.WithField(componentLogFieldKey, "Health server"), conf.Settings.HealthPort)
 	errGroup.Go(func() error {
-		defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 		return healthSrv.Serve(ctx)
 	})
 
@@ -218,7 +182,6 @@ func run(ctx context.Context) (err error) {
 	// Prometheus metrics
 	metricsSrv := newMetricsServer(logger.WithField(componentLogFieldKey, "Metrics server"), conf.Settings.MetricsPort)
 	errGroup.Go(func() error {
-		defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 		return metricsSrv.Serve(ctx)
 	})
 
@@ -230,7 +193,6 @@ func run(ctx context.Context) (err error) {
 			Log:               logger.WithField(componentLogFieldKey, "Executor"),
 			Cfg:               *conf,
 			CfgManager:        cfgManager,
-			AnalyticsReporter: analyticsReporter,
 			CommandGuard:      cmdGuard,
 			PluginManager:     pluginManager,
 			BotKubeVersion:    botkubeVersion,
@@ -279,7 +241,6 @@ func run(ctx context.Context) (err error) {
 			case bot.Bot:
 				bots[key] = platform
 				errGroup.Go(func() error {
-					defer analytics.ReportPanicIfOccurs(commGroupLogger, analyticsReporter)
 					return platform.Start(ctx)
 				})
 			}
@@ -288,49 +249,49 @@ func run(ctx context.Context) (err error) {
 		// Run bots
 		if commGroupCfg.SocketSlack.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewSocketSlack(commGroupLogger.WithField(botLogFieldKey, "SocketSlack"), commGroupMeta, commGroupCfg.SocketSlack, executorFactory, analyticsReporter)
+				return bot.NewSocketSlack(commGroupLogger.WithField(botLogFieldKey, "SocketSlack"), commGroupMeta, commGroupCfg.SocketSlack, executorFactory)
 			})
 		}
 
 		if commGroupCfg.CloudSlack.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewCloudSlack(commGroupLogger.WithField(botLogFieldKey, "CloudSlack"), commGroupMeta, commGroupCfg.CloudSlack, conf.Settings.ClusterName, executorFactory, analyticsReporter)
+				return bot.NewCloudSlack(commGroupLogger.WithField(botLogFieldKey, "CloudSlack"), commGroupMeta, commGroupCfg.CloudSlack, conf.Settings.ClusterName, executorFactory)
 			})
 		}
 
 		if commGroupCfg.Mattermost.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewMattermost(ctx, commGroupLogger.WithField(botLogFieldKey, "Mattermost"), commGroupMeta, commGroupCfg.Mattermost, executorFactory, analyticsReporter)
+				return bot.NewMattermost(ctx, commGroupLogger.WithField(botLogFieldKey, "Mattermost"), commGroupMeta, commGroupCfg.Mattermost, executorFactory)
 			})
 		}
 
 		if commGroupCfg.CloudTeams.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewCloudTeams(commGroupLogger.WithField(botLogFieldKey, "CloudTeams"), commGroupMeta, commGroupCfg.CloudTeams, conf.Settings.ClusterName, executorFactory, analyticsReporter)
+				return bot.NewCloudTeams(commGroupLogger.WithField(botLogFieldKey, "CloudTeams"), commGroupMeta, commGroupCfg.CloudTeams, conf.Settings.ClusterName, executorFactory)
 			})
 		}
 
 		if commGroupCfg.Discord.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return bot.NewDiscord(commGroupLogger.WithField(botLogFieldKey, "Discord"), commGroupMeta, commGroupCfg.Discord, executorFactory, analyticsReporter)
+				return bot.NewDiscord(commGroupLogger.WithField(botLogFieldKey, "Discord"), commGroupMeta, commGroupCfg.Discord, executorFactory)
 			})
 		}
 
 		// Run sinks
 		if commGroupCfg.Elasticsearch.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return sink.NewElasticsearch(commGroupLogger.WithField(sinkLogFieldKey, "Elasticsearch"), commGroupMeta.Index, commGroupCfg.Elasticsearch, analyticsReporter)
+				return sink.NewElasticsearch(commGroupLogger.WithField(sinkLogFieldKey, "Elasticsearch"), commGroupMeta.Index, commGroupCfg.Elasticsearch)
 			})
 		}
 
 		if commGroupCfg.Webhook.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return sink.NewWebhook(commGroupLogger.WithField(sinkLogFieldKey, "Webhook"), commGroupMeta.Index, commGroupCfg.Webhook, analyticsReporter)
+				return sink.NewWebhook(commGroupLogger.WithField(sinkLogFieldKey, "Webhook"), commGroupMeta.Index, commGroupCfg.Webhook)
 			})
 		}
 		if commGroupCfg.PagerDuty.Enabled {
 			scheduleNotifier(func() (notifier.Platform, error) {
-				return sink.NewPagerDuty(commGroupLogger.WithField(sinkLogFieldKey, "PagerDuty"), commGroupMeta.Index, commGroupCfg.PagerDuty, conf.Settings.ClusterName, analyticsReporter)
+				return sink.NewPagerDuty(commGroupLogger.WithField(sinkLogFieldKey, "PagerDuty"), commGroupMeta.Index, commGroupCfg.PagerDuty, conf.Settings.ClusterName)
 			})
 		}
 	}
@@ -352,7 +313,6 @@ func run(ctx context.Context) (err error) {
 			deployClient,
 			dynamicCli,
 			restarter,
-			analyticsReporter,
 			*conf,
 			cfgVersion,
 			cfgManager,
@@ -361,7 +321,6 @@ func run(ctx context.Context) (err error) {
 			return reportFatalError("while creating config reloader", err)
 		}
 		errGroup.Go(func() error {
-			defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 			return cfgReloader.Do(ctx)
 		})
 	}
@@ -387,7 +346,6 @@ func run(ctx context.Context) (err error) {
 			ghCli.Repositories,
 		)
 		errGroup.Go(func() error {
-			defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 			err := upgradeChecker.Run(ctx)
 			if err != nil {
 				// we ignore error to make sure that upgrade checker does not stop the agent
@@ -399,7 +357,7 @@ func run(ctx context.Context) (err error) {
 
 	actionProvider := action.NewProvider(logger.WithField(componentLogFieldKey, "Action Provider"), conf.Actions, executorFactory)
 
-	sourcePluginDispatcher := source.NewDispatcher(logger, conf.Settings.ClusterName, bots, sinkNotifiers, pluginManager, actionProvider, analyticsReporter, auditReporter, kubeConfig)
+	sourcePluginDispatcher := source.NewDispatcher(logger, conf.Settings.ClusterName, bots, sinkNotifiers, pluginManager, actionProvider, auditReporter, kubeConfig)
 
 	if conf.Settings.StatusCanvas.Enabled {
 		canvasClient, err := statusCanvasClient(bots)
@@ -417,7 +375,6 @@ func run(ctx context.Context) (err error) {
 
 			statusPublisher := status.NewPublisher(logger.WithField(componentLogFieldKey, "Status Canvas Publisher"), conf.Settings.StatusCanvas, canvasClient, statusCollector, clusterState)
 			errGroup.Go(func() error {
-				defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 				return statusPublisher.Start(ctx)
 			})
 		}
@@ -438,7 +395,6 @@ func run(ctx context.Context) (err error) {
 		)
 
 		errGroup.Go(func() error {
-			defer analytics.ReportPanicIfOccurs(logger, analyticsReporter)
 			return incomingWebhookSrv.Serve(ctx)
 		})
 	}
@@ -497,30 +453,6 @@ func newMetricsServer(log logrus.FieldLogger, metricsPort string) *httpx.Server 
 	return httpx.NewServer(log, addr, router)
 }
 
-func getAnalyticsReporter(disableAnalytics bool, logger logrus.FieldLogger) (analytics.Reporter, error) {
-	if disableAnalytics {
-		logger.Info("Analytics disabled via configuration settings.")
-		return analytics.NewNoopReporter(), nil
-	}
-
-	if analytics.APIKey == "" {
-		logger.Info("Analytics disabled as the API key is missing.")
-		return analytics.NewNoopReporter(), nil
-	}
-
-	wrappedLogger := logger.WithField(componentLogFieldKey, "Analytics reporter")
-	wrappedLogger.Infof("Using API Key starting with %q...", strings.ShortenString(analytics.APIKey, printAPIKeyCharCount))
-	segmentCli, err := segment.NewWithConfig(analytics.APIKey, segment.Config{
-		Logger:  analytics.NewSegmentLoggerAdapter(wrappedLogger),
-		Verbose: false,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("while creating new Analytics Client: %w", err)
-	}
-
-	return analytics.NewSegmentReporter(wrappedLogger, segmentCli), nil
-}
-
 func getK8sClients(cfg *rest.Config) (dynamic.Interface, discovery.DiscoveryInterface, error) {
 	dynamicK8sCli, err := dynamic.NewForConfig(cfg)
 	if err != nil {
@@ -550,7 +482,7 @@ func statusCanvasClient(bots map[string]bot.Bot) (status.CanvasClient, error) {
 	return nil, errors.New("no Socket Slack bot is configured")
 }
 
-func reportFatalErrFn(logger logrus.FieldLogger, reporter analytics.Reporter, status status.StatusReporter) func(ctx string, err error) error {
+func reportFatalErrFn(logger logrus.FieldLogger, status status.StatusReporter) func(ctx string, err error) error {
 	return func(ctx string, err error) error {
 		if err == nil {
 			return nil
@@ -564,10 +496,6 @@ func reportFatalErrFn(logger logrus.FieldLogger, reporter analytics.Reporter, st
 		ctxTimeout, cancel := context.WithTimeout(context.Background(), time.Second*10)
 		defer cancel()
 		wrappedErr := fmt.Errorf("%s: %w", ctx, err)
-
-		if reportErr := reporter.ReportFatalError(err); reportErr != nil {
-			logger.Errorf("while reporting fatal error: %s", err.Error())
-		}
 
 		if err := status.ReportDeploymentFailure(ctxTimeout, err.Error()); err != nil {
 			logger.Errorf("while reporting deployment failure: %s", err.Error())

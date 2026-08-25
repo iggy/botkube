@@ -43,8 +43,6 @@ func TestConfigExecutorShowConfig(t *testing.T) {
 						executors: {}
 						aliases: {}
 						communications: {}
-						analytics:
-						    disable: false
 						settings:
 						    clusterName: foo
 						    upgradeNotifier: false

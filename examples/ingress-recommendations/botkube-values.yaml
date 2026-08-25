@@ -78,6 +78,3 @@ rbac:
     - apiGroups: ["networking.k8s.io"]
       resources: ["ingresses"]
       verbs: ["delete", "create", "get"]
-
-analytics:
-  disable: false

@@ -3,7 +3,6 @@ package bot
 import (
 	"context"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/internal/health"
 	"github.com/iggy/botkube/pkg/config"
 	"github.com/iggy/botkube/pkg/execute"
@@ -31,29 +30,6 @@ type Status struct {
 // ExecutorFactory facilitates creation of execute.Executor instances.
 type ExecutorFactory interface {
 	NewDefault(cfg execute.NewDefaultInput) execute.Executor
-}
-
-// AnalyticsReporter defines a reporter that collects analytics data.
-type AnalyticsReporter interface {
-	// ReportBotEnabled reports an enabled bot.
-	ReportBotEnabled(platform config.CommPlatformIntegration, commGroupIdx int) error
-}
-
-// FatalErrorAnalyticsReporter reports a fatal errors.
-type FatalErrorAnalyticsReporter interface {
-	AnalyticsReporter
-
-	// ReportFatalError reports a fatal app error.
-	ReportFatalError(err error) error
-
-	// Close cleans up the reporter resources.
-	Close() error
-}
-
-// AnalyticsCommandReporter defines a reporter that collects analytics data.
-type AnalyticsCommandReporter interface {
-	FatalErrorAnalyticsReporter
-	ReportCommand(in analytics.ReportCommandInput) error
 }
 
 type channelConfigByID struct {

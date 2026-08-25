@@ -14,7 +14,6 @@ import (
 	"k8s.io/client-go/dynamic/dynamicinformer"
 	"k8s.io/client-go/tools/cache"
 
-	"github.com/iggy/botkube/internal/analytics"
 	"github.com/iggy/botkube/pkg/config"
 	"github.com/iggy/botkube/pkg/formatx"
 )
@@ -45,16 +44,15 @@ type InClusterConfigReloader struct {
 	log       logrus.FieldLogger
 	cli       dynamic.Interface
 	cfg       config.CfgWatcher
-	reporter  analytics.Reporter
 	restarter restarter
 
 	informerFactory dynamicinformer.DynamicSharedInformerFactory
 }
 
-func NewInClusterConfigReloader(log logrus.FieldLogger, cli dynamic.Interface, cfg config.CfgWatcher, restarter restarter, reporter analytics.Reporter) (*InClusterConfigReloader, error) {
+func NewInClusterConfigReloader(log logrus.FieldLogger, cli dynamic.Interface, cfg config.CfgWatcher, restarter restarter) (*InClusterConfigReloader, error) {
 	informerResyncPeriod := cfg.InCluster.InformerResyncPeriod
 	informerFactory := dynamicinformer.NewFilteredDynamicSharedInformerFactory(cli, informerResyncPeriod, cfg.Deployment.Namespace, tweakListOptions)
-	return &InClusterConfigReloader{log: log, cli: cli, cfg: cfg, reporter: reporter, restarter: restarter, informerFactory: informerFactory}, nil
+	return &InClusterConfigReloader{log: log, cli: cli, cfg: cfg, restarter: restarter, informerFactory: informerFactory}, nil
 }
 
 func (l *InClusterConfigReloader) Do(ctx context.Context) error {

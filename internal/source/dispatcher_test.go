@@ -24,7 +24,7 @@ func (o *recordingObserver) ObserveEvent(pluginName string, rawObject any) {
 
 func TestObserveEventWithoutObserver(t *testing.T) {
 	// The observer is optional, so a dispatcher without one must behave exactly as before.
-	dispatcher := NewDispatcher(loggerx.NewNoop(), "test", nil, nil, nil, nil, nil, nil, nil)
+	dispatcher := NewDispatcher(loggerx.NewNoop(), "test", nil, nil, nil, nil, nil, nil)
 
 	assert.NotPanics(t, func() {
 		dispatcher.observeEvent("botkube/kubernetes", map[string]any{"Kind": "Pod"})
@@ -34,7 +34,7 @@ func TestObserveEventWithoutObserver(t *testing.T) {
 func TestObserveEventForwardsToObserver(t *testing.T) {
 	// given
 	observer := &recordingObserver{}
-	dispatcher := NewDispatcher(loggerx.NewNoop(), "test", nil, nil, nil, nil, nil, nil, nil).WithStateObserver(observer)
+	dispatcher := NewDispatcher(loggerx.NewNoop(), "test", nil, nil, nil, nil, nil, nil).WithStateObserver(observer)
 	event := map[string]any{"Kind": "Pod", "Name": "api-1"}
 
 	// when
@@ -49,7 +49,7 @@ func TestObserveEventSurvivesPanickingObserver(t *testing.T) {
 	// The observer maintains an accessory view of the cluster. A panic in it must be contained here,
 	// because the caller goes on to deliver the event to every notifier.
 	observer := &recordingObserver{panics: true}
-	dispatcher := NewDispatcher(loggerx.NewNoop(), "test", nil, nil, nil, nil, nil, nil, nil).WithStateObserver(observer)
+	dispatcher := NewDispatcher(loggerx.NewNoop(), "test", nil, nil, nil, nil, nil, nil).WithStateObserver(observer)
 
 	assert.NotPanics(t, func() {
 		dispatcher.observeEvent("botkube/kubernetes", map[string]any{"Kind": "Pod"})

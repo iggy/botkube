@@ -94,7 +94,7 @@ For faster development, you can also build and run Botkube outside K8s cluster.
    go build -o botkube-agent ./cmd/botkube-agent/
    ```
 
-2. Create a local configuration file to override default values. For example, set communication credentials, specify cluster name, and disable analytics:
+2. Create a local configuration file to override default values. For example, set communication credentials and specify cluster name:
 
    ```yaml
    cat <<EOF > local_config.yaml
@@ -111,10 +111,6 @@ For faster development, you can also build and run Botkube outside K8s cluster.
       enabled: false
    settings:
      clusterName: "labs"
-   analytics:
-     # -- If true, sending anonymous analytics is disabled. To learn what date we collect,
-     # see [Privacy Policy](https://botkube.io/privacy#privacy-policy).
-     disable: true
    EOF
    ```
 

@@ -938,12 +938,7 @@ extraObjects: []
 #        name: "{{ include \"botkube.serviceAccountName\" . }}"
 #        namespace: "{{ .Release.Namespace }}"
 
-## Parameters for anonymous analytics collection.
-analytics:
-  # -- If true, sending anonymous analytics is disabled. To learn what date we collect, see the [Privacy Policy](https://botkube.io/privacy-policy).
-  disable: false
-
-# -- Parameters for the Config Watcher component which reloads Botkube on ConfigMap changes.
+## Parameters for the Config Watcher component which reloads Botkube on ConfigMap changes.
 # It restarts Botkube when configuration data change is detected. It watches ConfigMaps and/or Secrets with the `botkube.io/config-watch: "true"` label from the namespace where Botkube is installed.
 configWatcher:
   # -- If true, restarts the Botkube Pod on config changes.
