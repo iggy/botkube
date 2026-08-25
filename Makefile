@@ -94,7 +94,7 @@ gen-grpc-resources:
 # Generate plugins YAML index files for both all plugins and end-user ones.
 gen-plugins-index: build-plugins
 	go run ./hack/gen-plugin-index.go -output-path ./plugins-dev-index.yaml
-	go run ./hack/gen-plugin-index.go -output-path ./plugins-index.yaml -plugin-name-filter 'kubectl|kubernetes'
+	go run ./hack/gen-plugin-index.go -output-path ./plugins-index.yaml -plugin-name-filter 'kubectl|kubernetes|exec|helm|flux|gh|thread-mate|ai|ai-brain|argocd|github-events|keptn|prometheus'
 
 gen-docs-cli:
 	rm -f ./cmd/cli/docs/*
