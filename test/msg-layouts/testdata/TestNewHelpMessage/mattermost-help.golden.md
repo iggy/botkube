@@ -22,9 +22,9 @@ If you have multiple clusters configured for this channel, specify the cluster n
 ```
 
 **Other features**
-Automation: <https://docs.botkube.io/usage/automated-actions>
+Automation: https://docs.botkube.io/usage/automated-actions
 
-Give feedback: <https://feedback.botkube.io>
-Read our docs: <https://docs.botkube.io>
-Join our Slack: <https://join.botkube.io>
-Follow us on Twitter/X: <https://twitter.com/botkube_io>
+Give feedback: https://feedback.botkube.io
+Read our docs: https://docs.botkube.io
+Join our Slack: https://join.botkube.io
+Follow us on Twitter/X: https://twitter.com/botkube_io

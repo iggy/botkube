@@ -190,8 +190,8 @@ jobs:
 
       matrix:
         integration:
-          # - slack they are cloud based
-          # - teams they are cloud based
+          # Slack is not run here: the E2E harness needs rebuilding for Socket Mode
+          # now that Botkube Cloud (which brokered it) is gone.
           - discord
 
     steps:
@@ -260,44 +260,16 @@ jobs:
         run: |
           make build-plugins
 
-      - name: CLI Cache
-        uses: actions/cache@v6
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-            dist/botkube-cli_linux_amd64_v1/botkube
-          key: ${{ runner.os }}-botkube-cli
-
-      - name: Build CLI
-        run: make build-single-arch-cli
-
-      - name: Add Botkube CLI to env
-        run: |
-          echo "CONFIG_PROVIDER_BOTKUBE_CLI_BINARY_PATH=$PWD/dist/botkube-cli_linux_amd64_v1/botkube" >> "$GITHUB_ENV"
-
       - name: Run ${{ matrix.integration }} tests
         env:
           SLACK_TESTER_APP_TOKEN: ${{ secrets.SLACK_TESTER_APP_TOKEN }}
-          SLACK_CLOUD_TESTER_APP_TOKEN: ${{ secrets.SLACK_CLOUD_TESTER_APP_TOKEN }}
           SLACK_ADDITIONAL_CONTEXT_MESSAGE: "Pull request: ${{ github.event.pull_request.number }} - https://github.com/iggy/botkube/pull/${{ github.event.pull_request.number }}"
 
           DISCORD_TESTER_APP_TOKEN: ${{ secrets.DISCORD_TESTER_APP_TOKEN }}
           DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
           DISCORD_ADDITIONAL_CONTEXT_MESSAGE: "Pull request: ${{ github.event.pull_request.number }} - https://github.com/iggy/botkube/pull/${{ github.event.pull_request.number }}"
 
-          TEAMS_BOT_TESTER_APP_ID: ${{ secrets.TEAMS_BOT_TESTER_APP_ID }}
-          TEAMS_BOT_TESTER_APP_PASSWORD: ${{ secrets.TEAMS_BOT_TESTER_APP_PASSWORD }}
-          TEAMS_ORGANIZATION_TEAM_ID: ${{ secrets.TEAMS_ORGANIZATION_TEAM_ID }}
-          TEAMS_ORGANIZATION_TENANT_ID: ${{ secrets.TEAMS_ORGANIZATION_TENANT_ID }}
-          TEAMS_ADDITIONAL_CONTEXT_MESSAGE: "Branch test - commit SHA: ${{github.sha}} - https://github.com/iggy/botkube/commit/${{github.sha}}"
-
           PLUGINS_BINARIES_DIRECTORY: ${{ github.workspace }}/plugin-dist
-          CONFIG_PROVIDER_API_KEY: ${{ secrets.CONFIG_PROVIDER_API_KEY }}
-          CONFIG_PROVIDER_ENDPOINT: ${{ secrets.CONFIG_PROVIDER_ENDPOINT }}
-          CONFIG_PROVIDER_SLACK_WORKSPACE_TEAM_ID: ${{ secrets.CONFIG_PROVIDER_SLACK_WORKSPACE_TEAM_ID }}
-          CONFIG_PROVIDER_IMAGE_TAG: ${{ env.IMAGE_TAG }}
-          CONFIG_PROVIDER_HELM_REPO_DIRECTORY: ${{ github.workspace }}/helm
         run: |
           KUBECONFIG=$(k3d kubeconfig write ${{ matrix.integration }}-test-cluster) \
             make test-integration-${{ matrix.integration }}

@@ -69,18 +69,9 @@ type ExpAttachmentInput struct {
 type DriverType string
 
 const (
-	SlackBot   DriverType = "cloudSlack"
+	SlackBot   DriverType = "socketSlack"
 	DiscordBot DriverType = "discord"
 )
-
-func (d DriverType) IsCloud() bool {
-	switch d {
-	case SlackBot:
-		return true
-	default:
-		return false
-	}
-}
 
 // AssertEquals checks if message is equal to expected message
 func (d DriverType) AssertEquals(expectedMessage string) MessageAssertion {

@@ -2,7 +2,6 @@ package msg_layouts
 
 import (
 	"encoding/json"
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -23,7 +22,6 @@ import (
 //
 //	go test -v -run TestNewHelpMessage -update
 func TestNewHelpMessage(t *testing.T) {
-	os.Setenv("CONFIG_PROVIDER_IDENTIFIER", "")
 	msg := interactive.NewHelpMessage(config.DiscordCommPlatformIntegration, "Stage US", []string{"botkube/kubectl"}).Build(false)
 	msg.ReplaceBotNamePlaceholder("@Botkube")
 
@@ -43,8 +41,7 @@ func TestNewHelpMessage(t *testing.T) {
 //
 //	go test -v -run TestNewHelpMessageSlack -update
 func TestNewHelpMessageSlack(t *testing.T) {
-	os.Setenv("CONFIG_PROVIDER_IDENTIFIER", "")
-	msg := interactive.NewHelpMessage(config.SlackCommPlatformIntegration, "Stage US", []string{"botkube/kubectl"}).Build(false)
+	msg := interactive.NewHelpMessage(config.SocketSlackCommPlatformIntegration, "Stage US", []string{"botkube/kubectl"}).Build(false)
 	msg.ReplaceBotNamePlaceholder("@Botkube")
 
 	blocks := bot.NewSlackRenderer().RenderAsSlackBlocks(msg)

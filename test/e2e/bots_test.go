@@ -7,19 +7,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
-	"sync/atomic"
 	"testing"
 	"time"
 	"unicode"
 
-	"github.com/avast/retry-go/v5"
-
-	"github.com/iggy/botkube/test/helmx"
-
-	"github.com/iggy/botkube/test/botkubex"
 	"github.com/iggy/botkube/test/commplatform"
 	"github.com/iggy/botkube/test/diff"
 	"github.com/MakeNowJust/heredoc/v2"
@@ -43,21 +36,7 @@ import (
 	"github.com/iggy/botkube/pkg/config"
 	"github.com/iggy/botkube/pkg/httpx"
 	"github.com/iggy/botkube/pkg/plugin"
-	"github.com/iggy/botkube/pkg/ptr"
 )
-
-type ConfigProvider struct {
-	Endpoint             string
-	ApiKey               string
-	SlackWorkspaceTeamID string
-	ImageRepository      string `envconfig:"default=iggy/pr/botkube"`
-	ImageRegistry        string `envconfig:"default=ghcr.io"`
-	ImageTag             string
-	HelmRepoDirectory    string
-	BotkubeCliBinaryPath string
-
-	Timeout time.Duration `envconfig:"default=15s"`
-}
 
 type Config struct {
 	KubeconfigPath string `envconfig:"optional,KUBECONFIG"`
@@ -67,10 +46,10 @@ type Config struct {
 		ContainerName string        `envconfig:"default=botkube"`
 		WaitTimeout   time.Duration `envconfig:"default=3m"`
 		Envs          struct {
-			SlackEnabledName              string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SLACK_ENABLED"`
-			DefaultSlackChannelIDName     string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SLACK_CHANNELS_DEFAULT_NAME"`
-			SecondarySlackChannelIDName   string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SLACK_CHANNELS_SECONDARY_NAME"`
-			ThirdSlackChannelIDName       string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SLACK_CHANNELS_THIRD_NAME"`
+			SlackEnabledName              string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_ENABLED"`
+			DefaultSlackChannelIDName     string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_CHANNELS_DEFAULT_NAME"`
+			SecondarySlackChannelIDName   string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_CHANNELS_SECONDARY_NAME"`
+			ThirdSlackChannelIDName       string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_CHANNELS_THIRD_NAME"`
 			DiscordEnabledName            string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_DISCORD_ENABLED"`
 			DefaultDiscordChannelIDName   string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_DISCORD_CHANNELS_DEFAULT_ID"`
 			SecondaryDiscordChannelIDName string `envconfig:"default=BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_DISCORD_CHANNELS_SECONDARY_ID"`
@@ -94,7 +73,6 @@ type Config struct {
 	ClusterName      string `envconfig:"default=sample"`
 	Slack            commplatform.SlackConfig
 	Discord          commplatform.DiscordConfig
-	ConfigProvider   ConfigProvider
 	ShortWaitTimeout time.Duration `envconfig:"default=7s"`
 }
 
@@ -116,15 +94,15 @@ var (
 	configMapLabels = map[string]string{
 		"test.botkube.io": "true",
 	}
-	aliases = [][]string{
-		{"kgp", "Get Pods", "kubectl get pods"},
-		{"kgda", "Get Deployments", "kubectl get deployments -A"},
-		{"e", "", "echo"},
-		{"p", "", "ping"},
-	}
 )
 
 func TestSlack(t *testing.T) {
+	// The Slack E2E path used to provision a Botkube Cloud deployment over GraphQL and point the
+	// agent at it. Cloud is gone, so the test now takes the same Deployment-env-patching route as
+	// Discord - but that route has never been exercised against a real workspace for Socket Mode
+	// (it needs botToken/appToken plumbed in), so it stays skipped until someone verifies it.
+	t.Skip("Slack integration test disabled: the harness needs verifying against Socket Mode.")
+
 	t.Log("Loading configuration...")
 	var appCfg Config
 	err := envconfig.Init(&appCfg)
@@ -162,7 +140,7 @@ func TestDiscord(t *testing.T) {
 func newBotDriver(cfg Config, driverType commplatform.DriverType) (commplatform.BotDriver, error) {
 	switch driverType {
 	case commplatform.SlackBot:
-		return commplatform.NewSlackTester(cfg.Slack, ptr.FromType(cfg.ConfigProvider.ApiKey))
+		return commplatform.NewSlackTester(cfg.Slack)
 	case commplatform.DiscordBot:
 		return commplatform.NewDiscordTester(cfg.Discord)
 
@@ -178,9 +156,6 @@ func runBotTest(t *testing.T,
 	deployEnvSecondaryChannelIDName,
 	deployEnvRbacChannelIDName string,
 ) {
-	var botkubeDeploymentUninstalled atomic.Bool
-	botkubeDeploymentUninstalled.Store(true) // not yet installed
-
 	t.Logf("Creating API client with provided token for %s...", driverType)
 	botDriver, err := newBotDriver(appCfg, driverType)
 	require.NoError(t, err)
@@ -191,15 +166,11 @@ func runBotTest(t *testing.T,
 	k8sCli, err := kubernetes.NewForConfig(k8sConfig)
 	require.NoError(t, err)
 
-	var indexEndpoint string
-	if botDriver.Type() == commplatform.DiscordBot {
-		t.Log("Starting plugin server...")
-		endpoint, startServerFn := plugin.NewStaticPluginServer(appCfg.Plugins)
-		indexEndpoint = endpoint
-		go func() {
-			require.NoError(t, startServerFn())
-		}()
-	}
+	t.Log("Starting plugin server...")
+	indexEndpoint, startServerFn := plugin.NewStaticPluginServer(appCfg.Plugins)
+	go func() {
+		require.NoError(t, startServerFn())
+	}()
 
 	t.Logf("Setting up test %s setup...", driverType)
 	botDriver.InitUsers(t)
@@ -219,66 +190,14 @@ func runBotTest(t *testing.T,
 		botDriver.PostInitialMessage(t, currentChannel.Identifier())
 		botDriver.InviteBotToChannel(t, currentChannel.ID())
 	}
-	switch botDriver.Type() {
-	case commplatform.DiscordBot:
-		t.Log("Patching Deployment with test env variables...")
-		deployNsCli := k8sCli.AppsV1().Deployments(appCfg.Deployment.Namespace)
-		revertDeployFn := setTestEnvsForDeploy(t, appCfg, deployNsCli, botDriver.Type(), channels, indexEndpoint)
-		t.Cleanup(func() { revertDeployFn(t) })
+	t.Log("Patching Deployment with test env variables...")
+	deployNsCli := k8sCli.AppsV1().Deployments(appCfg.Deployment.Namespace)
+	revertDeployFn := setTestEnvsForDeploy(t, appCfg, deployNsCli, botDriver.Type(), channels, indexEndpoint)
+	t.Cleanup(func() { revertDeployFn(t) })
 
-		t.Log("Waiting for Deployment")
-		err = waitForDeploymentReady(deployNsCli, appCfg.Deployment.Name, appCfg.Deployment.WaitTimeout)
-		require.NoError(t, err)
-	case commplatform.SlackBot:
-		t.Log("Creating Botkube Cloud instance...")
-		gqlCli := NewClientForAPIKey(appCfg.ConfigProvider.Endpoint, appCfg.ConfigProvider.ApiKey)
-		appCfg.ClusterName = botDriver.FirstChannel().Name()
-		deployment := gqlCli.MustCreateBasicDeploymentWithCloudSlack(t, appCfg.ClusterName, appCfg.ConfigProvider.SlackWorkspaceTeamID, botDriver.FirstChannel().Name(), botDriver.SecondChannel().Name(), botDriver.ThirdChannel().Name())
-		for _, alias := range aliases {
-			gqlCli.MustCreateAlias(t, alias[0], alias[1], alias[2], deployment.ID)
-		}
-		t.Cleanup(func() {
-			err := helmx.WaitForUninstallation(context.Background(), t, &botkubeDeploymentUninstalled)
-			assert.NoError(t, err)
-
-			t.Log("Deleting Botkube Cloud instance...")
-			err = retry.New(
-				retry.Attempts(5),
-				retry.Delay(500*time.Millisecond),
-				retry.LastErrorOnly(false),
-			).Do(func() error {
-				return gqlCli.DeleteDeployment(t, deployment.ID)
-			})
-			if err != nil {
-				t.Logf("Failed to delete deployment: %s", err.Error())
-			}
-		})
-
-		botkubeDeploymentUninstalled.Store(false) // about to be installed
-		err = botkubex.Install(t, botkubex.InstallParams{
-			BinaryPath:                              appCfg.ConfigProvider.BotkubeCliBinaryPath,
-			HelmRepoDirectory:                       appCfg.ConfigProvider.HelmRepoDirectory,
-			ConfigProviderEndpoint:                  appCfg.ConfigProvider.Endpoint,
-			ConfigProviderIdentifier:                deployment.ID,
-			ConfigProviderAPIKey:                    deployment.APIKey.Value,
-			ImageTag:                                appCfg.ConfigProvider.ImageTag,
-			ImageRegistry:                           appCfg.ConfigProvider.ImageRegistry,
-			ImageRepository:                         appCfg.ConfigProvider.ImageRepository,
-			PluginRestartPolicyThreshold:            1,
-			PluginRestartHealthCheckIntervalSeconds: 2,
-		})
-		require.NoError(t, err)
-		t.Cleanup(func() {
-			if t.Failed() {
-				t.Log("Tests failed, keeping the Botkube instance installed for debugging purposes.")
-			} else {
-				t.Log("Uninstalling Helm chart...")
-				botkubex.Uninstall(t, appCfg.ConfigProvider.BotkubeCliBinaryPath)
-			}
-
-			botkubeDeploymentUninstalled.Store(true)
-		})
-	}
+	t.Log("Waiting for Deployment")
+	err = waitForDeploymentReady(deployNsCli, appCfg.Deployment.Name, appCfg.Deployment.WaitTimeout)
+	require.NoError(t, err)
 
 	cmdHeader := func(command string) string {
 		return fmt.Sprintf("`%s` on `%s`", command, appCfg.ClusterName)
@@ -374,7 +293,7 @@ func runBotTest(t *testing.T,
 
 		t.Run("Helm Executor", func(t *testing.T) {
 			if botDriver.Type() == commplatform.DiscordBot {
-				t.Skip("Skipped as the Botkube Cloud plugin isn't currently tested for this platform.")
+				t.Skip("Skipped as this plugin isn't currently tested for this platform.")
 			}
 
 			command := "helm install --help"
@@ -427,7 +346,7 @@ func runBotTest(t *testing.T,
 
 		t.Run("Helm Executor help", func(t *testing.T) {
 			if botDriver.Type() == commplatform.DiscordBot {
-				t.Skip("Skipped as the Botkube Cloud plugin isn't currently tested for this platform.")
+				t.Skip("Skipped as this plugin isn't currently tested for this platform.")
 			}
 
 			command := "helm help"
@@ -562,10 +481,6 @@ func runBotTest(t *testing.T,
 
 			// Same expected message as before
 			err = botDriver.WaitForLastMessageContains(userId, botDriver.FirstChannel().ID(), expMessage)
-			if err != nil && botDriver.Type() == commplatform.SlackBot { // the new cloud backend not release yet
-				t.Logf("Fallback to the old behavior with message sent at the channel level...")
-				err = botDriver.OnChannel().WaitForLastMessageContains(userId, botDriver.FirstChannel().ID(), expMessage)
-			}
 			assert.NoError(t, err)
 		})
 	})
@@ -601,12 +516,6 @@ func runBotTest(t *testing.T,
 			command := fmt.Sprintf("kubectl get configmap -n %s", appCfg.Deployment.Namespace)
 			assertConfigMaps := func(msg string) bool {
 				return strings.Contains(msg, "kube-root-ca.crt") && strings.Contains(msg, "botkube-global-config")
-			}
-
-			if botDriver.Type().IsCloud() {
-				assertConfigMaps = func(msg string) bool {
-					return strings.Contains(msg, "kube-root-ca.crt")
-				}
 			}
 
 			botDriver.PostMessageToBot(t, botDriver.FirstChannel().Identifier(), command)
@@ -789,8 +698,6 @@ func runBotTest(t *testing.T,
 
 		botDriver.PostMessageToBot(t, botDriver.SecondChannel().Identifier(), command)
 
-
-
 		expectedMessage := fmt.Sprintf("%s\n%s", cmdHeader(command), expectedBody)
 		err = botDriver.WaitForLastMessageEqual(botDriver.BotUserID(), botDriver.SecondChannel().ID(), expectedMessage)
 		assert.NoError(t, err)
@@ -803,10 +710,6 @@ func runBotTest(t *testing.T,
 		botDriver.PostMessageToBot(t, botDriver.SecondChannel().Identifier(), command)
 		err = botDriver.WaitForMessagePosted(botDriver.BotUserID(), botDriver.SecondChannel().ID(), limitMessages(), botDriver.AssertEquals(expectedMessage))
 		require.NoError(t, err)
-
-		if botDriver.Type().IsCloud() {
-			waitForRestart(t, botDriver, botDriver.BotUserID(), botDriver.FirstChannel().ID(), appCfg.ClusterName)
-		}
 
 		cfgMapCli := k8sCli.CoreV1().ConfigMaps(appCfg.Deployment.Namespace)
 
@@ -916,10 +819,6 @@ func runBotTest(t *testing.T,
 		err = botDriver.WaitForMessagePosted(botDriver.BotUserID(), botDriver.FirstChannel().ID(), limitMessages(), botDriver.AssertEquals(expectedMessage))
 		assert.NoError(t, err)
 
-		if botDriver.Type().IsCloud() {
-			waitForRestart(t, botDriver, botDriver.BotUserID(), botDriver.FirstChannel().ID(), appCfg.ClusterName)
-		}
-
 		t.Log("Getting notifier status from second channel...")
 		command = "status notifications"
 		expectedBody = codeBlock(fmt.Sprintf("Notifications from cluster '%s' are enabled here.", appCfg.ClusterName))
@@ -984,10 +883,6 @@ func runBotTest(t *testing.T,
 		botDriver.PostMessageToBot(t, botDriver.FirstChannel().Identifier(), command)
 		err = botDriver.WaitForMessagePosted(botDriver.BotUserID(), botDriver.FirstChannel().ID(), limitMessages(), botDriver.AssertEquals(expectedMessage))
 		assert.NoError(t, err)
-
-		if botDriver.Type().IsCloud() {
-			waitForRestart(t, botDriver, botDriver.BotUserID(), botDriver.FirstChannel().ID(), appCfg.ClusterName)
-		}
 
 		t.Log("Creating and deleting ignored ConfigMap")
 		ignoredCfgMap := &v1.ConfigMap{
@@ -1134,9 +1029,6 @@ func runBotTest(t *testing.T,
 		command := fmt.Sprintf(`kubectl get pod -n %s %s`, pod.Namespace, pod.Name)
 		automationAssertionFn := func(msg string) (bool, int, string) {
 			podNameCount := 2 // command + 1 occurrence in the command output
-			if botDriver.Type().IsCloud() {
-				podNameCount = 3 // command + on cluster name section + 1 occurrence in the command output
-			}
 
 			return hasValidHeaderWithAuthor(msg, command, " by Automation \"Get created resource\"") &&
 					hasAllColumns(msg, "NAME", "READY", "STATUS") &&
@@ -1610,27 +1502,6 @@ func crashConfigMapSourcePlugin(t *testing.T, cfgMapCli corev1.ConfigMapInterfac
 	require.NoError(t, err)
 }
 
-func waitForRestart(t *testing.T, tester commplatform.BotDriver, userID, channel, clusterName string) {
-	t.Logf("Waiting for restart (timestamp: %s)...", time.Now().Format(time.DateTime))
-
-	originalTimeout := tester.Timeout()
-	tester.SetTimeout(120 * time.Second)
-	expMsg := fmt.Sprintf("My watch begins for cluster '%s'! :crossed_swords:", clusterName)
-	assertFn := tester.AssertEquals(expMsg)
-
-	// 2, since from time to time latest message becomes upgrade message right after begin message
-	err := tester.OnChannel().WaitForMessagePosted(userID, channel, 2, assertFn)
-	assert.NoError(t, err)
-
-	t.Logf("Detected a successful restart (timestamp: %s).", time.Now().Format(time.DateTime))
-
-	t.Logf("Waiting a bit longer just to make sure Botkube connects to the Cloud Router...")
-	// Yes, it's ugly but "My watch begins..." doesn't really mean the Slack/Teams gRPC connection has been established.
-	// So we wait a bit longer to avoid a race condition.
-	time.Sleep(3 * time.Second)
-
-	tester.SetTimeout(originalTimeout)
-}
 
 func hasAllColumns(msg string, headerColumnNames ...string) bool {
 	for _, cn := range headerColumnNames {
