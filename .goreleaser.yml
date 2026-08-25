@@ -32,7 +32,6 @@ builds:
     main: cmd/cli/main.go
     ldflags:
       - -s -w
-        -X github.com/iggy/botkube/cmd/cli/cmd/migrate.DefaultImageTag={{ .Env.IMAGE_TAG }}
         -X go.szostok.io/version.version={{.Version}}
         -X go.szostok.io/version.buildDate={{.Date}}
         -X go.szostok.io/version.commit={{.FullCommit}}

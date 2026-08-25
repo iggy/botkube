@@ -14,8 +14,8 @@ A utility that simplifies working with Botkube.
 
 Quick Start:
 
-    botkube install                              # Install Botkube
-    botkube uninstall                            # Uninstall Botkube
+    $ botkube install                              # Install Botkube
+    $ botkube uninstall                            # Uninstall Botkube
     
 
 ```
@@ -31,8 +31,8 @@ botkube [flags]
 
 ### SEE ALSO
 
-* [botkube config](botkube_config.md)  - This command consists of multiple subcommands for working with Botkube configuration
-* [botkube install](botkube_install.md)  - install or upgrade Botkube in k8s cluster
-* [botkube uninstall](botkube_uninstall.md)  - uninstall Botkube from cluster
-* [botkube version](botkube_version.md)  - Print the CLI version
+* [botkube config](botkube_config.md)	 - This command consists of multiple subcommands for working with Botkube configuration
+* [botkube install](botkube_install.md)	 - install or upgrade Botkube in k8s cluster
+* [botkube uninstall](botkube_uninstall.md)	 - uninstall Botkube from cluster
+* [botkube version](botkube_version.md)	 - Print the CLI version
 

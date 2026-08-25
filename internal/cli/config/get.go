@@ -13,7 +13,6 @@ import (
 	semver "github.com/hashicorp/go-version"
 	"github.com/spf13/pflag"
 	"go.szostok.io/version"
-	"golang.org/x/exp/slices"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -25,7 +24,6 @@ import (
 	"github.com/iggy/botkube/internal/cli"
 	"github.com/iggy/botkube/internal/cli/install/iox"
 	"github.com/iggy/botkube/internal/cli/printer"
-	"github.com/iggy/botkube/internal/config/remote"
 	"github.com/iggy/botkube/pkg/formatx"
 	"github.com/iggy/botkube/pkg/ptr"
 )
@@ -47,14 +45,6 @@ type ExporterOptions struct {
 
 	Timeout    time.Duration
 	PollPeriod time.Duration
-
-	CloudEnvs CloudEnvsOptions
-}
-
-type CloudEnvsOptions struct {
-	EndpointEnvName string
-	IDEnvName       string
-	APIKeyEnvName   string
 }
 
 func (o *ExporterOptions) RegisterFlags(flags *pflag.FlagSet) {
@@ -65,10 +55,6 @@ func (o *ExporterOptions) RegisterFlags(flags *pflag.FlagSet) {
 	flags.StringVar(&o.Tag, "cfg-exporter-image-tag", getDefaultImageTag(), "Tag of the Config Exporter job image")
 	flags.DurationVar(&o.PollPeriod, "cfg-exporter-poll-period", 1*time.Second, "Interval used to check if Config Exporter job was finished")
 	flags.DurationVar(&o.Timeout, "cfg-exporter-timeout", 1*time.Minute, "Maximum execution time for the Config Exporter job")
-
-	flags.StringVar(&o.CloudEnvs.EndpointEnvName, "cloud-env-endpoint", remote.ProviderEndpointEnvKey, "Endpoint environment variable name specified under Deployment for cloud installation.")
-	flags.StringVar(&o.CloudEnvs.IDEnvName, "cloud-env-id", remote.ProviderIdentifierEnvKey, "Identifier environment variable name specified under Deployment for cloud installation.")
-	flags.StringVar(&o.CloudEnvs.APIKeyEnvName, "cloud-env-api-key", remote.ProviderAPIKeyEnvKey, "API key environment variable name specified under Deployment for cloud installation.")
 }
 
 func GetFromCluster(ctx context.Context, status *printer.StatusPrinter, k8sCfg *rest.Config, opts ExporterOptions, autoApprove bool) (config []byte, version string, err error) {
@@ -94,15 +80,6 @@ func GetFromCluster(ctx context.Context, status *printer.StatusPrinter, k8sCfg *
 		return nil, "", fmt.Errorf("while getting botkube version: %w", err)
 	}
 
-	envs := getCloudRelatedEnvs(botkubeContainer, opts.CloudEnvs)
-	if len(envs) > 1 {
-		cfg, err := fetchCloudConfig(ctx, envs)
-		if err != nil {
-			return nil, "", fmt.Errorf("while fetching cloud configuration: %w", err)
-		}
-		return cfg, ver, nil
-	}
-
 	if err = createExportJob(ctx, k8sCli, botkubePod, botkubeContainer, opts, autoApprove); err != nil {
 		return nil, "", fmt.Errorf("while creating config exporter job: %w", err)
 	}
@@ -119,37 +96,6 @@ func GetFromCluster(ctx context.Context, status *printer.StatusPrinter, k8sCfg *
 	}
 
 	return config, ver, nil
-}
-
-func fetchCloudConfig(ctx context.Context, envs map[string]string) ([]byte, error) {
-	cfg := remote.Config{
-		Endpoint:   envs[remote.ProviderEndpointEnvKey],
-		Identifier: envs[remote.ProviderIdentifierEnvKey],
-		APIKey:     envs[remote.ProviderAPIKeyEnvKey],
-	}
-
-	gqlClient := remote.NewDefaultGqlClient(cfg)
-	deployClient := remote.NewDeploymentClient(gqlClient)
-	deployConfig, err := deployClient.GetConfigWithResourceVersion(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return []byte(deployConfig.YAMLConfig), nil
-}
-
-func getCloudRelatedEnvs(c corev1.Container, envs CloudEnvsOptions) map[string]string {
-	exp := []string{envs.EndpointEnvName, envs.IDEnvName, envs.APIKeyEnvName}
-	out := map[string]string{}
-	for _, env := range c.Env {
-		name := strings.TrimSpace(env.Name)
-		if name == "" {
-			continue
-		}
-		if slices.Contains(exp, name) {
-			out[name] = env.Value
-		}
-	}
-	return out
 }
 
 func getBotkubePod(ctx context.Context, k8sCli *kubernetes.Clientset, namespace, label string) (*corev1.Pod, error) {

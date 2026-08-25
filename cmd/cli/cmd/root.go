@@ -14,7 +14,7 @@ const (
 	repoName = "botkube"
 )
 
-// NewRoot returns a root cobra.Command for the whole Botkube Cloud CLI.
+// NewRoot returns a root cobra.Command for the whole Botkube CLI.
 func NewRoot() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   cli.Name,
