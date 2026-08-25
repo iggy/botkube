@@ -38,7 +38,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.1
 	github.com/gorilla/mux v1.8.1
-	github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
+	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/hashicorp/go-getter v1.8.8
 	github.com/hashicorp/go-getter/v2 v2.2.3
 	github.com/hashicorp/go-hclog v1.6.3
