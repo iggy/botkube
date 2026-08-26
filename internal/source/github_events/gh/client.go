@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/bradleyfalzon/ghinstallation/v2"
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v90/github"
 	"github.com/gregjones/httpcache"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
@@ -113,7 +113,7 @@ func NewClient(cfg *ClientConfig, log config.Logger) (*github.Client, error) {
 		}
 	}
 	if baseURL == "" {
-		return github.NewClient(httpClient), nil
+		return github.NewClient(github.WithHTTPClient(httpClient))
 	}
 
 	if uploadURL == "" { // often the baseURL is same as the uploadURL, so we do not require to provide both of them
@@ -121,7 +121,10 @@ func NewClient(cfg *ClientConfig, log config.Logger) (*github.Client, error) {
 	}
 
 	bURL, uURL := httpx.CanonicalURLPath(baseURL), httpx.CanonicalURLPath(uploadURL)
-	return github.NewEnterpriseClient(bURL, uURL, httpClient)
+	return github.NewClient(
+		github.WithHTTPClient(httpClient),
+		github.WithEnterpriseURLs(bURL, uURL),
+	)
 }
 
 var headers = map[string]struct{}{

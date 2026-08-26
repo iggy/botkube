@@ -31,7 +31,6 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/gocarina/gocsv v0.0.0-20260824135904-1713ebc4797a
 	github.com/google/go-github/v90 v90.0.0
-	github.com/google/go-github/v90 v90.0.0
 	github.com/google/go-querystring v1.2.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.1

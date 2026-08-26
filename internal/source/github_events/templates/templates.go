@@ -7,11 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v90/github"
 
 	"github.com/iggy/botkube/pkg/api"
 	"github.com/iggy/botkube/pkg/formatx"
-	"github.com/iggy/botkube/pkg/ptr"
 )
 
 //	Available events:
@@ -71,7 +70,7 @@ func pullRequestEventMessage(gh *github.Event, event any, opts ...MessageMutator
 
 	var labels []string
 	for _, l := range pr.Labels {
-		labels = append(labels, ptr.ToValue(l.Name))
+		labels = append(labels, l.Name)
 	}
 	if len(labels) > 0 {
 		fields = append(fields, api.TextField{Key: "Labels", Value: fmt.Sprintf("`%s`", strings.Join(labels, "`, `"))})

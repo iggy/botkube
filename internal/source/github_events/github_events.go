@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v90/github"
 	"github.com/google/go-querystring/query"
 	"github.com/sirupsen/logrus"
 
@@ -273,14 +273,14 @@ func (w *Watcher) List(ctx context.Context, owner string, repo string, opts *git
 		return nil, nil, err
 	}
 
-	req, err := w.cli.NewRequest("GET", u, nil)
+	req, err := w.cli.NewRequest(ctx, "GET", u, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	req.Header.Add("if-modified-since", since.Format(http.TimeFormat))
 	var pulls []*github.PullRequest
-	resp, err := w.cli.Do(ctx, req, &pulls)
+	resp, err := w.cli.Do(req, &pulls)
 	if err != nil {
 		return nil, resp, err
 	}
