@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/avast/retry-go/v4"
+	"github.com/avast/retry-go/v5"
 	"github.com/iggy/botkube/pkg/api"
 	"github.com/iggy/botkube/pkg/api/source"
 	"github.com/iggy/botkube/pkg/config"
@@ -95,13 +95,7 @@ func (s *Source) Stream(ctx context.Context, input source.StreamInput) (source.S
 
 	s.log.Info("Preparing configuration...")
 
-	err = retry.Do(
-		func() error {
-			return s.setupArgoNotifications(ctx, k8sCli, sourceInstance{
-				cfg:    cfg,
-				srcCtx: input.Context.CommonSourceContext,
-			})
-		},
+	err = retry.New(
 		retry.OnRetry(func(n uint, err error) {
 			s.log.WithField("error", err).Errorf("Error setting up Argo notifications for %q. Retrying...", sourceName)
 		}),
@@ -109,6 +103,13 @@ func (s *Source) Stream(ctx context.Context, input source.StreamInput) (source.S
 		retry.MaxJitter(5*time.Second),
 		retry.Attempts(5),
 		retry.LastErrorOnly(false),
+	).Do(
+		func() error {
+			return s.setupArgoNotifications(ctx, k8sCli, sourceInstance{
+				cfg:    cfg,
+				srcCtx: input.Context.CommonSourceContext,
+			})
+		},
 	)
 	if err != nil {
 		return source.StreamOutput{}, fmt.Errorf("while configuring Argo notifications: %w", err)
