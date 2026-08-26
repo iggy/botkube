@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hashicorp/go-getter"
+	"github.com/hashicorp/go-getter/v2"
 )
 
 // Download downloads data from a given source to local file system under a given destination path.
@@ -17,12 +17,17 @@ func Download(ctx context.Context, src, dst string) error {
 
 	// Build the client
 	client := &getter.Client{
-		Ctx:  ctx,
-		Src:  src,
-		Dst:  dst,
-		Pwd:  pwd,
-		Mode: getter.ClientModeDir,
+		Getters:       getter.Getters,
+		Decompressors: getter.Decompressors,
 	}
-
-	return client.Get()
+	_, err = client.Get(ctx, &getter.Request{
+		Src:     src,
+		Dst:     dst,
+		Pwd:     pwd,
+		GetMode: getter.ModeDir,
+	})
+	if err != nil {
+		return fmt.Errorf("while downloading %q: %w", src, err)
+	}
+	return nil
 }

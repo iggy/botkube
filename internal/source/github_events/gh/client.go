@@ -6,7 +6,6 @@ import (
 
 	"github.com/bradleyfalzon/ghinstallation/v2"
 	"github.com/google/go-github/v90/github"
-	"github.com/gregjones/httpcache"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 
@@ -81,7 +80,6 @@ func NewClient(cfg *ClientConfig, log config.Logger) (*github.Client, error) {
 	}
 
 	httpClient := httpx.NewHTTPClient()
-	httpClient.Transport = httpcache.NewMemoryCacheTransport()
 
 	switch {
 	case cfg.Auth.AccessToken != "":
@@ -91,7 +89,7 @@ func NewClient(cfg *ClientConfig, log config.Logger) (*github.Client, error) {
 
 		httpClient = &http.Client{
 			Transport: &oauth2.Transport{
-				Base:   httpcache.NewMemoryCacheTransport(),
+				Base:   http.DefaultTransport,
 				Source: oauth2.ReuseTokenSource(nil, ts),
 			},
 		}
@@ -153,8 +151,7 @@ func (l LogRateLimitHeaders) RoundTrip(request *http.Request) (*http.Response, e
 }
 
 func createAppInstallationHTTPClient(cfg *ClientConfig) (client *http.Client, err error) {
-	tr := httpcache.NewMemoryCacheTransport()
-	itr, err := ghinstallation.New(tr, cfg.Auth.App.ID, cfg.Auth.App.InstallationID, []byte(cfg.Auth.App.PrivateKey))
+	itr, err := ghinstallation.New(http.DefaultTransport, cfg.Auth.App.ID, cfg.Auth.App.InstallationID, []byte(cfg.Auth.App.PrivateKey))
 	if err != nil {
 		return nil, err
 	}
