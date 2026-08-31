@@ -21,7 +21,7 @@ require (
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.19.0
-	github.com/fluxcd/kustomize-controller/api v1.9.4
+	github.com/fluxcd/kustomize-controller/api v1.9.5
 	github.com/fluxcd/source-controller/api v1.9.4
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
@@ -137,8 +137,8 @@ require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fluxcd/cli-utils v1.2.1 // indirect
 	github.com/fluxcd/pkg/apis/acl v0.10.0 // indirect
-	github.com/fluxcd/pkg/apis/kustomize v1.19.1 // indirect
-	github.com/fluxcd/pkg/apis/meta v1.30.1 // indirect
+	github.com/fluxcd/pkg/apis/kustomize v1.19.2 // indirect
+	github.com/fluxcd/pkg/apis/meta v1.30.2 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
@@ -264,8 +264,8 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	k8s.io/apiextensions-apiserver v0.36.2 // indirect
-	k8s.io/apiserver v0.36.2 // indirect
+	k8s.io/apiextensions-apiserver v0.36.4 // indirect
+	k8s.io/apiserver v0.36.4 // indirect
 	k8s.io/component-base v0.36.4 // indirect
 	k8s.io/kube-openapi v0.0.0-20260603220949-865597e52e25 // indirect
 	oras.land/oras-go/v2 v2.6.2 // indirect
