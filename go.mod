@@ -28,7 +28,7 @@ require (
 	github.com/go-playground/validator/v10 v10.30.3
 	github.com/go-task/slim-sprig v2.20.0+incompatible
 	github.com/go-viper/mapstructure/v2 v2.5.0
-	github.com/gocarina/gocsv v0.0.0-20260824135904-1713ebc4797a
+	github.com/gocarina/gocsv v0.0.0-20260908110832-9ab82d65b1cc
 	github.com/google/go-github/v53 v53.2.0
 	github.com/google/go-github/v90 v90.0.0
 	github.com/google/go-querystring v1.2.0
