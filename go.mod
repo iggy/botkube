@@ -60,7 +60,7 @@ require (
 	github.com/prometheus/client_golang v1.24.1
 	github.com/prometheus/common v0.71.0
 	github.com/sanity-io/litter v1.5.8
-	github.com/sashabaranov/go-openai v1.42.0
+	github.com/sashabaranov/go-openai v1.42.1
 	github.com/sirupsen/logrus v1.10.2
 	github.com/slack-go/slack v0.29.0
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8
