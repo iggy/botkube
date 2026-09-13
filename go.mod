@@ -50,7 +50,7 @@ require (
 	github.com/knadh/koanf/v2 v2.3.6
 	github.com/mattermost/mattermost/server/public v0.4.4
 	github.com/mattn/go-isatty v0.0.24
-	github.com/mattn/go-shellwords v1.0.14
+	github.com/mattn/go-shellwords v1.0.15
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c
 	github.com/morikuni/aec v1.1.0
 	github.com/muesli/reflow v0.3.0
