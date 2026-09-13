@@ -1,6 +1,6 @@
 module github.com/iggy/botkube
 
-go 1.26.7
+go 1.26.8
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
@@ -35,7 +35,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.6.1
 	github.com/gorilla/mux v1.8.1
-	github.com/hashicorp/go-getter/v2 v2.2.3
+	github.com/hashicorp/go-getter/v2 v2.2.4
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.8.0
