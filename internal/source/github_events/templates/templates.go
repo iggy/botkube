@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v91/github"
 
 	"github.com/iggy/botkube/pkg/api"
 	"github.com/iggy/botkube/pkg/formatx"

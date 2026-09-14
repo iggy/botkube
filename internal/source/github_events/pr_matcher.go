@@ -3,7 +3,7 @@ package github_events
 import (
 	"context"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v91/github"
 	"github.com/sirupsen/logrus"
 )
 
